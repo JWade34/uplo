@@ -83,7 +83,9 @@ Rails.application.configure do
   config.hosts = [
     "getuplo.com",     # Allow requests from getuplo.com
     "www.getuplo.com", # Allow requests from www.getuplo.com
-    /.*\.getuplo\.com/ # Allow requests from subdomains
+    /.*\.getuplo\.com/, # Allow requests from subdomains
+    "6eqkm.hatchboxapp.com", # Allow requests from Hatchbox staging
+    /.*\.hatchboxapp\.com/ # Allow requests from any Hatchbox subdomain
   ]
   
   # Skip DNS rebinding protection for the default health check endpoint.
