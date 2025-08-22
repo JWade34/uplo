@@ -350,16 +350,16 @@ GEM
       railties (>= 6.0.0)
     stringio (3.1.7)
     stripe (12.6.0)
-    tailwindcss-rails (3.3.0)
+    tailwindcss-rails (2.7.8-aarch64-linux)
       railties (>= 7.0.0)
-      tailwindcss-ruby
-    tailwindcss-ruby (4.1.12)
-    tailwindcss-ruby (4.1.12-aarch64-linux-gnu)
-    tailwindcss-ruby (4.1.12-aarch64-linux-musl)
-    tailwindcss-ruby (4.1.12-arm64-darwin)
-    tailwindcss-ruby (4.1.12-x86_64-darwin)
-    tailwindcss-ruby (4.1.12-x86_64-linux-gnu)
-    tailwindcss-ruby (4.1.12-x86_64-linux-musl)
+    tailwindcss-rails (2.7.8-arm-linux)
+      railties (>= 7.0.0)
+    tailwindcss-rails (2.7.8-arm64-darwin)
+      railties (>= 7.0.0)
+    tailwindcss-rails (2.7.8-x86_64-darwin)
+      railties (>= 7.0.0)
+    tailwindcss-rails (2.7.8-x86_64-linux)
+      railties (>= 7.0.0)
     thor (1.4.0)
     thruster (0.1.15)
     thruster (0.1.15-aarch64-linux)
@@ -424,7 +424,7 @@ DEPENDENCIES
   solid_queue
   stimulus-rails
   stripe (~> 12.0)
-  tailwindcss-rails (~> 3.0)
+  tailwindcss-rails (= 2.7.8)
   thruster
   turbo-rails
   tzinfo-data
