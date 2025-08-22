@@ -1,0 +1,31 @@
+/*
+ * This is a manifest file that'll be compiled into application.css.
+ *
+ * With Propshaft, assets are served efficiently without preprocessing steps. You can still include
+ * application-wide styles in this file, but keep in mind that CSS precedence will follow the standard
+ * cascading order, meaning styles declared later in the document or manifest will override earlier ones,
+ * depending on specificity.
+ *
+ * Consider organizing styles into separate files for maintainability.
+ */
+
+/* Safe Area Support for iPhone notch and Dynamic Island */
+.safe-area-nav {
+  padding-top: env(safe-area-inset-top);
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+}
+
+/* Fallback for devices without safe area insets */
+@supports not (padding-top: env(safe-area-inset-top)) {
+  .safe-area-nav {
+    padding-top: 0;
+  }
+}
+
+/* Additional spacing for Dynamic Island devices */
+@media (max-width: 428px) and (-webkit-device-pixel-ratio: 3) {
+  .safe-area-nav {
+    padding-top: max(env(safe-area-inset-top), 20px);
+  }
+}

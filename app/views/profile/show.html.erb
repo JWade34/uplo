@@ -1,0 +1,246 @@
+<!-- Profile Overview Page -->
+<div class="min-h-screen bg-gray-50">
+  <!-- Navigation -->
+  <nav class="bg-white shadow-sm border-b">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between h-16">
+        <div class="flex items-center">
+          <%= render 'shared/logo', size: '1.75rem' %>
+        </div>
+        <div class="flex items-center space-x-8">
+          <%= link_to dashboard_path, class: "text-gray-700 hover:text-gray-900" do %>
+            ← Dashboard
+          <% end %>
+          <%= link_to photos_path, class: "text-gray-700 hover:text-gray-900" do %>
+            My Photos
+          <% end %>
+          <span class="text-gray-700">Hi, <%= Current.user.email_address.split('@').first.capitalize %>!</span>
+          <%= link_to session_path, method: :delete, class: "text-gray-700 hover:text-gray-900" do %>
+            Sign Out
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Header -->
+    <div class="mb-8 flex justify-between items-center">
+      <div>
+        <h1 class="text-3xl font-bold text-gray-900 mb-2">Profile Settings</h1>
+        <p class="text-gray-600">Manage your account and AI preferences for better captions.</p>
+      </div>
+      <%= link_to profile_edit_path, class: "bg-accent text-black px-6 py-2 rounded-lg font-semibold hover:bg-accent-hover transition-colors" do %>
+        ✏️ Edit Profile
+      <% end %>
+    </div>
+
+    <!-- Profile Cards -->
+    <div class="space-y-6">
+      <!-- Account Information -->
+      <div class="bg-white rounded-lg shadow-sm border">
+        <div class="px-6 py-4 border-b border-gray-200">
+          <h2 class="text-xl font-semibold text-gray-900">Account Information</h2>
+        </div>
+        <div class="px-6 py-4">
+          <div class="flex items-start space-x-6">
+            <!-- Profile Picture -->
+            <div class="flex-shrink-0">
+              <div class="w-20 h-20 rounded-full overflow-hidden bg-gray-100 border-2 border-gray-200">
+                <% if @user.profile_picture.attached? %>
+                  <%= image_tag @user.profile_picture, class: "w-full h-full object-cover", alt: "Profile picture" %>
+                <% else %>
+                  <div class="w-full h-full flex items-center justify-center text-gray-400">
+                    <span class="text-2xl">👤</span>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+            
+            <!-- Account Details -->
+            <div class="flex-1 grid md:grid-cols-2 gap-6">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                <p class="text-gray-900"><%= @user.email_address %></p>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Member Since</label>
+                <p class="text-gray-900"><%= @user.created_at.strftime("%B %Y") %></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- AI Personalization -->
+      <div class="bg-white rounded-lg shadow-sm border">
+        <div class="px-6 py-4 border-b border-gray-200">
+          <h2 class="text-xl font-semibold text-gray-900">AI Personalization</h2>
+          <p class="text-sm text-gray-600 mt-1">These settings help our AI create better captions for you</p>
+        </div>
+        <div class="px-6 py-4">
+          <div class="grid md:grid-cols-2 gap-6">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Fitness Focus</label>
+              <p class="text-gray-900"><%= @user.fitness_focus&.humanize || "Not specified" %></p>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Target Audience</label>
+              <p class="text-gray-900"><%= @user.target_audience&.humanize || "Not specified" %></p>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Tone Preference</label>
+              <p class="text-gray-900"><%= @user.tone_preference&.humanize || "Not specified" %></p>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Business Type</label>
+              <p class="text-gray-900"><%= @user.business_type&.humanize || "Not specified" %></p>
+            </div>
+          </div>
+          
+          <% if @user.bio.present? %>
+            <div class="mt-6">
+              <label class="block text-sm font-medium text-gray-700 mb-1">Bio</label>
+              <p class="text-gray-900"><%= @user.bio %></p>
+            </div>
+          <% end %>
+        </div>
+      </div>
+
+      <!-- Advanced Settings -->
+      <div class="bg-white rounded-lg shadow-sm border">
+        <div class="px-6 py-4 border-b border-gray-200">
+          <h2 class="text-xl font-semibold text-gray-900">Advanced AI Settings</h2>
+          <p class="text-sm text-gray-600 mt-1">Detailed preferences for ultra-personalized captions</p>
+        </div>
+        <div class="px-6 py-4 space-y-6">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Client Pain Points</label>
+            <p class="text-gray-900"><%= @user.client_pain_points.present? ? @user.client_pain_points : "Not specified" %></p>
+          </div>
+          
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Your Unique Approach</label>
+            <p class="text-gray-900"><%= @user.unique_approach.present? ? @user.unique_approach : "Not specified" %></p>
+          </div>
+          
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Brand Personality</label>
+            <p class="text-gray-900"><%= @user.brand_personality.present? ? @user.brand_personality : "Not specified" %></p>
+          </div>
+          
+          <% if @user.sample_caption.present? %>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Sample Caption Style</label>
+              <div class="bg-gray-50 p-4 rounded-lg">
+                <p class="text-gray-900 italic">"<%= @user.sample_caption %>"</p>
+              </div>
+            </div>
+          <% else %>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Sample Caption Style</label>
+              <p class="text-gray-900">Not specified</p>
+            </div>
+          <% end %>
+        </div>
+      </div>
+
+      <!-- Content Preferences -->
+      <div class="bg-white rounded-lg shadow-sm border">
+        <div class="px-6 py-4 border-b border-gray-200">
+          <h2 class="text-xl font-semibold text-gray-900">Content Preferences</h2>
+        </div>
+        <div class="px-6 py-4">
+          <div class="grid md:grid-cols-2 gap-6">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Call-to-Action Style</label>
+              <p class="text-gray-900"><%= @user.call_to_action_preference.present? ? @user.call_to_action_preference : "Not specified" %></p>
+            </div>
+            
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Posting Frequency</label>
+              <p class="text-gray-900"><%= @user.posting_frequency.present? ? @user.posting_frequency : "Not specified" %></p>
+            </div>
+            
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Location</label>
+              <p class="text-gray-900"><%= @user.location.present? ? @user.location : "Not specified" %></p>
+            </div>
+            
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Price Range</label>
+              <p class="text-gray-900"><%= @user.price_range.present? ? @user.price_range : "Not specified" %></p>
+            </div>
+          </div>
+          
+          <div class="mt-6">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Favorite Hashtags</label>
+            <p class="text-gray-900"><%= @user.favorite_hashtags.present? ? @user.favorite_hashtags : "Not specified" %></p>
+          </div>
+          
+          <div class="mt-6">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Words to Avoid</label>
+            <p class="text-gray-900"><%= @user.words_to_avoid.present? ? @user.words_to_avoid : "Not specified" %></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Social Media Integration -->
+      <div class="bg-white rounded-lg shadow-sm border">
+        <div class="px-6 py-4 border-b border-gray-200">
+          <h2 class="text-xl font-semibold text-gray-900">Social Media Accounts</h2>
+          <p class="text-sm text-gray-600 mt-1">Connect your accounts for automated posting</p>
+        </div>
+        <div class="px-6 py-4">
+          <div class="space-y-4">
+            <div class="flex items-center justify-between p-4 border rounded-lg">
+              <div class="flex items-center">
+                <div class="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center">
+                  <span class="text-white font-bold">📷</span>
+                </div>
+                <div class="ml-3">
+                  <p class="font-medium text-gray-900">Instagram</p>
+                  <p class="text-sm text-gray-500">Connect to auto-post your captions</p>
+                </div>
+              </div>
+              <button class="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50">
+                Coming Soon
+              </button>
+            </div>
+            
+            <div class="flex items-center justify-between p-4 border rounded-lg">
+              <div class="flex items-center">
+                <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
+                  <span class="text-white font-bold">f</span>
+                </div>
+                <div class="ml-3">
+                  <p class="font-medium text-gray-900">Facebook</p>
+                  <p class="text-sm text-gray-500">Share to your business page</p>
+                </div>
+              </div>
+              <button class="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50">
+                Coming Soon
+              </button>
+            </div>
+            
+            <div class="flex items-center justify-between p-4 border rounded-lg">
+              <div class="flex items-center">
+                <div class="w-10 h-10 bg-black rounded-lg flex items-center justify-center">
+                  <span class="text-white font-bold">🎵</span>
+                </div>
+                <div class="ml-3">
+                  <p class="font-medium text-gray-900">TikTok</p>
+                  <p class="text-sm text-gray-500">Cross-post your fitness content</p>
+                </div>
+              </div>
+              <button class="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50">
+                Coming Soon
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

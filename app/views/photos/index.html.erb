@@ -1,0 +1,108 @@
+<!-- My Photos Page -->
+<div class="min-h-screen bg-gray-50">
+  <%= render 'shared/navigation' %>
+
+  <!-- Main Content -->
+  <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-8">
+    <!-- Header -->
+    <div class="mb-6 sm:mb-8">
+      <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">My Photos</h1>
+      <p class="text-sm sm:text-base text-gray-600">View and manage your uploaded photos and AI-generated captions.</p>
+    </div>
+
+    <% if @photos.any? %>
+      <!-- Photos Grid -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
+        <% @photos.each do |photo| %>
+          <div class="bg-white rounded-lg shadow-sm border overflow-hidden hover:shadow-md transition-shadow">
+            <%= link_to photo_path(photo), class: "block" do %>
+              <div class="aspect-square bg-gray-100 relative">
+                <% if photo.image.attached? %>
+                  <% if photo.heic_file? %>
+                    <!-- HEIC Image with badge -->
+                    <div class="relative w-full h-full">
+                      <%= image_tag photo.display_image_url, class: "w-full h-full object-cover", alt: photo.title %>
+                      <div class="absolute top-2 right-2 bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">
+                        HEIC
+                      </div>
+                    </div>
+                  <% else %>
+                    <%= image_tag photo.display_image, class: "w-full h-full object-cover", alt: photo.title %>
+                  <% end %>
+                <% else %>
+                  <div class="w-full h-full flex items-center justify-center">
+                    <span class="text-gray-400 text-4xl">📸</span>
+                  </div>
+                <% end %>
+                
+                <!-- Processing Badge -->
+                <% unless photo.processed? %>
+                  <div class="absolute top-2 right-2 bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded-full">
+                    <span class="hidden sm:inline">Processing...</span>
+                    <span class="sm:hidden">⏳</span>
+                  </div>
+                <% end %>
+              </div>
+              
+              <div class="p-3 sm:p-4">
+                <h3 class="font-semibold text-gray-900 truncate text-sm sm:text-base">
+                  <%= photo.title.present? ? photo.title : "Photo ##{photo.id}" %>
+                </h3>
+                <p class="text-xs sm:text-sm text-gray-500 mt-1">
+                  <%= time_ago_in_words(photo.created_at) %> ago
+                </p>
+                
+                <!-- Show first caption if available -->
+                <% if photo.processed? && photo.captions.any? %>
+                  <div class="mt-2 sm:mt-3 p-2 sm:p-3 bg-gray-50 rounded-lg">
+                    <p class="text-xs sm:text-sm text-gray-700 line-clamp-2 sm:line-clamp-3">
+                      <%= truncate(photo.captions.recent.first.content, length: 100) %>
+                    </p>
+                    <div class="mt-2 flex items-center justify-between">
+                      <span class="text-xs text-gray-500 capitalize">
+                        <span class="hidden sm:inline"><%= photo.captions.recent.first.style %> style</span>
+                        <span class="sm:hidden"><%= photo.captions.recent.first.style %></span>
+                      </span>
+                      <span class="text-xs text-accent">
+                        <%= pluralize(photo.captions.count, 'caption') %> →
+                      </span>
+                    </div>
+                  </div>
+                <% elsif photo.processed? %>
+                  <div class="mt-2 sm:mt-3 p-2 sm:p-3 bg-red-50 rounded-lg">
+                    <p class="text-xs text-red-600">
+                      <span class="hidden sm:inline">Caption generation failed</span>
+                      <span class="sm:hidden">❌ Failed</span>
+                    </p>
+                  </div>
+                <% else %>
+                  <div class="mt-2 sm:mt-3 p-2 sm:p-3 bg-yellow-50 rounded-lg">
+                    <p class="text-xs text-yellow-700">
+                      <span class="hidden sm:inline">⏳ Generating captions...</span>
+                      <span class="sm:hidden">⏳ Processing</span>
+                    </p>
+                  </div>
+                <% end %>
+              </div>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <!-- Empty State -->
+      <div class="text-center py-8 sm:py-12">
+        <div class="w-20 h-20 sm:w-24 sm:h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+          <span class="text-3xl sm:text-4xl">📸</span>
+        </div>
+        <h3 class="text-lg sm:text-xl font-semibold text-gray-900 mb-2">No photos yet</h3>
+        <p class="text-sm sm:text-base text-gray-600 mb-6 max-w-md mx-auto px-4">
+          Upload your first gym photo and we'll create engaging captions for your social media automatically.
+        </p>
+        <%= link_to new_photo_path, class: "inline-flex items-center px-4 py-3 sm:px-6 bg-accent text-black font-semibold rounded-lg hover:bg-accent-hover transition-colors text-sm sm:text-base" do %>
+          <span class="hidden sm:inline">📸 Upload Your First Photo</span>
+          <span class="sm:hidden">📸 Upload Photo</span>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</div>

@@ -1,0 +1,236 @@
+<!-- Photo Detail Page -->
+<div class="min-h-screen bg-gray-50">
+  <%= render 'shared/navigation' %>
+
+  <!-- Main Content -->
+  <div class="max-w-6xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-8">
+    
+    <!-- Flash Message -->
+    <% if flash[:notice] %>
+      <div class="mb-4 sm:mb-6 bg-accent text-black p-3 sm:p-4 rounded-lg text-center font-semibold text-sm sm:text-base">
+        <%= flash[:notice] %>
+      </div>
+    <% end %>
+
+    <!-- Mobile-First Layout: Photo, then Captions, then Details -->
+    <div class="space-y-6">
+      <!-- Photo Display (Always First) -->
+      <div class="bg-white rounded-lg shadow-sm border overflow-hidden">
+          <% if @photo.image.attached? %>
+            <% if @photo.heic_file? %>
+              <!-- HEIC Image - Show actual converted image -->
+              <div class="relative">
+                <%= image_tag @photo.display_image_url, class: "w-full h-auto", alt: @photo.title %>
+                <div class="absolute top-2 right-2 bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">
+                  HEIC Image
+                </div>
+              </div>
+            <% else %>
+              <%= image_tag @photo.display_image, class: "w-full h-auto", alt: @photo.title %>
+            <% end %>
+          <% else %>
+            <div class="w-full h-64 bg-gray-100 flex items-center justify-center">
+              <span class="text-gray-400 text-6xl">📸</span>
+            </div>
+          <% end %>
+      </div>
+      
+      <!-- Desktop Layout Container -->
+      <div class="lg:grid lg:grid-cols-2 lg:gap-8 lg:space-y-0 space-y-6">
+        <!-- AI Captions Section (Second on mobile, Right column on desktop) -->
+        <div class="lg:order-2 space-y-4 sm:space-y-6" data-controller="photo-polling" 
+             data-photo-polling-url-value="<%= photo_path(@photo) %>"
+             data-photo-polling-interval-value="3000"
+             data-processing="<%= !@photo.processed? %>">
+          <div class="bg-white rounded-lg shadow-sm border p-4 sm:p-6">
+            <div class="flex items-center justify-between mb-3 sm:mb-4">
+              <h2 class="text-lg sm:text-xl font-bold text-gray-900">AI Captions</h2>
+              <% unless @photo.processed? %>
+                <span class="bg-yellow-100 text-yellow-800 text-xs px-2 sm:px-3 py-1 rounded-full font-medium">
+                  <span class="hidden sm:inline">Processing...</span>
+                  <span class="sm:hidden">⏳</span>
+                </span>
+              <% end %>
+            </div>
+            
+            <% if @photo.processed? && @photo.captions.any? %>
+              <!-- Display Generated Captions -->
+              <div class="space-y-3 sm:space-y-4">
+                <% @photo.captions.recent.each_with_index do |caption, index| %>
+                  <div class="border rounded-lg p-3 sm:p-4">
+                    <div class="flex items-start justify-between mb-2">
+                      <span class="text-xs sm:text-sm font-medium text-gray-700">
+                        <span class="hidden sm:inline">Caption <%= index + 1 %> - <%= caption.style.humanize %></span>
+                        <span class="sm:hidden"><%= caption.style.humanize %></span>
+                      </span>
+                      <button onclick="copyToClipboard('<%= caption.id %>')" class="text-xs text-accent hover:underline px-2 py-1 -m-1">
+                        Copy
+                      </button>
+                    </div>
+                    <p class="text-sm sm:text-base text-gray-900 leading-relaxed" id="caption-<%= caption.id %>"><%= caption.content %></p>
+                    <div class="mt-2 text-xs text-gray-500">
+                      <span class="hidden sm:inline">Generated <%= time_ago_in_words(caption.generated_at) %> ago</span>
+                      <span class="sm:hidden"><%= time_ago_in_words(caption.generated_at) %> ago</span>
+                    </div>
+                  </div>
+                <% end %>
+              </div>
+            <% elsif @photo.processed? %>
+              <!-- No captions generated -->
+              <div class="text-center py-6 sm:py-8">
+                <div class="text-gray-400 text-3xl sm:text-4xl mb-3 sm:mb-4">⚠️</div>
+                <h3 class="text-base sm:text-lg font-medium text-gray-900 mb-2">Caption Generation Failed</h3>
+                <p class="text-sm sm:text-base text-gray-600 max-w-sm mx-auto mb-4 px-4">
+                  We encountered an issue generating captions for this photo. This might be due to image quality or content.
+                </p>
+                <button onclick="window.location.reload()" class="bg-accent text-black px-4 py-2 rounded-lg font-semibold hover:bg-accent-hover transition-colors text-sm sm:text-base">
+                  Try Again
+                </button>
+              </div>
+            <% else %>
+              <!-- Processing State -->
+              <div class="text-center py-6 sm:py-8" data-turbo-permanent>
+                <div class="animate-spin rounded-full h-6 w-6 sm:h-8 sm:w-8 border-b-2 border-accent mx-auto mb-3 sm:mb-4"></div>
+                <h3 class="text-base sm:text-lg font-medium text-gray-900 mb-2">Analyzing Your Photo</h3>
+                <p class="text-sm sm:text-base text-gray-600 max-w-sm mx-auto px-4">
+                  Our AI is analyzing your photo and generating engaging captions tailored to your fitness content. This usually takes 30-60 seconds.
+                </p>
+                <p class="text-xs text-gray-500 mt-2">Page will refresh automatically...</p>
+              </div>
+              
+              <!-- Auto-refresh while processing -->
+              <script>
+                setTimeout(function() {
+                  window.location.reload();
+                }, 5000); // Refresh every 5 seconds while processing
+              </script>
+            <% end %>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="bg-white rounded-lg shadow-sm border p-4 sm:p-6">
+            <h3 class="text-base sm:text-lg font-semibold text-gray-900 mb-3 sm:mb-4">Next Steps</h3>
+            <div class="space-y-3">
+              <% if @photo.processed? %>
+                <button class="w-full bg-accent text-black py-3 rounded-lg font-semibold hover:bg-accent-hover transition-colors text-sm sm:text-base">
+                  <span class="hidden sm:inline">📱 Schedule Post</span>
+                  <span class="sm:hidden">📱 Schedule</span>
+                </button>
+                <button class="w-full border border-gray-300 text-gray-700 py-3 rounded-lg font-semibold hover:bg-gray-50 transition-colors text-sm sm:text-base">
+                  <span class="hidden sm:inline">✏️ Edit Captions</span>
+                  <span class="sm:hidden">✏️ Edit</span>
+                </button>
+              <% else %>
+                <div class="w-full bg-gray-100 text-gray-500 py-3 rounded-lg font-semibold text-center text-sm sm:text-base">
+                  <span class="hidden sm:inline">⏳ Waiting for AI processing...</span>
+                  <span class="sm:hidden">⏳ Processing...</span>
+                </div>
+              <% end %>
+              <%= link_to photos_path, class: "w-full border border-gray-300 text-gray-700 py-3 rounded-lg font-semibold hover:bg-gray-50 transition-colors block text-center text-sm sm:text-base" do %>
+                <span class="hidden sm:inline">👁️ View All Photos</span>
+                <span class="sm:hidden">👁️ All Photos</span>
+              <% end %>
+            </div>
+          </div>
+        </div>
+
+        <!-- Photo Info (Third on mobile, Left column on desktop) -->
+        <div class="lg:order-1 space-y-4">
+          <div class="bg-white rounded-lg shadow-sm border p-4 sm:p-6">
+          <h1 class="text-xl sm:text-2xl font-bold text-gray-900 mb-3 sm:mb-4">
+            <%= @photo.title.present? ? @photo.title : "Photo ##{@photo.id}" %>
+          </h1>
+          
+          <% if @photo.description.present? %>
+            <div class="mb-3 sm:mb-4">
+              <h3 class="text-sm font-medium text-gray-700 mb-2">Description</h3>
+              <p class="text-sm sm:text-base text-gray-600"><%= @photo.description %></p>
+            </div>
+          <% end %>
+          
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 text-sm">
+            <div>
+              <span class="text-gray-500">Uploaded:</span>
+              <div class="text-gray-900 mt-1 sm:mt-0 sm:inline sm:ml-2">
+                <span class="hidden sm:inline"><%= @photo.created_at.strftime("%B %d, %Y at %I:%M %p") %></span>
+                <span class="sm:hidden"><%= @photo.created_at.strftime("%b %d, %Y") %></span>
+              </div>
+            </div>
+            <% if @photo.image.attached? %>
+              <div>
+                <span class="text-gray-500">File Size:</span>
+                <div class="text-gray-900 mt-1 sm:mt-0 sm:inline sm:ml-2"><%= number_to_human_size(@photo.image.byte_size) %></div>
+              </div>
+            <% end %>
+          </div>
+          
+          <!-- Photo Metadata -->
+          <% if @photo.metadata.present? && @photo.metadata_summary.any? %>
+            <div class="mt-4 pt-4 border-t border-gray-200">
+              <h4 class="text-sm font-medium text-gray-700 mb-3">Photo Details</h4>
+              <div class="grid grid-cols-1 gap-3 text-sm">
+                <% @photo.metadata_summary.each do |key, value| %>
+                  <% if value.present? %>
+                    <div class="flex justify-between">
+                      <span class="text-gray-500 capitalize"><%= key.to_s.humanize %>:</span>
+                      <span class="text-gray-900 text-right">
+                        <% if key == :taken_at && value.respond_to?(:strftime) %>
+                          <%= value.strftime("%b %d, %Y %I:%M %p") %>
+                        <% else %>
+                          <%= value %>
+                        <% end %>
+                      </span>
+                    </div>
+                  <% end %>
+                <% end %>
+              </div>
+            </div>
+          <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function copyToClipboard(captionId) {
+  const captionElement = document.getElementById('caption-' + captionId);
+  const text = captionElement.textContent;
+  
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(text).then(() => {
+      showCopyFeedback();
+    });
+  } else {
+    // Fallback for older browsers
+    const textArea = document.createElement('textarea');
+    textArea.value = text;
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+    try {
+      document.execCommand('copy');
+      showCopyFeedback();
+    } catch (err) {
+      console.error('Failed to copy text: ', err);
+    }
+    document.body.removeChild(textArea);
+  }
+}
+
+function showCopyFeedback() {
+  // Create a temporary feedback element
+  const feedback = document.createElement('div');
+  feedback.textContent = 'Copied to clipboard!';
+  feedback.className = 'fixed top-4 right-4 bg-accent text-black px-4 py-2 rounded-lg font-semibold z-50';
+  document.body.appendChild(feedback);
+  
+  // Remove after 2 seconds
+  setTimeout(() => {
+    if (feedback.parentNode) {
+      feedback.parentNode.removeChild(feedback);
+    }
+  }, 2000);
+}
+</script>

@@ -1,0 +1,532 @@
+<!-- Navigation -->
+<nav class="fixed top-0 w-full bg-white/90 backdrop-blur-md z-50 border-b border-gray-200">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between h-16">
+      <div class="flex items-center">
+        <%= render 'shared/logo', size: '1.75rem', color: 'text-gray-900' %>
+      </div>
+      <div class="flex items-center space-x-8">
+        <a href="#features" class="text-gray-700 hover:text-gray-900">Features</a>
+        <a href="#examples" class="text-gray-700 hover:text-gray-900">Examples</a>
+        <a href="#pricing" class="text-gray-700 hover:text-gray-900">Pricing</a>
+        <% if Current.user %>
+          <%= link_to "/dashboard", class: "text-gray-700 hover:text-gray-900" do %>
+            Dashboard
+          <% end %>
+          <%= link_to session_path, method: :delete, class: "text-gray-700 hover:text-gray-900" do %>
+            Sign Out
+          <% end %>
+        <% else %>
+          <%= link_to new_session_path, class: "text-gray-700 hover:text-gray-900" do %>
+            Sign In
+          <% end %>
+          <%= link_to early_access_path, class: "bg-accent text-gray-900 px-6 py-2 rounded-lg font-semibold hover:bg-accent-hover transition-colors" do %>
+            Get Started
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero Section -->
+<div class="pt-16 bg-gradient-to-br from-gray-900 to-black">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+    <div class="grid lg:grid-cols-2 gap-12 items-center">
+      <!-- Left Column -->
+      <div class="space-y-8">
+        <div class="space-y-4">
+          <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight">
+            Your photos.<br>
+            Our AI.<br>
+            <span class="text-accent">More clients, less effort.</span>
+          </h1>
+          <p class="text-xl text-gray-300 max-w-2xl">
+            Stop stressing about social media. Upload your gym photos and we'll turn them into engaging posts that attract new clients—automatically.
+          </p>
+        </div>
+        
+        <div class="flex flex-col sm:flex-row gap-4">
+          <%= link_to early_access_path, class: "bg-accent text-black px-8 py-4 rounded-lg font-semibold text-lg hover:bg-accent-hover transition-colors text-center" do %>
+            Start Free Trial
+          <% end %>
+          <button class="border-2 border-gray-600 text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-800 transition-colors">
+            Watch Demo
+          </button>
+        </div>
+
+        <!-- Social Proof -->
+        <div class="flex items-center space-x-8 pt-8">
+          <div class="text-center">
+            <div class="text-2xl font-bold text-white">500+</div>
+            <div class="text-sm text-gray-400">Personal Trainers</div>
+          </div>
+          <div class="text-center">
+            <div class="text-2xl font-bold text-white">3x</div>
+            <div class="text-sm text-gray-400">More Engagement</div>
+          </div>
+          <div class="text-center">
+            <div class="text-2xl font-bold text-white">2hrs</div>
+            <div class="text-sm text-gray-400">Saved Daily</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column - iPhone Mockup -->
+      <div class="relative flex justify-center">
+        <!-- Glow Effect -->
+        <div class="absolute inset-0 bg-accent opacity-20 blur-3xl rounded-full scale-75"></div>
+        <div class="absolute inset-0 bg-gradient-to-r from-accent/30 to-purple-500/30 blur-2xl rounded-full scale-90"></div>
+        
+        <div class="relative" data-controller="carousel">
+          <!-- iPhone Frame -->
+          <div class="relative w-80 h-[650px] bg-gray-200 rounded-[55px] p-3 shadow-2xl ring-2 ring-gray-700/50 shadow-accent/20">
+            <div class="w-full h-full bg-white rounded-[45px] overflow-hidden relative border-2 border-gray-800">
+              <!-- Notch -->
+              <div class="absolute top-2 left-1/2 transform -translate-x-1/2 w-32 h-6 bg-black rounded-full z-10"></div>
+              
+              <!-- Carousel Content -->
+              <div class="pt-8 h-full relative overflow-hidden" data-carousel-target="container">
+                <!-- Slide 1: Upload Interface -->
+                <div class="absolute inset-0 transition-transform duration-500 ease-in-out" data-carousel-target="slide">
+                  <div class="flex flex-col h-full bg-gray-900 text-white">
+                    <div class="p-6 flex-1">
+                      <h3 class="text-2xl font-bold mb-4 text-center">Upload Your Photo</h3>
+                      <div class="border-2 border-dashed border-gray-600 rounded-lg p-8 text-center">
+                        <div class="text-4xl mb-4">📸</div>
+                        <p class="text-gray-400">Drag & drop or click to upload</p>
+                      </div>
+                    </div>
+                    <div class="p-6">
+                      <button class="w-full bg-accent text-gray-900 py-3 rounded-lg font-semibold">
+                        Choose Photo
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Slide 2: AI Analysis -->
+                <div class="absolute inset-0 transition-transform duration-500 ease-in-out" data-carousel-target="slide" style="background-color: #111827;">
+                  <div class="flex flex-col h-full p-6" style="background-color: #111827; color: white;">
+                    <h3 class="text-xl font-bold mb-6 text-center" style="color: white;">AI Analyzing...</h3>
+                    <div class="space-y-4 flex-1">
+                      <div class="rounded-lg p-4 border" style="background-color: #1f2937; border-color: #374151;">
+                        <div class="flex items-center justify-between">
+                          <span class="text-sm" style="color: #d1d5db;">📍 Location</span>
+                          <span class="text-sm font-semibold" style="color: #84cc16;">Downtown Gym</span>
+                        </div>
+                      </div>
+                      <div class="rounded-lg p-4 border" style="background-color: #1f2937; border-color: #374151;">
+                        <div class="flex items-center justify-between">
+                          <span class="text-sm" style="color: #d1d5db;">⏰ Time</span>
+                          <span class="text-sm font-semibold" style="color: #84cc16;">Morning Workout</span>
+                        </div>
+                      </div>
+                      <div class="rounded-lg p-4 border" style="background-color: #1f2937; border-color: #374151;">
+                        <div class="flex items-center justify-between">
+                          <span class="text-sm" style="color: #d1d5db;">🎯 Content</span>
+                          <span class="text-sm font-semibold" style="color: #84cc16;">Strength Training</span>
+                        </div>
+                      </div>
+                      <div class="rounded-lg p-4 mt-6" style="background-color: #374151;">
+                        <div class="flex items-center space-x-2">
+                          <div class="w-3 h-3 rounded-full animate-pulse" style="background-color: #84cc16;"></div>
+                          <span class="text-sm" style="color: #d1d5db;">Processing metadata...</span>
+                        </div>
+                      </div>
+                      <div class="text-center mt-4">
+                        <div class="inline-flex items-center space-x-1">
+                          <div class="w-2 h-2 rounded-full animate-bounce" style="background-color: #84cc16; animation-delay: 0ms;"></div>
+                          <div class="w-2 h-2 rounded-full animate-bounce" style="background-color: #84cc16; animation-delay: 150ms;"></div>
+                          <div class="w-2 h-2 rounded-full animate-bounce" style="background-color: #84cc16; animation-delay: 300ms;"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Slide 3: Caption Options -->
+                <div class="absolute inset-0 transition-transform duration-500 ease-in-out" data-carousel-target="slide">
+                  <div class="flex flex-col h-full bg-gray-900 text-white p-6">
+                    <h3 class="text-lg font-bold mb-4 text-center">Choose Your Style</h3>
+                    <div class="space-y-3 flex-1 overflow-y-auto">
+                      <div class="rounded-lg p-4 border-2" style="background-color: #1f2937; border-color: #d2f803;">
+                        <div class="text-xs mb-2" style="color: #d2f803; font-weight: 600;">MOTIVATIONAL</div>
+                        <p class="text-sm text-white">"💪 Morning grind at Downtown Gym! Who's ready to crush their goals today?"</p>
+                      </div>
+                      <div class="rounded-lg p-4 border" style="background-color: #374151; border-color: #6b7280;">
+                        <div class="text-xs mb-2" style="color: #9ca3af; font-weight: 600;">EDUCATIONAL</div>
+                        <p class="text-sm text-white">"Form check: Notice the controlled movement in this deadlift. Technique > Weight always."</p>
+                      </div>
+                      <div class="rounded-lg p-4 border" style="background-color: #111827; border-color: #374151;">
+                        <div class="text-xs mb-2" style="color: #6b7280; font-weight: 600;">BEHIND-THE-SCENES</div>
+                        <p class="text-sm text-white">"6 AM setup complete. Ready to help my clients become their strongest selves 💚"</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Carousel Dots -->
+              <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
+                <button class="w-2 h-2 rounded-full bg-accent" data-carousel-target="dot" data-action="click->carousel#goToSlide" data-index="0"></button>
+                <button class="w-2 h-2 rounded-full bg-gray-400" data-carousel-target="dot" data-action="click->carousel#goToSlide" data-index="1"></button>
+                <button class="w-2 h-2 rounded-full bg-gray-400" data-carousel-target="dot" data-action="click->carousel#goToSlide" data-index="2"></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Features Section -->
+<section id="features" class="py-20 bg-white">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-16">
+      <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+        Upload & Auto-Everything
+      </h2>
+      <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+        The only social media tool built specifically for personal trainers. One upload, infinite possibilities.
+      </p>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-8">
+      <div class="text-center p-8 bg-gray-50 rounded-xl">
+        <div class="w-16 h-16 bg-accent rounded-full flex items-center justify-center mx-auto mb-6">
+          <span class="text-2xl">📸</span>
+        </div>
+        <h3 class="text-xl font-semibold mb-4">Smart Photo Analysis</h3>
+        <p class="text-gray-600">Our AI extracts location, time, and context from your photos to create authentic, relevant captions.</p>
+      </div>
+
+      <div class="text-center p-8 bg-gray-50 rounded-xl">
+        <div class="w-16 h-16 bg-accent rounded-full flex items-center justify-center mx-auto mb-6">
+          <span class="text-2xl">🤖</span>
+        </div>
+        <h3 class="text-xl font-semibold mb-4">Voice Learning</h3>
+        <p class="text-gray-600">The more you use Uplo, the better it gets at matching your unique tone and brand voice.</p>
+      </div>
+
+      <div class="text-center p-8 bg-gray-50 rounded-xl">
+        <div class="w-16 h-16 bg-accent rounded-full flex items-center justify-center mx-auto mb-6">
+          <span class="text-2xl">📈</span>
+        </div>
+        <h3 class="text-xl font-semibold mb-4">Optimal Timing</h3>
+        <p class="text-gray-600">Posts automatically at peak engagement times for each platform to maximize your reach.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Examples Section -->
+<section id="examples" class="py-20 bg-gray-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-16">
+      <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+        Amazing Posts We Create
+      </h2>
+      <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+        See real examples of AI-generated content that's helping personal trainers attract more clients.
+      </p>
+    </div>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <!-- Example Post 1 -->
+      <div class="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow">
+        <div class="aspect-square relative overflow-hidden">
+          <%= image_tag "workout1.jpg", class: "w-full h-full object-cover", alt: "Personal trainer deadlift form" %>
+          <!-- Instagram-style overlay -->
+          <div class="absolute top-4 right-4">
+            <div class="bg-black/20 backdrop-blur-sm rounded-full p-2">
+              <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
+                <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+        <div class="p-6">
+          <div class="flex items-center mb-4">
+            <div class="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full mr-3 flex items-center justify-center">
+              <span class="text-white text-xs font-bold">M</span>
+            </div>
+            <span class="font-semibold">@mikethehealthguy</span>
+          </div>
+          <p class="text-gray-800 mb-4">
+            "Form check: Notice how I keep my chest up and core tight during these deadlifts. 
+            It's the small details that prevent injury and maximize results. 
+            Book your form assessment this week! 💯 #FormMatters #PersonalTrainer"
+          </p>
+          <div class="flex items-center justify-between text-sm text-gray-500">
+            <span>❤️ 156 likes</span>
+            <span>💬 23 comments</span>
+            <span class="text-accent font-semibold">+40% engagement</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Example Post 2 -->
+      <div class="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow">
+        <div class="aspect-square relative overflow-hidden">
+          <%= image_tag "workout2.jpg", class: "w-full h-full object-cover", alt: "Client workout transformation" %>
+          <!-- Instagram-style overlay -->
+          <div class="absolute top-4 right-4">
+            <div class="bg-black/20 backdrop-blur-sm rounded-full p-2">
+              <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
+                <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+        <div class="p-6">
+          <div class="flex items-center mb-4">
+            <div class="w-8 h-8 bg-gradient-to-br from-pink-500 to-orange-500 rounded-full mr-3 flex items-center justify-center">
+              <span class="text-white text-xs font-bold">S</span>
+            </div>
+            <span class="font-semibold">@sarahfitpro</span>
+          </div>
+          <p class="text-gray-800 mb-4">
+            "6 months ago, Jessica couldn't do a single push-up. Today? She's crushing 15 in a row! 
+            This is why I love what I do. Your transformation starts with one decision. 
+            Ready to make yours? DM me! ✨ #TransformationTuesday #Results"
+          </p>
+          <div class="flex items-center justify-between text-sm text-gray-500">
+            <span>❤️ 203 likes</span>
+            <span>💬 31 comments</span>
+            <span class="text-accent font-semibold">+65% engagement</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Example Post 3 -->
+      <div class="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow">
+        <div class="aspect-square relative overflow-hidden">
+          <%= image_tag "workout3.jpg", class: "w-full h-full object-cover", alt: "Early morning gym setup" %>
+          <!-- Instagram-style overlay -->
+          <div class="absolute top-4 right-4">
+            <div class="bg-black/20 backdrop-blur-sm rounded-full p-2">
+              <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
+                <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+        <div class="p-6">
+          <div class="flex items-center mb-4">
+            <div class="w-8 h-8 bg-gradient-to-br from-green-500 to-teal-500 rounded-full mr-3 flex items-center justify-center">
+              <span class="text-white text-xs font-bold">A</span>
+            </div>
+            <span class="font-semibold">@alexfitness</span>
+          </div>
+          <p class="text-gray-800 mb-4">
+            "5 AM gym setup complete ✅ I love these quiet moments before the day begins, 
+            planning out personalized workouts for each client. Ready to see what I have 
+            in store for you today? 💚 #EarlyBird #Dedication #PersonalTraining"
+          </p>
+          <div class="flex items-center justify-between text-sm text-gray-500">
+            <span>❤️ 89 likes</span>
+            <span>💬 12 comments</span>
+            <span class="text-accent font-semibold">+35% engagement</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="text-center mt-12">
+      <p class="text-gray-600 mb-6">
+        Join hundreds of personal trainers already growing their business with Uplo
+      </p>
+      <%= link_to early_access_path, class: "bg-accent text-gray-900 px-8 py-3 rounded-lg font-semibold hover:bg-accent-hover transition-colors" do %>
+        Start Creating Amazing Content
+      <% end %>
+    </div>
+  </div>
+</section>
+
+<!-- Social Proof Section -->
+<section class="py-20 bg-white">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-16">
+      <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+        Loved by Personal Trainers
+      </h2>
+      <p class="text-xl text-gray-600">
+        See what trainers are saying about Uplo
+      </p>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-8">
+      <div class="bg-gray-50 rounded-xl p-8">
+        <div class="flex items-center mb-4">
+          <div class="w-12 h-12 bg-gray-400 rounded-full mr-4"></div>
+          <div>
+            <h4 class="font-semibold">Mike Rodriguez</h4>
+            <p class="text-sm text-gray-600">Personal Trainer, Miami</p>
+          </div>
+        </div>
+        <p class="text-gray-800 mb-4">
+          "Uplo saved me 2 hours every day. I went from posting twice a week to posting daily, 
+          and my client inquiries have tripled. The AI actually sounds like me!"
+        </p>
+        <div class="flex items-center text-accent">
+          <span class="text-sm font-semibold">⭐⭐⭐⭐⭐ 5/5</span>
+        </div>
+      </div>
+
+      <div class="bg-gray-50 rounded-xl p-8">
+        <div class="flex items-center mb-4">
+          <div class="w-12 h-12 bg-gray-400 rounded-full mr-4"></div>
+          <div>
+            <h4 class="font-semibold">Sarah Chen</h4>
+            <p class="text-sm text-gray-600">Fitness Coach, San Francisco</p>
+          </div>
+        </div>
+        <p class="text-gray-800 mb-4">
+          "I was terrible at writing captions. Now my posts get 3x more engagement and 
+          I'm booking clients every week. This is a game-changer for introverted trainers."
+        </p>
+        <div class="flex items-center text-accent">
+          <span class="text-sm font-semibold">⭐⭐⭐⭐⭐ 5/5</span>
+        </div>
+      </div>
+
+      <div class="bg-gray-50 rounded-xl p-8">
+        <div class="flex items-center mb-4">
+          <div class="w-12 h-12 bg-gray-400 rounded-full mr-4"></div>
+          <div>
+            <h4 class="font-semibold">Alex Thompson</h4>
+            <p class="text-sm text-gray-600">Gym Owner, Austin</p>
+          </div>
+        </div>
+        <p class="text-gray-800 mb-4">
+          "My entire team uses Uplo now. We've gone from struggling with social media 
+          to having a consistent, professional presence. Our membership has grown 40%."
+        </p>
+        <div class="flex items-center text-accent">
+          <span class="text-sm font-semibold">⭐⭐⭐⭐⭐ 5/5</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Pricing Section -->
+<section id="pricing" class="py-20 bg-gray-900 text-white">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-16">
+      <h2 class="text-3xl sm:text-4xl font-bold mb-4">
+        Simple Pricing for Personal Trainers
+      </h2>
+      <p class="text-xl text-gray-400">
+        Choose the plan that fits your goals. Cancel anytime.
+      </p>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+      <!-- Starter Plan -->
+      <div class="bg-gray-800 rounded-xl p-8 border border-gray-700">
+        <div class="text-center mb-8">
+          <h3 class="text-2xl font-bold mb-2">Starter</h3>
+          <div class="text-4xl font-bold mb-2">$19<span class="text-lg text-gray-400">/month</span></div>
+          <p class="text-gray-400">Perfect for individual trainers</p>
+        </div>
+        <ul class="space-y-4 mb-8">
+          <li class="flex items-center">
+            <span class="text-accent mr-3">✓</span>
+            30 AI-generated posts per month
+          </li>
+          <li class="flex items-center">
+            <span class="text-accent mr-3">✓</span>
+            Instagram & Facebook posting
+          </li>
+          <li class="flex items-center">
+            <span class="text-accent mr-3">✓</span>
+            3 caption style variations
+          </li>
+          <li class="flex items-center">
+            <span class="text-accent mr-3">✓</span>
+            Basic analytics
+          </li>
+          <li class="flex items-center">
+            <span class="text-accent mr-3">✓</span>
+            Email support
+          </li>
+        </ul>
+        <%= link_to early_access_path, class: "w-full bg-accent text-gray-900 py-3 rounded-lg font-semibold hover:bg-accent-hover transition-colors text-center block" do %>
+          Start Free Trial
+        <% end %>
+      </div>
+
+      <!-- Pro Plan -->
+      <div class="bg-gray-800 rounded-xl p-8 border-2 border-accent relative">
+        <div class="absolute -top-4 left-1/2 transform -translate-x-1/2">
+          <span class="bg-accent text-gray-900 px-6 py-1 rounded-full text-sm font-semibold">Most Popular</span>
+        </div>
+        <div class="text-center mb-8">
+          <h3 class="text-2xl font-bold mb-2">Pro</h3>
+          <div class="text-4xl font-bold mb-2">$39<span class="text-lg text-gray-400">/month</span></div>
+          <p class="text-gray-400">For serious fitness professionals</p>
+        </div>
+        <ul class="space-y-4 mb-8">
+          <li class="flex items-center">
+            <span class="text-accent mr-3">✓</span>
+            Unlimited AI-generated posts
+          </li>
+          <li class="flex items-center">
+            <span class="text-accent mr-3">✓</span>
+            All platforms (Instagram, Facebook, TikTok, LinkedIn)
+          </li>
+          <li class="flex items-center">
+            <span class="text-accent mr-3">✓</span>
+            Advanced voice learning
+          </li>
+          <li class="flex items-center">
+            <span class="text-accent mr-3">✓</span>
+            Detailed analytics & insights
+          </li>
+          <li class="flex items-center">
+            <span class="text-accent mr-3">✓</span>
+            Priority support
+          </li>
+          <li class="flex items-center">
+            <span class="text-accent mr-3">✓</span>
+            Team collaboration tools
+          </li>
+        </ul>
+        <%= link_to early_access_path, class: "w-full bg-accent text-gray-900 py-3 rounded-lg font-semibold hover:bg-accent-hover transition-colors text-center block" do %>
+          Start Free Trial
+        <% end %>
+      </div>
+    </div>
+
+    <div class="text-center mt-12">
+      <p class="text-gray-400 mb-4">
+        30-day free trial • No credit card required • Cancel anytime
+      </p>
+      <p class="text-sm text-gray-500">
+        Questions? <a href="mailto:hello@soco.com" class="text-accent hover:underline">Contact us</a>
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- CTA Section -->
+<section class="py-20 bg-accent">
+  <div class="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
+    <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-6">
+      Ready to Transform Your Social Media?
+    </h2>
+    <p class="text-xl text-gray-800 mb-8">
+      Join 500+ personal trainers who are already growing their business with Uplo.
+      Start your free trial today—no credit card required.
+    </p>
+    <%= link_to early_access_path, class: "bg-gray-900 text-white px-12 py-4 rounded-lg font-semibold text-lg hover:bg-gray-800 transition-colors" do %>
+      Start Free Trial Now
+    <% end %>
+  </div>
+</section>

@@ -1,0 +1,80 @@
+<!-- Unified Navigation Component -->
+<nav class="bg-white shadow-sm border-b safe-area-nav">
+  <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+    <div class="flex justify-between h-14 sm:h-16">
+      <div class="flex items-center">
+        <%= render 'shared/logo', size: '1.5rem' %>
+      </div>
+      <div class="flex items-center space-x-2 sm:space-x-4">
+        <!-- Dashboard Link (hidden on dashboard page) -->
+        <% unless current_page?(dashboard_path) %>
+          <%= link_to dashboard_path, class: "text-gray-700 hover:text-gray-900 flex items-center px-2 py-1.5 sm:px-3 sm:py-2 rounded-lg hover:bg-gray-100 transition-colors text-sm font-medium" do %>
+            Dashboard
+          <% end %>
+        <% end %>
+        
+        <!-- Photos Link (hidden on photos index page) -->
+        <% unless current_page?(photos_path) %>
+          <%= link_to photos_path, class: "text-gray-700 hover:text-gray-900 flex items-center px-2 py-1.5 sm:px-3 sm:py-2 rounded-lg hover:bg-gray-100 transition-colors text-sm font-medium" do %>
+            My Photos
+          <% end %>
+        <% end %>
+        
+        <!-- Upload Link (hidden on upload page) -->
+        <% unless current_page?(new_photo_path) %>
+          <%= link_to new_photo_path, class: "bg-accent text-black px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg text-sm sm:text-base font-semibold hover:bg-accent-hover transition-colors" do %>
+            <span class="hidden sm:inline">Upload Photo</span>
+            <span class="sm:hidden">Upload</span>
+          <% end %>
+        <% end %>
+        
+        <!-- Profile Dropdown -->
+        <div class="relative" data-controller="dropdown">
+          <button data-dropdown-target="button" data-action="click->dropdown#toggle" class="flex items-center text-gray-700 hover:text-gray-900 focus:outline-none">
+            <div class="w-8 h-8 rounded-full overflow-hidden bg-gray-100 border border-gray-200 sm:mr-2">
+              <% if Current.user.profile_picture.attached? %>
+                <%= image_tag Current.user.profile_picture, class: "w-full h-full object-cover", alt: "Profile" %>
+              <% else %>
+                <div class="w-full h-full flex items-center justify-center bg-gray-200">
+                  <svg class="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                  </svg>
+                </div>
+              <% end %>
+            </div>
+            <span class="hidden sm:inline text-sm sm:text-base">Hi, <%= Current.user.email_address.split('@').first.capitalize %>!</span>
+            <svg class="w-3 h-3 sm:w-4 sm:h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </button>
+          
+          <div data-dropdown-target="menu" class="hidden absolute left-auto right-2 sm:right-0 mt-2 w-48 bg-white rounded-xl shadow-xl border border-gray-100 z-50 overflow-hidden origin-top-right">
+            <div class="py-2">
+              <!-- Dashboard link in dropdown (always show) -->
+              <%= link_to dashboard_path, class: "block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors font-medium #{'bg-gray-50' if current_page?(dashboard_path)}" do %>
+                Dashboard
+              <% end %>
+              
+              <!-- Photos link in dropdown (always show) -->
+              <%= link_to photos_path, class: "block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors font-medium #{'bg-gray-50' if current_page?(photos_path)}" do %>
+                My Photos
+              <% end %>
+              
+              <!-- Profile link -->
+              <%= link_to profile_path, class: "block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors font-medium" do %>
+                My Profile
+              <% end %>
+              
+              <hr class="my-1 border-gray-100">
+              
+              <!-- Sign out -->
+              <%= link_to session_path, method: :delete, class: "block px-4 py-3 text-sm text-red-600 hover:bg-red-50 transition-colors font-medium" do %>
+                Sign Out
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>

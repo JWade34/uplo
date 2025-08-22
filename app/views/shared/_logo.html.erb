@@ -1,0 +1,4 @@
+<!-- Uplo Logo -->
+<%= link_to authenticated? ? photos_path : root_path, class: "font-black tracking-tight #{local_assigns[:color] || 'text-accent'} hover:opacity-80 transition-opacity", style: "font-size: #{local_assigns[:size] || '2rem'}; font-style: italic; transform: skewX(-8deg);" do %>
+  UPLO
+<% end %>

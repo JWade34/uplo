@@ -1,0 +1,175 @@
+<!-- Upgrade Modal -->
+<div id="upgrade-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4" data-controller="modal">
+  <div class="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-screen overflow-y-auto" data-modal-target="content">
+    <!-- Header -->
+    <div class="px-6 py-4 border-b border-gray-200">
+      <div class="flex items-center justify-between">
+        <h2 class="text-xl sm:text-2xl font-bold text-gray-900">Upgrade to Pro</h2>
+        <button data-action="click->modal#close" class="text-gray-400 hover:text-gray-600 p-1">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+    
+    <!-- Content -->
+    <div class="px-6 py-6">
+      <!-- Value Proposition -->
+      <div class="text-center mb-6">
+        <div class="text-4xl mb-3">🚀</div>
+        <h3 class="text-lg font-semibold text-gray-900 mb-2">
+          Unlock Your Full Potential
+        </h3>
+        <p class="text-gray-600 text-sm sm:text-base">
+          Get unlimited photos, 3 caption styles, and advanced analytics to grow your fitness business.
+        </p>
+      </div>
+      
+      <!-- Usage Status -->
+      <% if Current.user && !Current.user.can_access_pro_features? %>
+        <div class="bg-gradient-to-r from-blue-50 to-accent/10 rounded-lg p-4 mb-6">
+          <h4 class="text-base font-semibold text-gray-900 mb-3">Your Current Usage</h4>
+          <div class="grid grid-cols-2 gap-4 text-sm">
+            <div class="text-center">
+              <div class="text-lg font-bold text-accent"><%= Current.user.current_month_photos %></div>
+              <div class="text-xs text-gray-600">Photos This Month</div>
+            </div>
+            <div class="text-center">
+              <div class="text-lg font-bold text-blue-600"><%= Current.user.current_month_captions %></div>
+              <div class="text-xs text-gray-600">Captions Generated</div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+      
+      <!-- Plan Selection -->
+      <div class="space-y-4 mb-6">
+        <!-- Annual Plan (Recommended) -->
+        <div class="relative border-2 border-accent rounded-lg p-4 bg-accent/5">
+          <div class="absolute -top-2 left-4 bg-accent text-black text-xs px-2 py-1 rounded-full font-medium">
+            Most Popular
+          </div>
+          <div class="flex items-center justify-between">
+            <div>
+              <h4 class="text-lg font-semibold text-gray-900">Pro Annual</h4>
+              <p class="text-sm text-gray-600">Save $78 per year</p>
+              <div class="mt-2">
+                <span class="text-2xl font-bold text-gray-900">$390</span>
+                <span class="text-gray-600">/year</span>
+                <span class="ml-2 text-sm text-gray-500 line-through">$468</span>
+              </div>
+            </div>
+            <%= form_with url: checkout_create_path, method: :post, local: true, class: "inline", data: { turbo: false } do |form| %>
+              <%= form.hidden_field :plan_id, value: "pro_yearly" %>
+              <%= form.submit "Start Free Trial", class: "bg-accent text-black px-6 py-3 rounded-lg font-semibold hover:bg-accent-hover transition-colors" %>
+            <% end %>
+          </div>
+        </div>
+        
+        <!-- Monthly Plan -->
+        <div class="border border-gray-200 rounded-lg p-4">
+          <div class="flex items-center justify-between">
+            <div>
+              <h4 class="text-lg font-semibold text-gray-900">Pro Monthly</h4>
+              <p class="text-sm text-gray-600">Pay monthly, cancel anytime</p>
+              <div class="mt-2">
+                <span class="text-2xl font-bold text-gray-900">$39</span>
+                <span class="text-gray-600">/month</span>
+              </div>
+            </div>
+            <%= form_with url: checkout_create_path, method: :post, local: true, class: "inline", data: { turbo: false } do |form| %>
+              <%= form.hidden_field :plan_id, value: "pro_monthly" %>
+              <%= form.submit "Start Free Trial", class: "border border-gray-300 text-gray-700 px-6 py-3 rounded-lg font-semibold hover:bg-gray-50 transition-colors" %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Features Comparison -->
+      <div class="bg-gray-50 rounded-lg p-4 mb-6">
+        <h4 class="text-base font-semibold text-gray-900 mb-3">Pro Features Include:</h4>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm">
+          <div class="flex items-center">
+            <span class="text-accent mr-2">✓</span>
+            <span>Unlimited photo uploads</span>
+          </div>
+          <div class="flex items-center">
+            <span class="text-accent mr-2">✓</span>
+            <span>3 caption styles per photo</span>
+          </div>
+          <div class="flex items-center">
+            <span class="text-accent mr-2">✓</span>
+            <span>90-day analytics history</span>
+          </div>
+          <div class="flex items-center">
+            <span class="text-accent mr-2">✓</span>
+            <span>Platform performance comparison</span>
+          </div>
+          <div class="flex items-center">
+            <span class="text-accent mr-2">✓</span>
+            <span>Competitor analysis</span>
+          </div>
+          <div class="flex items-center">
+            <span class="text-accent mr-2">✓</span>
+            <span>Growth predictions</span>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Trust Signals -->
+      <div class="text-center text-sm text-gray-600">
+        <div class="flex items-center justify-center space-x-4 mb-2">
+          <span>✓ 14-day free trial</span>
+          <span>✓ Cancel anytime</span>
+          <span>✓ No setup fees</span>
+        </div>
+        <p class="text-xs">
+          Join 500+ fitness trainers growing their business with Uplo Pro
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Controller JavaScript -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Simple modal controller
+  const modal = document.getElementById('upgrade-modal');
+  if (!modal) return;
+  
+  const closeButtons = modal.querySelectorAll('[data-action*="modal#close"]');
+  
+  // Close modal function
+  function closeModal() {
+    modal.classList.add('hidden');
+    document.body.classList.remove('overflow-hidden');
+  }
+  
+  // Open modal function
+  window.openUpgradeModal = function() {
+    modal.classList.remove('hidden');
+    document.body.classList.add('overflow-hidden');
+  };
+  
+  // Close button listeners
+  closeButtons.forEach(button => {
+    button.addEventListener('click', closeModal);
+  });
+  
+  // Close on background click
+  modal.addEventListener('click', function(e) {
+    if (e.target === modal) {
+      closeModal();
+    }
+  });
+  
+  // Close on escape key
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+      closeModal();
+    }
+  });
+});
+</script>

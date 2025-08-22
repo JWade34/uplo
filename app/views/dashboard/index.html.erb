@@ -1,0 +1,445 @@
+<!-- Performance Dashboard -->
+<div class="min-h-screen bg-gray-50">
+  <%= render 'shared/navigation' %>
+
+  <!-- Main Content - Mobile Optimized -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
+    <!-- Mobile-Friendly Header with Subscription Status -->
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 sm:mb-8">
+      <div class="mb-4 sm:mb-0">
+        <h1 class="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900">Performance Dashboard</h1>
+        <p class="text-sm sm:text-base text-gray-600">Track your social media performance</p>
+      </div>
+      <div class="flex items-center justify-between sm:block sm:text-right">
+        <div class="inline-flex items-center px-3 py-2 sm:px-4 sm:py-2 rounded-lg text-sm <%= @user.can_access_pro_features? ? 'bg-accent text-black' : 'bg-gray-100 text-gray-700' %>">
+          <span class="mr-2"><%= @user.can_access_pro_features? ? '💎' : '🌟' %></span>
+          <span class="font-semibold"><%= @user.subscription_display_name %> Plan</span>
+        </div>
+        <% if @user.trial_active? %>
+          <p class="text-xs text-gray-500 sm:mt-1">
+            <%= pluralize(@user.days_left_in_trial, 'day') %> left
+          </p>
+        <% end %>
+      </div>
+    </div>
+
+    <!-- Usage Limits for Starter Users -->
+    <% unless @user.can_access_pro_features? %>
+      <div class="max-w-5xl mx-auto mb-6 sm:mb-8">
+        <div class="bg-white rounded-lg shadow-sm border p-4 sm:p-6">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-lg font-semibold text-gray-900">Monthly Usage</h3>
+            <span class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full">
+              Starter Plan
+            </span>
+          </div>
+          
+          <div class="grid grid-cols-2 gap-4 sm:gap-6">
+            <!-- Photos Usage -->
+            <div>
+              <div class="flex justify-between text-sm mb-2">
+                <span class="text-gray-600">Photos</span>
+                <span class="font-medium"><%= @usage_stats[:photos_used] %>/<%= @usage_stats[:photos_limit] %></span>
+              </div>
+              <div class="w-full bg-gray-200 rounded-full h-2">
+                <div class="bg-accent h-2 rounded-full transition-all duration-300" style="width: <%= [@usage_stats[:photos_percentage], 100].min %>%"></div>
+              </div>
+              <p class="text-xs text-gray-500 mt-1"><%= @usage_stats[:photos_remaining] %> remaining</p>
+            </div>
+            
+            <!-- Captions Usage -->
+            <div>
+              <div class="flex justify-between text-sm mb-2">
+                <span class="text-gray-600">AI Captions</span>
+                <span class="font-medium"><%= @usage_stats[:captions_used] %>/<%= @usage_stats[:captions_limit] %></span>
+              </div>
+              <div class="w-full bg-gray-200 rounded-full h-2">
+                <div class="bg-accent h-2 rounded-full transition-all duration-300" style="width: <%= [@usage_stats[:captions_percentage], 100].min %>%"></div>
+              </div>
+              <p class="text-xs text-gray-500 mt-1"><%= @usage_stats[:captions_remaining] %> remaining</p>
+            </div>
+          </div>
+          
+          <% if @usage_stats[:photos_remaining] <= 2 || @usage_stats[:captions_remaining] <= 1 %>
+            <div class="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
+              <div class="flex items-start">
+                <span class="text-yellow-400 mr-2">⚠️</span>
+                <div class="flex-1">
+                  <p class="text-sm text-yellow-800 font-medium">
+                    You're running low on <%= @usage_stats[:photos_remaining] <= 2 ? 'photos' : 'captions' %>!
+                  </p>
+                  <p class="text-xs text-yellow-700 mt-1">
+                    Upgrade to Pro for unlimited uploads and 3 caption styles per photo.
+                  </p>
+                </div>
+                <button onclick="openUpgradeModal()" class="text-xs bg-yellow-100 text-yellow-800 px-3 py-1 rounded hover:bg-yellow-200 transition-colors">
+                  Upgrade →
+                </button>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+
+    <!-- Desktop-Constrained Key Metrics -->
+    <div class="max-w-5xl mx-auto">
+      <div class="grid grid-cols-2 gap-4 mb-6 sm:mb-8 lg:grid-cols-4 sm:gap-6">
+        <!-- Total Posts -->
+        <div class="bg-white rounded-lg shadow-sm border p-4 sm:p-6">
+          <div class="flex flex-col sm:flex-row sm:items-center">
+            <div class="mb-2 sm:mb-0 sm:mr-4">
+              <span class="text-2xl sm:text-3xl">📸</span>
+            </div>
+            <div>
+              <p class="text-2xl sm:text-3xl font-bold text-gray-900"><%= @total_photos %></p>
+              <p class="text-sm sm:text-base text-gray-600">
+                Total Posts
+                <% unless @user.can_access_pro_features? %>
+                  <span class="block text-xs text-gray-500">(Last 7 days)</span>
+                <% end %>
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Average Engagement -->
+        <div class="bg-white rounded-lg shadow-sm border p-4 sm:p-6">
+          <div class="flex flex-col sm:flex-row sm:items-center">
+            <div class="mb-2 sm:mb-0 sm:mr-4">
+              <span class="text-2xl sm:text-3xl">💚</span>
+            </div>
+            <div>
+              <p class="text-2xl sm:text-3xl font-bold text-gray-900"><%= number_with_precision(@avg_engagement, precision: 1) %>%</p>
+              <p class="text-sm sm:text-base text-gray-600">Avg Engagement</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Total Engagement -->
+        <div class="bg-white rounded-lg shadow-sm border p-4 sm:p-6">
+          <div class="flex flex-col sm:flex-row sm:items-center">
+            <div class="mb-2 sm:mb-0 sm:mr-4">
+              <span class="text-2xl sm:text-3xl">👥</span>
+            </div>
+            <div>
+              <p class="text-2xl sm:text-3xl font-bold text-gray-900"><%= number_with_delimiter(@total_engagement) %></p>
+              <p class="text-sm sm:text-base text-gray-600">Total Interactions</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Monthly Growth -->
+        <div class="bg-white rounded-lg shadow-sm border p-4 sm:p-6">
+          <div class="flex flex-col sm:flex-row sm:items-center">
+            <div class="mb-2 sm:mb-0 sm:mr-4">
+              <span class="text-2xl sm:text-3xl">📈</span>
+            </div>
+            <div>
+              <p class="text-2xl sm:text-3xl font-bold text-gray-900">
+                <%= @latest_summary&.followers_gained || 0 %>
+              </p>
+              <p class="text-sm sm:text-base text-gray-600">New Followers</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile-First Content Layout -->
+    <div class="space-y-4 sm:space-y-6 lg:grid lg:grid-cols-3 lg:gap-6 lg:space-y-0">
+      <!-- Main Content - Appears first on mobile -->
+      <div class="lg:col-span-2 space-y-4 sm:space-y-6">
+        <!-- Top Performing Posts - Mobile Optimized -->
+        <div class="bg-white rounded-lg shadow-sm border p-4 sm:p-6">
+          <div class="flex items-center justify-between mb-3 sm:mb-5">
+            <h2 class="text-lg sm:text-xl font-bold text-gray-900">Top Performing Posts</h2>
+            <% unless @user.can_access_pro_features? %>
+              <span class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full">
+                Limited
+              </span>
+            <% end %>
+          </div>
+
+          <% if @top_posts.any? %>
+            <div class="space-y-3 sm:space-y-4">
+              <% @top_posts.each_with_index do |performance, index| %>
+                <div class="flex items-center p-3 sm:p-4 border rounded-lg <%= index >= 3 && !@user.can_access_pro_features? ? 'opacity-50 pointer-events-none' : '' %>">
+                  <div class="w-10 h-10 sm:w-12 sm:h-12 bg-gray-100 rounded-lg flex items-center justify-center mr-3 sm:mr-4 flex-shrink-0">
+                    <span class="text-base sm:text-xl">📸</span>
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <h3 class="font-semibold text-gray-900 text-sm sm:text-base truncate">
+                      <%= performance.photo.title || "Workout Session ##{index + 1}" %>
+                    </h3>
+                    <p class="text-xs sm:text-sm text-gray-600">
+                      <%= performance.platform_display_name %> • 
+                      <%= time_ago_in_words(performance.posted_at) %> ago
+                    </p>
+                  </div>
+                  <div class="text-right ml-2 sm:ml-4">
+                    <p class="text-base sm:text-lg font-bold text-accent">
+                      <%= number_with_precision(performance.engagement_rate, precision: 1) %>%
+                    </p>
+                    <p class="text-xs sm:text-sm text-gray-600">
+                      <%= number_with_delimiter(performance.total_engagement) %> 
+                      <span class="hidden sm:inline">interactions</span>
+                    </p>
+                  </div>
+                </div>
+                
+                <!-- Mobile-Friendly Upgrade prompt -->
+                <% if index == 2 && !@user.can_access_pro_features? %>
+                  <!-- Show blurred preview of locked posts -->
+                  <% if @locked_posts_preview&.any? %>
+                    <div class="border-t border-gray-200 pt-4">
+                      <div class="relative">
+                        <!-- Blurred content overlay -->
+                        <div class="absolute inset-0 bg-white/80 backdrop-blur-sm z-10 rounded-lg flex items-center justify-center">
+                          <div class="text-center p-4">
+                            <div class="text-3xl mb-2">🔒</div>
+                            <h3 class="text-base font-semibold text-gray-900 mb-1">
+                              <%= pluralize(@locked_posts_preview.count, 'more post') %> available
+                            </h3>
+                            <p class="text-sm text-gray-600 mb-3">
+                              Unlock full analytics with Pro
+                            </p>
+                            <button onclick="openUpgradeModal()" class="bg-accent text-black px-4 py-2 text-sm rounded-lg font-semibold hover:bg-accent-hover transition-colors">
+                              Upgrade Now
+                            </button>
+                          </div>
+                        </div>
+                        
+                        <!-- Blurred preview content -->
+                        <div class="space-y-3 blur-sm">
+                          <% @locked_posts_preview.first(3).each_with_index do |performance, preview_index| %>
+                            <div class="flex items-center p-3 border rounded-lg opacity-60">
+                              <div class="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center mr-3 flex-shrink-0">
+                                <span class="text-base">📸</span>
+                              </div>
+                              <div class="flex-1 min-w-0">
+                                <h3 class="font-semibold text-gray-900 text-sm truncate">
+                                  <%= performance.photo.title || "Workout Session ##{preview_index + 4}" %>
+                                </h3>
+                                <p class="text-xs text-gray-600">
+                                  <%= performance.platform_display_name %> • 
+                                  <%= time_ago_in_words(performance.posted_at) %> ago
+                                </p>
+                              </div>
+                              <div class="text-right ml-2">
+                                <p class="text-base font-bold text-accent">
+                                  <%= number_with_precision(performance.engagement_rate, precision: 1) %>%
+                                </p>
+                                <p class="text-xs text-gray-600">
+                                  <%= number_with_delimiter(performance.total_engagement) %>
+                                </p>
+                              </div>
+                            </div>
+                          <% end %>
+                        </div>
+                      </div>
+                    </div>
+                  <% end %>
+                  
+                  <div class="text-center py-4 sm:py-6 border-t border-gray-200 mt-4">
+                    <div class="bg-gradient-to-r from-accent/10 to-accent/5 rounded-lg p-4 sm:p-6">
+                      <h3 class="text-base sm:text-lg font-semibold text-gray-900 mb-2">
+                        🔓 Unlock Full Analytics
+                      </h3>
+                      <p class="text-sm sm:text-base text-gray-600 mb-3 sm:mb-4">
+                        See all your posts, compare platforms, and track growth trends.
+                      </p>
+                      <button onclick="openUpgradeModal()" class="bg-accent text-black px-4 py-2 sm:px-6 text-sm sm:text-base rounded-lg font-semibold hover:bg-accent-hover transition-colors w-full sm:w-auto">
+                        Upgrade to Pro - $39/month
+                      </button>
+                    </div>
+                  </div>
+                  <% break %>
+                <% end %>
+              <% end %>
+            </div>
+          <% else %>
+            <div class="text-center py-6 sm:py-8">
+              <div class="text-gray-400 text-3xl sm:text-4xl mb-3 sm:mb-4">📊</div>
+              <h3 class="text-base sm:text-lg font-medium text-gray-900 mb-2">No Performance Data Yet</h3>
+              <p class="text-sm sm:text-base text-gray-600 mb-3 sm:mb-4">
+                Upload photos and start posting to see your analytics.
+              </p>
+              <%= link_to new_photo_path, class: "bg-accent text-black px-4 py-2 sm:px-6 text-sm sm:text-base rounded-lg font-semibold hover:bg-accent-hover transition-colors inline-block" do %>
+                Upload Your First Photo
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+
+        <!-- Platform Performance - Hidden on mobile for Starter users -->
+        <% if @user.can_access_pro_features? && @platform_stats.any? %>
+          <div class="bg-white rounded-lg shadow-sm border p-4 sm:p-6">
+            <h2 class="text-lg sm:text-xl font-bold text-gray-900 mb-3 sm:mb-5">Platform Performance</h2>
+            <div class="space-y-3 sm:space-y-4">
+              <% @platform_stats.each do |platform, avg_engagement| %>
+                <div class="flex items-center justify-between p-3 sm:p-4 border rounded-lg">
+                  <div class="flex items-center">
+                    <div class="w-8 h-8 sm:w-10 sm:h-10 bg-gray-100 rounded-lg flex items-center justify-center mr-2 sm:mr-3">
+                      <span class="text-sm sm:text-lg">📱</span>
+                    </div>
+                    <span class="font-medium text-gray-900 text-sm sm:text-base"><%= platform %></span>
+                  </div>
+                  <div class="text-right">
+                    <div class="text-base sm:text-lg font-bold text-accent">
+                      <%= number_with_precision(avg_engagement, precision: 1) %>%
+                    </div>
+                    <div class="text-xs sm:text-sm text-gray-600">avg engagement</div>
+                  </div>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+
+      <!-- Sidebar - Appears below main content on mobile -->
+      <div class="space-y-4 sm:space-y-6">
+        <!-- Value Gap Calculator for Starter Users -->
+        <% unless @user.can_access_pro_features? %>
+          <% if @value_gaps.any? %>
+            <div class="bg-white rounded-lg shadow-sm border p-4 sm:p-6 mb-4 sm:mb-6">
+              <div class="text-center mb-4">
+                <h3 class="text-lg font-bold text-gray-900 mb-1">Missed Opportunities</h3>
+                <p class="text-sm text-gray-600">What you're missing without Pro</p>
+              </div>
+              
+              <div class="space-y-4">
+                <!-- Weekly Engagement Gap -->
+                <div class="flex justify-between items-center p-3 bg-red-50 rounded-lg">
+                  <div>
+                    <p class="text-sm font-medium text-red-800">Weekly Engagement</p>
+                    <p class="text-xs text-red-600">Current vs Pro potential</p>
+                  </div>
+                  <div class="text-right">
+                    <p class="text-lg font-bold text-red-700">
+                      -<%= number_with_delimiter(@value_gaps[:weekly_opportunity_cost].to_i) %>
+                    </p>
+                    <p class="text-xs text-red-600">interactions/week</p>
+                  </div>
+                </div>
+                
+                <!-- Potential Followers -->
+                <div class="flex justify-between items-center p-3 bg-blue-50 rounded-lg">
+                  <div>
+                    <p class="text-sm font-medium text-blue-800">Monthly Growth</p>
+                    <p class="text-xs text-blue-600">Additional followers</p>
+                  </div>
+                  <div class="text-right">
+                    <p class="text-lg font-bold text-blue-700">
+                      +<%= @value_gaps[:potential_followers] %>
+                    </p>
+                    <p class="text-xs text-blue-600">followers/month</p>
+                  </div>
+                </div>
+                
+                <!-- Engagement Rate -->
+                <div class="flex justify-between items-center p-3 bg-green-50 rounded-lg">
+                  <div>
+                    <p class="text-sm font-medium text-green-800">Engagement Rate</p>
+                    <p class="text-xs text-green-600">Pro vs Starter</p>
+                  </div>
+                  <div class="text-right">
+                    <p class="text-lg font-bold text-green-700">
+                      <%= number_with_precision(@value_gaps[:pro][:engagement_rate], precision: 1) %>%
+                    </p>
+                    <p class="text-xs text-green-600">
+                      vs <%= number_with_precision(@value_gaps[:current][:engagement_rate], precision: 1) %>% current
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <% end %>
+          
+          <div class="bg-gradient-to-br from-gray-900 to-black rounded-lg p-4 sm:p-6 text-white">
+            <div class="text-center mb-4 sm:mb-6">
+              <div class="text-3xl sm:text-4xl mb-2 sm:mb-4">💎</div>
+              <h3 class="text-lg sm:text-xl font-bold mb-1 sm:mb-2">Unlock Your Potential</h3>
+              <p class="text-gray-300 text-xs sm:text-sm">
+                Gain <span class="text-accent font-bold"><%= @potential_followers %></span> more followers per month
+              </p>
+            </div>
+            
+            <div class="space-y-2 sm:space-y-3 mb-4 sm:mb-6">
+              <div class="flex items-center text-xs sm:text-sm">
+                <span class="text-accent mr-2">✓</span>
+                90-day performance history
+              </div>
+              <div class="flex items-center text-xs sm:text-sm">
+                <span class="text-accent mr-2">✓</span>
+                Platform comparison
+              </div>
+              <div class="flex items-center text-xs sm:text-sm">
+                <span class="text-accent mr-2">✓</span>
+                Competitor analysis
+              </div>
+              <div class="flex items-center text-xs sm:text-sm">
+                <span class="text-accent mr-2">✓</span>
+                Growth predictions
+              </div>
+              <div class="flex items-center text-xs sm:text-sm">
+                <span class="text-accent mr-2">✓</span>
+                3 caption styles per photo
+              </div>
+            </div>
+            
+            <button onclick="openUpgradeModal()" class="w-full bg-accent text-black py-2.5 sm:py-3 rounded-lg font-semibold text-sm sm:text-base hover:bg-accent-hover transition-colors">
+              Upgrade to Pro - $39/month
+            </button>
+            <p class="text-center text-xs text-gray-400 mt-2">Cancel anytime</p>
+          </div>
+        <% end %>
+
+        <!-- Mobile-Optimized Monthly Summary -->
+        <% if @latest_summary %>
+          <div class="bg-white rounded-lg shadow-sm border p-4 sm:p-6">
+            <h3 class="text-base sm:text-lg font-semibold text-gray-900 mb-3 sm:mb-4">This Month</h3>
+            <div class="space-y-2 sm:space-y-3 text-sm">
+              <div class="flex justify-between">
+                <span class="text-gray-600">Posts</span>
+                <span class="font-semibold"><%= @latest_summary.total_posts %></span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-gray-600">Avg Engagement</span>
+                <span class="font-semibold"><%= number_with_precision(@latest_summary.avg_engagement_rate, precision: 1) %>%</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-gray-600">Followers Gained</span>
+                <span class="font-semibold text-accent">+<%= @latest_summary.followers_gained %></span>
+              </div>
+            </div>
+          </div>
+        <% end %>
+
+        <!-- Condensed Locked Features for mobile -->
+        <% unless @user.can_access_pro_features? %>
+          <div class="bg-white rounded-lg shadow-sm border p-4 sm:p-6">
+            <h3 class="text-base sm:text-lg font-semibold text-gray-900 mb-3 sm:mb-4">
+              🔒 Pro Features
+            </h3>
+            <div class="space-y-2 sm:space-y-3">
+              <% @locked_features.first(3).each do |feature| %>
+                <div class="flex items-start p-2 sm:p-3 bg-gray-50 rounded-lg">
+                  <span class="text-base sm:text-xl mr-2 sm:mr-3"><%= feature[:icon] %></span>
+                  <div>
+                    <h4 class="font-medium text-gray-900 text-xs sm:text-sm"><%= feature[:title] %></h4>
+                    <p class="text-xs text-gray-600 mt-0.5 sm:mt-1 hidden sm:block"><%= feature[:description] %></p>
+                  </div>
+                </div>
+              <% end %>
+            </div>
+            <button onclick="openUpgradeModal()" class="w-full text-accent hover:underline text-xs sm:text-sm font-medium mt-3">
+              See All Pro Features →
+            </button>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

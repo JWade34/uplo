@@ -1,0 +1,34 @@
+<!-- Payment Cancelled Page -->
+<div class="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+  <div class="max-w-md w-full">
+    <div class="bg-white rounded-xl shadow-lg p-6 sm:p-8 text-center">
+      <div class="text-6xl mb-4">💭</div>
+      <h1 class="text-2xl font-bold text-gray-900 mb-2">No Problem!</h1>
+      <p class="text-gray-600 mb-6">
+        <%= @cancel_message || 'Your payment was cancelled. You can upgrade anytime when you\'re ready.' %>
+      </p>
+      
+      <!-- Continue using free features -->
+      <div class="bg-gray-50 rounded-lg p-4 mb-6">
+        <h3 class="font-semibold text-gray-900 mb-2">Your Free Account Includes:</h3>
+        <div class="text-sm text-gray-600 space-y-1">
+          <div>✓ 8 photo uploads per month</div>
+          <div>✓ 5 AI captions per month</div>
+          <div>✓ 7-day analytics history</div>
+          <div>✓ Basic performance insights</div>
+        </div>
+      </div>
+      
+      <div class="space-y-3">
+        <%= link_to "Continue with Free Account", dashboard_path, class: "block w-full bg-accent text-black py-3 rounded-lg font-semibold hover:bg-accent-hover transition-colors" %>
+        <button onclick="openUpgradeModal()" class="block w-full border border-gray-300 text-gray-700 py-3 rounded-lg font-semibold hover:bg-gray-50 transition-colors">
+          View Pro Plans Again
+        </button>
+      </div>
+      
+      <div class="mt-6 text-sm text-gray-500">
+        <p>Questions? Email us at <a href="mailto:support@uplo.com" class="text-accent hover:underline">support@uplo.com</a></p>
+      </div>
+    </div>
+  </div>
+</div>

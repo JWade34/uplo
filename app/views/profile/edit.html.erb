@@ -1,0 +1,281 @@
+<!-- Profile Edit Page -->
+<div class="min-h-screen bg-gray-50">
+  <!-- Navigation -->
+  <nav class="bg-white shadow-sm border-b">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between h-16">
+        <div class="flex items-center">
+          <%= render 'shared/logo', size: '1.75rem' %>
+        </div>
+        <div class="flex items-center space-x-8">
+          <%= link_to profile_path, class: "text-gray-700 hover:text-gray-900" do %>
+            ← Back to Profile
+          <% end %>
+          <span class="text-gray-700">Hi, <%= Current.user.email_address.split('@').first.capitalize %>!</span>
+          <%= link_to session_path, method: :delete, class: "text-gray-700 hover:text-gray-900" do %>
+            Sign Out
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Header -->
+    <div class="mb-8">
+      <h1 class="text-3xl font-bold text-gray-900 mb-2">Edit Profile</h1>
+      <p class="text-gray-600">Update your account settings and AI preferences.</p>
+    </div>
+
+    <%= form_with model: @user, url: profile_path, method: :patch, local: true, multipart: true, class: "space-y-8" do |form| %>
+      <% if @user.errors.any? %>
+        <div class="bg-red-50 border border-red-200 rounded-lg p-4">
+          <div class="flex">
+            <div class="flex-shrink-0">
+              <span class="text-red-400">⚠️</span>
+            </div>
+            <div class="ml-3">
+              <h3 class="text-sm font-medium text-red-800">
+                <%= pluralize(@user.errors.count, "error") %> prohibited this profile from being saved:
+              </h3>
+              <div class="mt-2 text-sm text-red-700">
+                <ul class="list-disc list-inside space-y-1">
+                  <% @user.errors.full_messages.each do |message| %>
+                    <li><%= message %></li>
+                  <% end %>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+
+      <!-- Account Information -->
+      <div class="bg-white rounded-lg shadow-sm border">
+        <div class="px-6 py-4 border-b border-gray-200">
+          <h2 class="text-xl font-semibold text-gray-900">Account Information</h2>
+        </div>
+        <div class="px-6 py-6 space-y-6">
+          <!-- Profile Picture Upload -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Profile Picture</label>
+            <div class="flex items-center space-x-6">
+              <div class="w-20 h-20 rounded-full overflow-hidden bg-gray-100 border-2 border-gray-200">
+                <% if @user.profile_picture.attached? %>
+                  <%= image_tag @user.profile_picture, class: "w-full h-full object-cover", alt: "Current profile picture" %>
+                <% else %>
+                  <div class="w-full h-full flex items-center justify-center text-gray-400">
+                    <span class="text-2xl">👤</span>
+                  </div>
+                <% end %>
+              </div>
+              <div class="flex-1">
+                <%= form.file_field :profile_picture, accept: "image/*", class: "block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-accent file:text-black hover:file:bg-accent-hover" %>
+                <p class="text-xs text-gray-500 mt-2">JPG, PNG, or GIF. Max size 5MB.</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="grid md:grid-cols-2 gap-6">
+            <div>
+              <%= form.label :email_address, class: "block text-sm font-medium text-gray-700 mb-2" %>
+              <%= form.email_field :email_address, class: "w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-accent focus:border-accent" %>
+            </div>
+            <div>
+              <!-- Space for future field -->
+            </div>
+          </div>
+          
+          <div class="border-t pt-6">
+            <h3 class="text-lg font-medium text-gray-900 mb-4">Change Password</h3>
+            <div class="grid md:grid-cols-2 gap-6">
+              <div>
+                <%= form.label :password, class: "block text-sm font-medium text-gray-700 mb-2" %>
+                <%= form.password_field :password, placeholder: "Leave blank to keep current password", class: "w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-accent focus:border-accent" %>
+              </div>
+              <div>
+                <%= form.label :password_confirmation, class: "block text-sm font-medium text-gray-700 mb-2" %>
+                <%= form.password_field :password_confirmation, class: "w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-accent focus:border-accent" %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- AI Personalization -->
+      <div class="bg-white rounded-lg shadow-sm border">
+        <div class="px-6 py-4 border-b border-gray-200">
+          <h2 class="text-xl font-semibold text-gray-900">AI Personalization</h2>
+          <p class="text-sm text-gray-600 mt-1">Help our AI create better captions for you</p>
+        </div>
+        <div class="px-6 py-6 space-y-6">
+          <div>
+            <%= form.label :bio, class: "block text-sm font-medium text-gray-700 mb-2" %>
+            <%= form.text_area :bio, rows: 3, placeholder: "Tell us about yourself and your fitness business...", class: "w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-accent focus:border-accent" %>
+          </div>
+          
+          <div class="grid md:grid-cols-2 gap-6">
+            <div>
+              <%= form.label :fitness_focus, class: "block text-sm font-medium text-gray-700 mb-2" %>
+              <%= form.select :fitness_focus, [
+                ['Select your focus...', ''],
+                ['Strength Training', 'strength_training'],
+                ['Cardio', 'cardio'],
+                ['Yoga', 'yoga'],
+                ['Pilates', 'pilates'],
+                ['CrossFit', 'crossfit'],
+                ['Bodybuilding', 'bodybuilding'],
+                ['Powerlifting', 'powerlifting'],
+                ['Functional Fitness', 'functional_fitness'],
+                ['Weight Loss', 'weight_loss'],
+                ['Sports Performance', 'sports_performance'],
+                ['Rehabilitation', 'rehabilitation'],
+                ['General Fitness', 'general_fitness']
+              ], {}, { class: "w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-accent focus:border-accent" } %>
+            </div>
+            
+            <div>
+              <%= form.label :target_audience, class: "block text-sm font-medium text-gray-700 mb-2" %>
+              <%= form.select :target_audience, [
+                ['Select your audience...', ''],
+                ['Beginners', 'beginners'],
+                ['Intermediate', 'intermediate'],
+                ['Advanced Athletes', 'advanced'],
+                ['Women', 'women'],
+                ['Men', 'men'],
+                ['Seniors', 'seniors'],
+                ['Youth/Teens', 'youth'],
+                ['Busy Professionals', 'professionals'],
+                ['New Moms', 'new_moms'],
+                ['Athletes', 'athletes'],
+                ['General Population', 'general']
+              ], {}, { class: "w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-accent focus:border-accent" } %>
+            </div>
+            
+            <div>
+              <%= form.label :tone_preference, class: "block text-sm font-medium text-gray-700 mb-2" %>
+              <%= form.select :tone_preference, [
+                ['Select your tone...', ''],
+                ['Motivational', 'motivational'],
+                ['Educational', 'educational'],
+                ['Friendly & Casual', 'friendly'],
+                ['Professional', 'professional'],
+                ['Inspirational', 'inspirational'],
+                ['Humorous', 'humorous'],
+                ['Direct & To-the-Point', 'direct'],
+                ['Encouraging', 'encouraging']
+              ], {}, { class: "w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-accent focus:border-accent" } %>
+            </div>
+            
+            <div>
+              <%= form.label :business_type, class: "block text-sm font-medium text-gray-700 mb-2" %>
+              <%= form.select :business_type, [
+                ['Select business type...', ''],
+                ['Solo Personal Trainer', 'solo_trainer'],
+                ['Gym Owner', 'gym_owner'],
+                ['Fitness Studio', 'studio'],
+                ['Online Coach', 'online_coach'],
+                ['Group Fitness Instructor', 'group_instructor'],
+                ['Nutritionist', 'nutritionist'],
+                ['Wellness Coach', 'wellness_coach'],
+                ['Fitness Influencer', 'influencer']
+              ], {}, { class: "w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-accent focus:border-accent" } %>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Advanced AI Settings -->
+      <div class="bg-white rounded-lg shadow-sm border">
+        <div class="px-6 py-4 border-b border-gray-200">
+          <h2 class="text-xl font-semibold text-gray-900">Advanced AI Settings</h2>
+          <p class="text-sm text-gray-600 mt-1">Optional: Provide more details for ultra-personalized captions</p>
+        </div>
+        <div class="px-6 py-6 space-y-6">
+          <div>
+            <%= form.label :client_pain_points, "What are your clients' biggest challenges?", class: "block text-sm font-medium text-gray-700 mb-2" %>
+            <%= form.text_area :client_pain_points, rows: 3, placeholder: "e.g., Lack of motivation, time constraints, plateau in progress...", class: "w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-accent focus:border-accent" %>
+          </div>
+          
+          <div>
+            <%= form.label :unique_approach, "What makes your approach unique?", class: "block text-sm font-medium text-gray-700 mb-2" %>
+            <%= form.text_area :unique_approach, rows: 3, placeholder: "e.g., Focus on sustainable habits, personalized nutrition plans...", class: "w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-accent focus:border-accent" %>
+          </div>
+          
+          <div>
+            <%= form.label :brand_personality, "Describe your brand personality", class: "block text-sm font-medium text-gray-700 mb-2" %>
+            <%= form.text_area :brand_personality, rows: 3, placeholder: "e.g., Energetic and supportive, science-based, no-nonsense...", class: "w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-accent focus:border-accent" %>
+          </div>
+          
+          <div>
+            <%= form.label :sample_caption, "Share a sample caption you love", class: "block text-sm font-medium text-gray-700 mb-2" %>
+            <%= form.text_area :sample_caption, rows: 4, placeholder: "Paste a caption that represents your style and voice...", class: "w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-accent focus:border-accent" %>
+          </div>
+        </div>
+      </div>
+
+      <!-- Content Preferences -->
+      <div class="bg-white rounded-lg shadow-sm border">
+        <div class="px-6 py-4 border-b border-gray-200">
+          <h2 class="text-xl font-semibold text-gray-900">Content Preferences</h2>
+        </div>
+        <div class="px-6 py-6 space-y-6">
+          <div class="grid md:grid-cols-2 gap-6">
+            <div>
+              <%= form.label :call_to_action_preference, "Preferred Call-to-Action Style", class: "block text-sm font-medium text-gray-700 mb-2" %>
+              <%= form.text_field :call_to_action_preference, placeholder: "e.g., Book a free consultation, DM for details...", class: "w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-accent focus:border-accent" %>
+            </div>
+            
+            <div>
+              <%= form.label :posting_frequency, "How often do you post?", class: "block text-sm font-medium text-gray-700 mb-2" %>
+              <%= form.text_field :posting_frequency, placeholder: "e.g., Daily, 3-4 times per week...", class: "w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-accent focus:border-accent" %>
+            </div>
+            
+            <div>
+              <%= form.label :location, "Location/City", class: "block text-sm font-medium text-gray-700 mb-2" %>
+              <%= form.text_field :location, placeholder: "e.g., Los Angeles, CA", class: "w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-accent focus:border-accent" %>
+            </div>
+            
+            <div>
+              <%= form.label :price_range, "Service Price Range", class: "block text-sm font-medium text-gray-700 mb-2" %>
+              <%= form.text_field :price_range, placeholder: "e.g., $75-150/session", class: "w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-accent focus:border-accent" %>
+            </div>
+          </div>
+          
+          <div>
+            <%= form.label :favorite_hashtags, "Favorite Hashtags", class: "block text-sm font-medium text-gray-700 mb-2" %>
+            <%= form.text_area :favorite_hashtags, rows: 2, placeholder: "#fitness #personaltrainer #motivation #strength #wellness...", class: "w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-accent focus:border-accent" %>
+          </div>
+          
+          <div>
+            <%= form.label :words_to_avoid, "Words or phrases to avoid", class: "block text-sm font-medium text-gray-700 mb-2" %>
+            <%= form.text_area :words_to_avoid, rows: 2, placeholder: "e.g., weight loss, diet, skinny...", class: "w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-accent focus:border-accent" %>
+          </div>
+        </div>
+      </div>
+
+      <!-- Submit Button -->
+      <div class="flex justify-end space-x-4">
+        <%= link_to profile_path, class: "px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors" do %>
+          Cancel
+        <% end %>
+        <%= form.submit "Update Profile", class: "bg-accent text-black px-8 py-2 rounded-lg font-semibold hover:bg-accent-hover transition-colors", onclick: "console.log('Submit button clicked')" %>
+      </div>
+    <% end %>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const form = document.querySelector('form');
+  if (form) {
+    form.addEventListener('submit', function(e) {
+      console.log('Form submit event triggered');
+      console.log('Form action:', form.action);
+      console.log('Form method:', form.method);
+      console.log('Form enctype:', form.enctype);
+    });
+  }
+});
+</script>
+  </div>
+</div>

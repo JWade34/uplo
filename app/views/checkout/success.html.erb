@@ -1,0 +1,45 @@
+<!-- Payment Success Page -->
+<div class="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+  <div class="max-w-md w-full">
+    <div class="bg-white rounded-xl shadow-lg p-6 sm:p-8 text-center">
+      <% if @success_message %>
+        <!-- Success State -->
+        <div class="text-6xl mb-4">🎉</div>
+        <h1 class="text-2xl font-bold text-gray-900 mb-2">Welcome to Pro!</h1>
+        <p class="text-gray-600 mb-6"><%= @success_message %></p>
+        
+        <% if @subscription %>
+          <div class="bg-accent/10 rounded-lg p-4 mb-6">
+            <h3 class="font-semibold text-gray-900 mb-2">Your Subscription</h3>
+            <p class="text-sm text-gray-600">
+              <strong><%= @subscription.plan_name %> Plan</strong><br>
+              <%= @subscription.price_display %><br>
+              <%= @subscription.status_display %>
+            </p>
+          </div>
+        <% end %>
+        
+        <div class="space-y-3">
+          <%= link_to "Start Uploading Photos", new_photo_path, class: "block w-full bg-accent text-black py-3 rounded-lg font-semibold hover:bg-accent-hover transition-colors" %>
+          <%= link_to "View Dashboard", dashboard_path, class: "block w-full border border-gray-300 text-gray-700 py-3 rounded-lg font-semibold hover:bg-gray-50 transition-colors" %>
+        </div>
+        
+        <div class="mt-6 text-sm text-gray-500">
+          <p>Questions? Email us at <a href="mailto:support@uplo.com" class="text-accent hover:underline">support@uplo.com</a></p>
+        </div>
+      <% else %>
+        <!-- Error State -->
+        <div class="text-6xl mb-4">⚠️</div>
+        <h1 class="text-2xl font-bold text-gray-900 mb-2">Payment Issue</h1>
+        <p class="text-gray-600 mb-6"><%= @error_message || 'There was an issue processing your payment.' %></p>
+        
+        <div class="space-y-3">
+          <button onclick="openUpgradeModal()" class="block w-full bg-accent text-black py-3 rounded-lg font-semibold hover:bg-accent-hover transition-colors">
+            Try Again
+          </button>
+          <%= link_to "Contact Support", "mailto:support@uplo.com", class: "block w-full border border-gray-300 text-gray-700 py-3 rounded-lg font-semibold hover:bg-gray-50 transition-colors" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
