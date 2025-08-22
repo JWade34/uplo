@@ -2,6 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  :root {
+    --color-accent: #d2f803;
+    --color-accent-hover: #c4e003;
+  }
+}
+
 /* Safe Area Support for iPhone notch and Dynamic Island */
 .safe-area-nav {
   padding-top: env(safe-area-inset-top);
