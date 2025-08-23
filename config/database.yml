@@ -94,7 +94,7 @@ test:
 production:
   <<: *default
   <% if ENV["DATABASE_URL"] %>
-    <% # Fix Hatchbox malformed DATABASE_URL %>
-    <% fixed_url = ENV["DATABASE_URL"].sub(/^postgresql:/, 'postgresql://').sub('@:', '@178.156.161.52:') %>
-    url: <%= fixed_url %>
+  <% # Fix Hatchbox malformed DATABASE_URL %>
+  <% fixed_url = ENV["DATABASE_URL"].sub(/^postgresql:/, 'postgresql://').sub('@:', '@178.156.161.52:') %>
+  url: <%= fixed_url %>
   <% end %>
