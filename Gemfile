@@ -51,7 +51,7 @@ gem "exifr", "~> 1.4"
 gem "ruby-openai", "~> 7.0"
 
 # Stripe for subscription payments
-gem "stripe", "~> 12.0"
+gem "stripe", "~> 15.4"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
