@@ -48,7 +48,7 @@ gem "mini_magick", "~> 4.12"
 gem "exifr", "~> 1.4"
 
 # OpenAI integration for AI caption generation
-gem "ruby-openai", "~> 7.0"
+gem "ruby-openai", "~> 8.2"
 
 # Stripe for subscription payments
 gem "stripe", "~> 12.0"
