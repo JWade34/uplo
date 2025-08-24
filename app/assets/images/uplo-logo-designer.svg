@@ -1,0 +1,16 @@
+<svg width="800" height="240" viewBox="0 0 800 240" xmlns="http://www.w3.org/2000/svg">
+  <!-- Exact recreation of designer's UPLO logo -->
+  <g fill="#d2f803">
+    <!-- U - Bold, geometric with rounded inner corners -->
+    <path d="M0 40 L0 140 C0 200 40 240 120 240 C200 240 240 200 240 140 L240 40 L180 40 L180 140 C180 160 160 180 120 180 C80 180 60 160 60 140 L60 40 Z"/>
+    
+    <!-- P - Strong vertical with rounded top section -->
+    <path d="M280 40 L280 240 L340 240 L340 160 L420 160 C480 160 520 120 520 80 C520 40 480 0 420 0 L280 0 Z M340 60 L420 60 C440 60 460 70 460 80 C460 90 440 100 420 100 L340 100 Z"/>
+    
+    <!-- L - Clean, bold vertical with strong horizontal -->
+    <path d="M560 40 L560 240 L800 240 L800 180 L620 180 L620 40 Z"/>
+    
+    <!-- O - Perfect circle, consistent stroke width -->
+    <path d="M820 120 C820 40 880 0 960 0 C1040 0 1100 40 1100 120 C1100 200 1040 240 960 240 C880 240 820 200 820 120 Z M880 120 C880 160 910 180 960 180 C1010 180 1040 160 1040 120 C1040 80 1010 60 960 60 C910 60 880 80 880 120 Z"/>
+  </g>
+</svg>
