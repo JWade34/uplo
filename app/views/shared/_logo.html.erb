@@ -1,8 +1,4 @@
 <!-- Uplo Logo -->
-<%= link_to authenticated? ? photos_path : root_path, class: "hover:opacity-80 transition-opacity flex items-center bg-gradient-to-r from-gray-900 to-black px-4 py-2 rounded-lg" do %>
-  <% if image_path("uplo-logo.png") rescue nil %>
-    <%= image_tag "uplo-logo.png", alt: "Uplo", style: "height: #{local_assigns[:size] || '2rem'}; width: auto;" %>
-  <% else %>
-    <span class="text-accent font-bold" style="font-family: system-ui, -apple-system, sans-serif; font-size: #{local_assigns[:size] || '2rem'}; font-weight: 800; letter-spacing: -0.05em;">UPLO</span>
-  <% end %>
+<%= link_to authenticated? ? photos_path : root_path, class: "hover:opacity-80 transition-opacity flex items-center" do %>
+  <%= image_tag "uplo-logo.png", alt: "Uplo", style: "height: #{local_assigns[:size] || '2rem'}; width: auto;" %>
 <% end %>
