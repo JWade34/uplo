@@ -1,0 +1,71 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background Gradient -->
+  <defs>
+    <linearGradient id="bg-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#111827;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#000000;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="accent-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#d2f803;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#a3e635;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg-gradient)"/>
+  
+  <!-- Decorative Elements -->
+  <circle cx="100" cy="100" r="150" fill="#d2f803" opacity="0.1"/>
+  <circle cx="1100" cy="530" r="200" fill="#d2f803" opacity="0.05"/>
+  
+  <!-- Main Content -->
+  <g transform="translate(100, 150)">
+    <!-- Logo/Brand -->
+    <text x="0" y="80" font-family="Inter, Arial, sans-serif" font-size="72" font-weight="800" fill="#d2f803">Uplo</text>
+    
+    <!-- Main Headline -->
+    <text x="0" y="140" font-family="Inter, Arial, sans-serif" font-size="48" font-weight="700" fill="white">AI-Powered Social Media</text>
+    <text x="0" y="195" font-family="Inter, Arial, sans-serif" font-size="48" font-weight="700" fill="white">for Personal Trainers</text>
+    
+    <!-- Subline -->
+    <text x="0" y="260" font-family="Inter, Arial, sans-serif" font-size="28" font-weight="400" fill="#9ca3af">Transform your gym photos into engaging content</text>
+    <text x="0" y="300" font-family="Inter, Arial, sans-serif" font-size="28" font-weight="400" fill="#9ca3af">that attracts more clients automatically</text>
+    
+    <!-- Call to Action -->
+    <rect x="0" y="340" width="280" height="60" rx="8" fill="url(#accent-gradient)"/>
+    <text x="140" y="380" font-family="Inter, Arial, sans-serif" font-size="24" font-weight="600" fill="#000" text-anchor="middle">Get Early Access</text>
+  </g>
+  
+  <!-- Phone Mockup -->
+  <g transform="translate(750, 100)">
+    <!-- Phone Frame -->
+    <rect x="0" y="0" width="200" height="400" rx="25" fill="#1f2937" stroke="#374151" stroke-width="2"/>
+    <rect x="10" y="30" width="180" height="340" rx="15" fill="#000"/>
+    
+    <!-- Screen Content -->
+    <rect x="20" y="50" width="160" height="80" rx="8" fill="#d2f803" opacity="0.2"/>
+    <text x="100" y="75" font-family="Arial, sans-serif" font-size="12" font-weight="600" fill="#d2f803" text-anchor="middle">Upload Photo</text>
+    <text x="100" y="95" font-family="Arial, sans-serif" font-size="10" fill="#9ca3af" text-anchor="middle">📸</text>
+    
+    <rect x="20" y="140" width="160" height="60" rx="6" fill="#374151"/>
+    <text x="25" y="155" font-family="Arial, sans-serif" font-size="8" fill="#d2f803">AI Caption Generated:</text>
+    <text x="25" y="170" font-family="Arial, sans-serif" font-size="7" fill="white">"Morning grind at the gym! 💪</text>
+    <text x="25" y="180" font-family="Arial, sans-serif" font-size="7" fill="white">Ready to crush today's goals?</text>
+    <text x="25" y="190" font-family="Arial, sans-serif" font-size="7" fill="white">DM me for training tips!"</text>
+    
+    <!-- Phone highlights -->
+    <ellipse cx="100" cy="20" rx="15" ry="3" fill="#374151"/>
+  </g>
+  
+  <!-- Stats -->
+  <g transform="translate(100, 480)">
+    <text x="0" y="0" font-family="Inter, Arial, sans-serif" font-size="20" font-weight="600" fill="#d2f803">500+</text>
+    <text x="0" y="20" font-family="Inter, Arial, sans-serif" font-size="14" fill="#9ca3af">Personal Trainers</text>
+    
+    <text x="180" y="0" font-family="Inter, Arial, sans-serif" font-size="20" font-weight="600" fill="#d2f803">3x</text>
+    <text x="180" y="20" font-family="Inter, Arial, sans-serif" font-size="14" fill="#9ca3af">More Engagement</text>
+    
+    <text x="320" y="0" font-family="Inter, Arial, sans-serif" font-size="20" font-weight="600" fill="#d2f803">2hrs</text>
+    <text x="320" y="20" font-family="Inter, Arial, sans-serif" font-size="14" fill="#9ca3af">Saved Daily</text>
+  </g>
+</svg>

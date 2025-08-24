@@ -1,18 +1,79 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <title><%= content_for(:title) || "Soco" %></title>
+    <!-- Basic Meta Tags -->
+    <title><%= content_for(:title) || "Uplo - AI-Powered Social Media for Personal Trainers" %></title>
+    <meta name="description" content="<%= content_for(:description) || "Transform your gym photos into engaging social media content that attracts more clients. Join 500+ personal trainers using AI-powered caption generation." %>">
+    <meta name="keywords" content="<%= content_for(:keywords) || "personal trainer social media, fitness social media, AI caption generator, gym social media, fitness marketing, personal trainer marketing" %>">
+    <meta name="author" content="Uplo">
+    
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="<%= content_for(:canonical_url) || request.original_url %>">
+    
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
+    <!-- Open Graph Meta Tags for Social Media Sharing -->
+    <meta property="og:title" content="<%= content_for(:og_title) || content_for(:title) || "Uplo - AI-Powered Social Media for Personal Trainers" %>">
+    <meta property="og:description" content="<%= content_for(:og_description) || content_for(:description) || "Transform your gym photos into engaging social media content that attracts more clients. Join 500+ personal trainers using AI-powered caption generation." %>">
+    <meta property="og:image" content="<%= content_for(:og_image) || asset_url('uplo-og-image.svg') %>">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:url" content="<%= content_for(:canonical_url) || request.original_url %>">
+    <meta property="og:type" content="<%= content_for(:og_type) || "website" %>">
+    <meta property="og:site_name" content="Uplo">
+    <meta property="og:locale" content="en_US">
+
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@uplo_app">
+    <meta name="twitter:title" content="<%= content_for(:twitter_title) || content_for(:og_title) || content_for(:title) || "Uplo - AI-Powered Social Media for Personal Trainers" %>">
+    <meta name="twitter:description" content="<%= content_for(:twitter_description) || content_for(:og_description) || content_for(:description) || "Transform your gym photos into engaging social media content. AI-powered captions for personal trainers." %>">
+    <meta name="twitter:image" content="<%= content_for(:twitter_image) || content_for(:og_image) || asset_url('uplo-og-image.svg') %>">
+    <meta name="twitter:creator" content="@uplo_app">
+
+    <!-- Additional Meta Tags -->
+    <meta name="robots" content="<%= content_for(:robots) || "index, follow" %>">
+    <meta name="theme-color" content="#d2f803">
+    <meta name="msapplication-TileColor" content="#d2f803">
+
     <%= yield :head %>
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Uplo",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "Web",
+      "description": "AI-powered social media content creation tool for personal trainers and fitness professionals",
+      "url": "<%= request.base_url %>",
+      "author": {
+        "@type": "Organization",
+        "name": "Uplo",
+        "url": "<%= request.base_url %>"
+      },
+      "offers": {
+        "@type": "Offer",
+        "category": "SaaS",
+        "price": "19",
+        "priceCurrency": "USD",
+        "priceValidUntil": "2025-12-31",
+        "availability": "https://schema.org/InStock"
+      }
+    }
+    </script>
 
     <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
     <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
 
+    <!-- Favicon -->
     <link rel="icon" href="/icon.png" type="image/png">
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/icon.png">

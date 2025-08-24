@@ -39,6 +39,17 @@ class PhotosController < ApplicationController
           file_size: @photo.image.byte_size
         )
         
+        # Optimize image immediately after upload for faster display
+        begin
+          @photo.image.open do |file|
+            service = ImageProcessingService.new(file)
+            service.create_display_optimized_version
+          end
+          Rails.logger.info "Image optimized successfully for photo #{@photo.id}"
+        rescue => e
+          Rails.logger.error "Failed to optimize image for photo #{@photo.id}: #{e.message}"
+        end
+        
         # Enqueue background job to generate AI captions
         PhotoProcessingJob.perform_later(@photo.id)
         

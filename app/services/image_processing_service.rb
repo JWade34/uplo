@@ -538,4 +538,36 @@ class ImageProcessingService
     
     context_parts.join('. ') + '.' if context_parts.any?
   end
+
+  # Create a display-optimized version for faster loading
+  def create_display_optimized_version
+    with_converted_image do |processed_file|
+      temp_file = Tempfile.new(['display_optimized', '.jpg'])
+      
+      begin
+        image = MiniMagick::Image.open(processed_file.path)
+        
+        # Resize for web display - larger than AI version but smaller than original
+        image.resize "800x800>"
+        image.format 'jpeg'
+        image.quality 90
+        image.strip # Remove all metadata
+        
+        image.write(temp_file.path)
+        
+        # Attach as a variant to the photo
+        if @uploaded_file.respond_to?(:attach) # ActiveStorage blob
+          @uploaded_file.variant(resize_to_limit: [800, 800], format: :jpeg, quality: 90)
+        end
+        
+        Rails.logger.info "Display optimized version created successfully"
+        temp_file.path
+      ensure
+        temp_file.close
+      end
+    end
+  rescue => e
+    Rails.logger.error "Failed to create display optimized version: #{e.message}"
+    raise e
+  end
 end

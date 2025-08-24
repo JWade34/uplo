@@ -1,3 +1,7 @@
+<% content_for :title, "#{@photo.title.present? ? @photo.title : "Photo ##{@photo.id}"} | Uplo" %>
+<% content_for :description, "#{@photo.description.present? ? @photo.description : "View AI-generated captions for this gym photo"} - Created with Uplo's AI-powered social media tools for personal trainers." %>
+<% content_for :robots, "noindex, follow" %>
+
 <!-- Photo Detail Page -->
 <div class="min-h-screen bg-gray-50">
   <%= render 'shared/navigation' %>
@@ -14,25 +18,58 @@
 
     <!-- Mobile-First Layout: Photo, then Captions, then Details -->
     <div class="space-y-6">
-      <!-- Photo Display (Always First) -->
-      <div class="bg-white rounded-lg shadow-sm border overflow-hidden">
+      <!-- Photo Display (Social Media Style) -->
+      <div style="width: 367px; margin: 0 auto;">
+        <div class="bg-white rounded-lg shadow-sm border overflow-hidden">
           <% if @photo.image.attached? %>
             <% if @photo.heic_file? %>
               <!-- HEIC Image - Show actual converted image -->
-              <div class="relative">
-                <%= image_tag @photo.display_image_url, class: "w-full h-auto", alt: @photo.title %>
-                <div class="absolute top-2 right-2 bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">
-                  HEIC Image
+              <div class="relative aspect-square bg-gray-100">
+                <%= image_tag @photo.display_image_url, class: "w-full h-full object-cover", alt: @photo.title %>
+                <div class="absolute top-3 right-3 bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">
+                  HEIC
                 </div>
               </div>
             <% else %>
-              <%= image_tag @photo.display_image, class: "w-full h-auto", alt: @photo.title %>
+              <div class="aspect-square bg-gray-100">
+                <%= image_tag @photo.display_image, class: "w-full h-full object-cover", alt: @photo.title %>
+              </div>
             <% end %>
           <% else %>
-            <div class="w-full h-64 bg-gray-100 flex items-center justify-center">
+            <div class="aspect-square bg-gray-100 flex items-center justify-center">
               <span class="text-gray-400 text-6xl">📸</span>
             </div>
           <% end %>
+          
+          <!-- Social Media Post-Style Info Bar -->
+          <div class="p-4 border-t border-gray-100">
+            <div class="flex items-start justify-between">
+              <div class="flex-1">
+                <h2 class="font-semibold text-gray-900 text-sm sm:text-base">
+                  <%= @photo.title.present? ? @photo.title : "Photo ##{@photo.id}" %>
+                </h2>
+                <p class="text-xs sm:text-sm text-gray-500 mt-1">
+                  Uploaded <%= time_ago_in_words(@photo.created_at) %> ago
+                  <% if @photo.image.attached? %>
+                    • <%= number_to_human_size(@photo.image.byte_size) %>
+                  <% end %>
+                </p>
+              </div>
+              <% unless @photo.processed? %>
+                <div class="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded-full ml-3">
+                  <span class="hidden sm:inline">Processing...</span>
+                  <span class="sm:hidden">⏳</span>
+                </div>
+              <% end %>
+            </div>
+            
+            <% if @photo.description.present? %>
+              <p class="text-sm text-gray-700 mt-2 leading-relaxed">
+                <%= @photo.description %>
+              </p>
+            <% end %>
+          </div>
+        </div>
       </div>
       
       <!-- Desktop Layout Container -->
@@ -208,60 +245,6 @@
           <% end %>
         </div>
 
-        <!-- Photo Info (Third on mobile, Left column on desktop) -->
-        <div class="lg:order-1 space-y-4">
-          <div class="bg-white rounded-lg shadow-sm border p-4 sm:p-6">
-          <h1 class="text-xl sm:text-2xl font-bold text-gray-900 mb-3 sm:mb-4">
-            <%= @photo.title.present? ? @photo.title : "Photo ##{@photo.id}" %>
-          </h1>
-          
-          <% if @photo.description.present? %>
-            <div class="mb-3 sm:mb-4">
-              <h3 class="text-sm font-medium text-gray-700 mb-2">Description</h3>
-              <p class="text-sm sm:text-base text-gray-600"><%= @photo.description %></p>
-            </div>
-          <% end %>
-          
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 text-sm">
-            <div>
-              <span class="text-gray-500">Uploaded:</span>
-              <div class="text-gray-900 mt-1 sm:mt-0 sm:inline sm:ml-2">
-                <span class="hidden sm:inline"><%= @photo.created_at.strftime("%B %d, %Y at %I:%M %p") %></span>
-                <span class="sm:hidden"><%= @photo.created_at.strftime("%b %d, %Y") %></span>
-              </div>
-            </div>
-            <% if @photo.image.attached? %>
-              <div>
-                <span class="text-gray-500">File Size:</span>
-                <div class="text-gray-900 mt-1 sm:mt-0 sm:inline sm:ml-2"><%= number_to_human_size(@photo.image.byte_size) %></div>
-              </div>
-            <% end %>
-          </div>
-          
-          <!-- Photo Metadata -->
-          <% if @photo.metadata.present? && @photo.metadata_summary.any? %>
-            <div class="mt-4 pt-4 border-t border-gray-200">
-              <h4 class="text-sm font-medium text-gray-700 mb-3">Photo Details</h4>
-              <div class="grid grid-cols-1 gap-3 text-sm">
-                <% @photo.metadata_summary.each do |key, value| %>
-                  <% if value.present? %>
-                    <div class="flex justify-between">
-                      <span class="text-gray-500 capitalize"><%= key.to_s.humanize %>:</span>
-                      <span class="text-gray-900 text-right">
-                        <% if key == :taken_at && value.respond_to?(:strftime) %>
-                          <%= value.strftime("%b %d, %Y %I:%M %p") %>
-                        <% else %>
-                          <%= value %>
-                        <% end %>
-                      </span>
-                    </div>
-                  <% end %>
-                <% end %>
-              </div>
-            </div>
-          <% end %>
-          </div>
-        </div>
       </div>
     </div>
   </div>

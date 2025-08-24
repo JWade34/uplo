@@ -1,3 +1,10 @@
+<% content_for :title, "Upload & Generate AI Captions | Uplo" %>
+<% content_for :description, "Upload your gym photos and get personalized AI-generated captions that sound like you and drive engagement. Perfect for personal trainers and fitness professionals." %>
+<% content_for :keywords, "upload gym photo, AI caption generator, fitness social media, personal trainer content, gym photo captions" %>
+<% content_for :og_title, "Upload & Generate AI Captions - Uplo" %>
+<% content_for :og_description, "Transform your gym photos into engaging social media posts with AI-powered caption generation." %>
+<% content_for :robots, "noindex, follow" %>
+
 <!-- Upload Photo Page -->
 <div class="min-h-screen bg-gray-50">
   <%= render 'shared/navigation' %>
@@ -129,13 +136,20 @@
               id: "photo-input" %>
           
           <!-- Preview Area -->
-          <div id="preview-area" class="hidden border-2 border-gray-300 rounded-lg p-3 sm:p-4">
+          <div id="preview-area" class="hidden border-2 border-accent bg-accent/5 rounded-lg p-3 sm:p-4">
             <div class="text-center">
-              <img id="preview-image" class="max-w-full h-32 sm:h-48 object-cover rounded-lg mx-auto mb-2 sm:mb-3" />
-              <p id="preview-name" class="text-xs sm:text-sm font-medium text-gray-900 mb-2 truncate"></p>
-              <button type="button" onclick="changePhoto()" class="text-xs sm:text-sm text-accent hover:underline">
-                📸 Change Photo
-              </button>
+              <div class="mb-3 sm:mb-4">
+                <img id="preview-image" class="max-w-full h-48 sm:h-64 object-cover rounded-lg mx-auto shadow-sm" alt="Photo preview" />
+              </div>
+              <p id="preview-name" class="text-sm font-medium text-gray-900 mb-3 px-2"></p>
+              <div class="flex flex-col sm:flex-row gap-2 sm:gap-3 justify-center">
+                <button type="button" onclick="changePhoto()" class="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-accent bg-white border border-accent rounded-lg hover:bg-accent hover:text-black transition-colors">
+                  📸 Change Photo
+                </button>
+                <span class="text-xs text-gray-600 flex items-center justify-center">
+                  ✅ Ready to upload
+                </span>
+              </div>
             </div>
           </div>
         </div>
@@ -217,31 +231,56 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('File selection triggered');
     const file = photoInput.files[0];
     console.log('Selected file:', file);
-    if (file && file.type.startsWith('image/')) {
-      console.log('File details:', {
-        name: file.name,
-        size: file.size,
-        type: file.type
-      });
-      // Show preview immediately
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        console.log('FileReader onload triggered');
-        previewImage.src = e.target.result;
-        previewName.textContent = file.name;
-        previewArea.classList.remove('hidden');
-        dropZone.style.display = 'none'; // Force hide with inline style
-        console.log('Preview updated and shown');
-      };
-      reader.onerror = function(e) {
-        console.error('FileReader error:', e);
-      };
-      reader.readAsDataURL(file);
+    
+    if (file) {
+      // Check if it's an image file (including HEIC)
+      const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/heic', 'image/heif'];
+      const isValidImage = file.type.startsWith('image/') || validTypes.includes(file.type.toLowerCase()) || 
+                          file.name.toLowerCase().match(/\.(jpg|jpeg|png|webp|heic|heif)$/);
+      
+      if (isValidImage) {
+        console.log('File details:', {
+          name: file.name,
+          size: file.size,
+          type: file.type
+        });
+        
+        // Show preview immediately
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          console.log('FileReader onload triggered');
+          previewImage.src = e.target.result;
+          previewName.textContent = file.name;
+          
+          // Add file size info
+          const fileSize = (file.size / (1024 * 1024)).toFixed(1);
+          previewName.textContent = `${file.name} (${fileSize} MB)`;
+          
+          // Show preview, hide upload area
+          previewArea.classList.remove('hidden');
+          dropZone.classList.add('hidden');
+          console.log('Preview updated and shown');
+        };
+        
+        reader.onerror = function(e) {
+          console.error('FileReader error:', e);
+          alert('Error reading file. Please try again.');
+        };
+        
+        reader.readAsDataURL(file);
+      } else {
+        console.log('Invalid file type selected:', file.type);
+        alert('Please select a valid image file (JPG, PNG, WebP, HEIC)');
+        // Reset if invalid file
+        previewArea.classList.add('hidden');
+        dropZone.classList.remove('hidden');
+        photoInput.value = '';
+      }
     } else {
-      console.log('No valid image file selected');
-      // Reset if invalid file
+      console.log('No file selected');
+      // Reset if no file
       previewArea.classList.add('hidden');
-      dropZone.style.display = 'block';
+      dropZone.classList.remove('hidden');
     }
   }
 
@@ -249,7 +288,7 @@ document.addEventListener('DOMContentLoaded', function() {
   window.changePhoto = function() {
     console.log('Change photo clicked');
     previewArea.classList.add('hidden');
-    dropZone.style.display = 'block';
+    dropZone.classList.remove('hidden');
     photoInput.value = ''; // Clear the input
     photoInput.click();
   };
