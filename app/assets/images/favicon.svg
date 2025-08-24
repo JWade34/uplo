@@ -1,0 +1,11 @@
+<svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+  <!-- Uplo favicon - U + P lettermark -->
+  <rect width="32" height="32" fill="#d2f803"/>
+  <g fill="#000000">
+    <!-- U -->
+    <path d="M3 6 L3 17 C3 21 5.5 23 9 23 C12.5 23 15 21 15 17 L15 6 L12 6 L12 17 C12 18 11 19 9 19 C7 19 6 18 6 17 L6 6 Z"/>
+    
+    <!-- P -->
+    <path d="M17 6 L17 26 L20 26 L20 18 L24 18 C26.5 18 28 16.5 28 14 C28 11.5 26.5 10 24 10 L17 10 Z M20 10 L24 10 C25 10 25 11 25 14 C25 15 25 15 24 15 L20 15 Z"/>
+  </g>
+</svg>
