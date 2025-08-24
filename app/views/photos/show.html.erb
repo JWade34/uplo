@@ -32,7 +32,7 @@
               </div>
             <% else %>
               <div class="aspect-square bg-gray-100">
-                <%= image_tag @photo.display_image, class: "w-full h-full object-cover", alt: @photo.title %>
+                <%= image_tag @photo.display_image_url, class: "w-full h-full object-cover", alt: @photo.title %>
               </div>
             <% end %>
           <% else %>

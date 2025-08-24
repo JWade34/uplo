@@ -121,10 +121,7 @@ class Photo < ApplicationRecord
   # Get browser-compatible image for display
   # Converts HEIC to JPEG for browsers that don't support HEIC
   def display_image
-    return image unless heic_file?
-    
-    # For HEIC files, return a path to our custom conversion endpoint
-    Rails.application.routes.url_helpers.display_heic_photo_path(self)
+    image
   end
 
   # Get the display image URL for use in image_tag
@@ -132,7 +129,8 @@ class Photo < ApplicationRecord
     if heic_file?
       Rails.application.routes.url_helpers.display_heic_photo_path(self)
     else
-      image
+      # Return the regular Active Storage URL for non-HEIC files
+      Rails.application.routes.url_helpers.rails_blob_url(image, only_path: true) if image.attached?
     end
   end
   
