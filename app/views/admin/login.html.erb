@@ -24,7 +24,7 @@
         </p>
       </div>
       
-      <%= form_with url: admin_login_path, method: :post, local: true, class: "mt-8 space-y-6" do |form| %>
+      <%= form_with url: admin_login_path, method: :post, local: true, data: { turbo: false }, class: "mt-8 space-y-6" do |form| %>
         <div>
           <label for="password" class="sr-only">Admin Password</label>
           <%= form.password_field :password, 
