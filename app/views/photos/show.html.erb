@@ -16,11 +16,11 @@
       </div>
     <% end %>
 
-    <!-- Mobile-First Layout: Photo, then Captions, then Details -->
-    <div class="space-y-6">
-      <!-- Photo Display (Social Media Style) -->
-      <div style="width: 367px; margin: 0 auto;">
-        <div class="bg-white rounded-lg shadow-sm border overflow-hidden">
+    <!-- Clean Responsive Layout -->
+    <div class="lg:grid lg:grid-cols-2 lg:gap-8 lg:space-y-0 space-y-6">
+      <!-- Photo Display -->
+      <div class="lg:order-1">
+        <div class="bg-white rounded-lg shadow-sm border overflow-hidden max-w-lg mx-auto lg:max-w-none">
           <% if @photo.image.attached? %>
             <% if @photo.heic_file? %>
               <!-- HEIC Image - Show actual converted image -->
@@ -72,10 +72,8 @@
         </div>
       </div>
       
-      <!-- Desktop Layout Container -->
-      <div class="lg:grid lg:grid-cols-2 lg:gap-8 lg:space-y-0 space-y-6">
-        <!-- AI Captions Section (Second on mobile, Right column on desktop) -->
-        <div class="lg:order-2 space-y-4 sm:space-y-6" data-controller="photo-polling" 
+      <!-- AI Captions Section -->
+      <div class="lg:order-2 space-y-4 sm:space-y-6" data-controller="photo-polling" 
              data-photo-polling-url-value="<%= photo_path(@photo) %>"
              data-photo-polling-interval-value="3000"
              data-processing="<%= !@photo.processed? %>">
@@ -244,8 +242,6 @@
             </div>
           <% end %>
         </div>
-
-      </div>
     </div>
   </div>
 </div>
