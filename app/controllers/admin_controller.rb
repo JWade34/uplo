@@ -262,9 +262,8 @@ class AdminController < ApplicationController
   
   def ip_allowed?
     return true if Rails.env.development?
-    # Temporarily allow all IPs for initial setup
-    true
-    # ALLOWED_IPS.include?(request.remote_ip)
+    # Re-enable IP restrictions for security
+    ALLOWED_IPS.include?(request.remote_ip)
   end
   
   def log_admin_activity
