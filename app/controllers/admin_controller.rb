@@ -7,20 +7,38 @@ class AdminController < ApplicationController
   ALLOWED_IPS = ENV.fetch('ADMIN_ALLOWED_IPS', '127.0.0.1,::1').split(',').map(&:strip)
   
   def index
-    @stats = {
-      total_users: User.count,
-      active_users: User.joins(:sessions).where('sessions.created_at > ?', 7.days.ago).distinct.count,
-      total_photos: Photo.count,
-      photos_this_month: Photo.where(created_at: Time.current.beginning_of_month..Time.current).count,
-      processing_photos: Photo.where(processed: false).count,
-      active_subscriptions: Subscription.active.count,
-      revenue_this_month: calculate_monthly_revenue,
-      system_health: check_system_health
-    }
-    
-    @recent_users = User.order(created_at: :desc).limit(5)
-    @recent_photos = Photo.order(created_at: :desc).limit(5)
-    @failed_jobs = get_failed_jobs.first(5)
+    begin
+      @stats = {
+        total_users: User.count || 0,
+        active_users: User.joins(:sessions).where('sessions.created_at > ?', 7.days.ago).distinct.count || 0,
+        total_photos: Photo.count || 0,
+        photos_this_month: Photo.where(created_at: Time.current.beginning_of_month..Time.current).count || 0,
+        processing_photos: Photo.where(processed: false).count || 0,
+        active_subscriptions: Subscription.active.count || 0,
+        revenue_this_month: calculate_monthly_revenue || 0,
+        system_health: check_system_health || {}
+      }
+      
+      @recent_users = User.order(created_at: :desc).limit(5)
+      @recent_photos = Photo.order(created_at: :desc).limit(5)
+      @failed_jobs = get_failed_jobs.first(5) || []
+    rescue => e
+      Rails.logger.error "Admin dashboard error: #{e.message}"
+      @stats = {
+        total_users: 0,
+        active_users: 0,
+        total_photos: 0,
+        photos_this_month: 0,
+        processing_photos: 0,
+        active_subscriptions: 0,
+        revenue_this_month: 0,
+        system_health: { database: false, storage: false, jobs: false, overall: false }
+      }
+      @recent_users = []
+      @recent_photos = []
+      @failed_jobs = []
+      @error = "Error loading dashboard data: #{e.message}"
+    end
   end
   
   def users
