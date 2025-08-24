@@ -1,6 +1,6 @@
 class AdminController < ApplicationController
   allow_unauthenticated_access
-  before_action :require_admin_authentication
+  before_action :require_admin_authentication, except: [:login]
   before_action :log_admin_activity
   
   ADMIN_PASSWORD = ENV.fetch('ADMIN_PASSWORD', 'admin123')
