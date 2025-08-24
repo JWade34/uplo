@@ -86,9 +86,9 @@
       </div>
     <% end %>
 
-    <!-- Desktop-Constrained Key Metrics -->
-    <div class="max-w-5xl mx-auto">
-      <div class="grid grid-cols-2 gap-4 mb-6 sm:mb-8 lg:grid-cols-4 sm:gap-6">
+    <!-- Key Metrics - Better Desktop Layout -->
+    <div class="max-w-6xl mx-auto">
+      <div class="grid grid-cols-1 gap-4 mb-6 sm:grid-cols-2 sm:mb-8 lg:grid-cols-4 sm:gap-6">
         <!-- Total Posts -->
         <div class="bg-white rounded-lg shadow-sm border p-4 sm:p-6">
           <div class="flex flex-col sm:flex-row sm:items-center">
@@ -150,8 +150,9 @@
       </div>
     </div>
 
-    <!-- Mobile-First Content Layout -->
-    <div class="space-y-4 sm:space-y-6 lg:grid lg:grid-cols-3 lg:gap-6 lg:space-y-0">
+    <!-- Main Content Layout -->
+    <div class="max-w-6xl mx-auto">
+      <div class="space-y-4 sm:space-y-6 lg:grid lg:grid-cols-3 lg:gap-6 lg:space-y-0">
       <!-- Main Content - Appears first on mobile -->
       <div class="lg:col-span-2 space-y-4 sm:space-y-6">
         <!-- Top Performing Posts - Mobile Optimized -->
@@ -265,12 +266,32 @@
           <% else %>
             <div class="text-center py-6 sm:py-8">
               <div class="text-gray-400 text-3xl sm:text-4xl mb-3 sm:mb-4">📊</div>
-              <h3 class="text-base sm:text-lg font-medium text-gray-900 mb-2">No Performance Data Yet</h3>
-              <p class="text-sm sm:text-base text-gray-600 mb-3 sm:mb-4">
-                Upload photos and start posting to see your analytics.
-              </p>
-              <%= link_to new_photo_path, class: "bg-accent text-black px-4 py-2 sm:px-6 text-sm sm:text-base rounded-lg font-semibold hover:bg-accent-hover transition-colors inline-block" do %>
-                Upload Your First Photo
+              
+              <% if @total_photos > 0 %>
+                <!-- User has photos but no performance data -->
+                <h3 class="text-base sm:text-lg font-medium text-gray-900 mb-2">Connect Your Social Platforms</h3>
+                <p class="text-sm sm:text-base text-gray-600 mb-3 sm:mb-4">
+                  You've uploaded <%= pluralize(@total_photos, 'photo') %>! Connect your social media accounts to track engagement and performance.
+                </p>
+                <div class="space-y-2">
+                  <button class="bg-accent text-black px-4 py-2 sm:px-6 text-sm sm:text-base rounded-lg font-semibold hover:bg-accent-hover transition-colors inline-block mr-2">
+                    Connect Instagram
+                  </button>
+                  <% unless @user.can_access_pro_features? %>
+                    <p class="text-xs text-gray-500 mt-2">
+                      <button onclick="openUpgradeModal()" class="text-accent hover:underline">Upgrade to Pro</button> for advanced analytics and insights
+                    </p>
+                  <% end %>
+                </div>
+              <% else %>
+                <!-- User has no photos -->
+                <h3 class="text-base sm:text-lg font-medium text-gray-900 mb-2">No Performance Data Yet</h3>
+                <p class="text-sm sm:text-base text-gray-600 mb-3 sm:mb-4">
+                  Upload photos and start posting to see your analytics.
+                </p>
+                <%= link_to new_photo_path, class: "bg-accent text-black px-4 py-2 sm:px-6 text-sm sm:text-base rounded-lg font-semibold hover:bg-accent-hover transition-colors inline-block" do %>
+                  Upload Your First Photo
+                <% end %>
               <% end %>
             </div>
           <% end %>
@@ -443,6 +464,7 @@
             </button>
           </div>
         <% end %>
+      </div>
       </div>
     </div>
   </div>
