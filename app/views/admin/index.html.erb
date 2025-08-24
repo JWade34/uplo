@@ -208,13 +208,13 @@
                   <div class="flex-shrink-0">
                     <div class="h-8 w-8 bg-gray-200 rounded-full flex items-center justify-center">
                       <span class="text-sm font-medium text-gray-700">
-                        <%= user.email.first.upcase %>
+                        <%= user.email_address.first.upcase %>
                       </span>
                     </div>
                   </div>
                   <div class="flex-1 min-w-0">
                     <p class="text-sm font-medium text-gray-900 truncate">
-                      <%= user.email %>
+                      <%= user.email_address %>
                     </p>
                     <p class="text-sm text-gray-500">
                       Joined <%= user.created_at.strftime("%b %d, %Y") %>
@@ -258,7 +258,7 @@
                   </div>
                   <div class="flex-1 min-w-0">
                     <p class="text-sm font-medium text-gray-900 truncate">
-                      <%= photo.user.email %>
+                      <%= photo.user.email_address %>
                     </p>
                     <p class="text-sm text-gray-500">
                       <%= photo.created_at.strftime("%b %d, %H:%M") %> • 

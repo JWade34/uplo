@@ -23,7 +23,7 @@
 
 <script>
   function loadSystemStatus() {
-    fetch('/admin/system')
+    fetch('/admin/system/status')
       .then(response => response.json())
       .then(data => {
         document.getElementById('systemStatusContent').innerHTML = `

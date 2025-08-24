@@ -89,7 +89,7 @@ class AdminController < ApplicationController
     @user.update!(
       current_month_photos: 0,
       current_month_captions: 0,
-      monthly_reset_date: Time.current.beginning_of_month
+      last_usage_reset: Time.current.beginning_of_month
     )
     
     # Create Pro subscription if needed
@@ -117,6 +117,12 @@ class AdminController < ApplicationController
   end
   
   def system_status
+    # Render HTML view for /admin/system
+    render 'admin/system_status'
+  end
+  
+  def system
+    # JSON endpoint for AJAX calls
     render json: {
       database: check_database_connection,
       storage: check_storage_status,

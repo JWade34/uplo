@@ -136,6 +136,10 @@ class User < ApplicationRecord
     active_subscription.present?
   end
   
+  def has_active_subscription?
+    subscription_active?
+  end
+  
   def needs_payment_attention?
     active_subscription&.needs_attention? || false
   end

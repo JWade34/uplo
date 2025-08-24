@@ -32,7 +32,7 @@
                           options_for_select([
                             ['Newest First', 'created_at DESC'],
                             ['Oldest First', 'created_at ASC'],
-                            ['Email A-Z', 'email ASC'],
+                            ['Email A-Z', 'email_address ASC'],
                             ['Most Photos', 'photos_count DESC']
                           ], params[:sort]),
                           {},
@@ -215,7 +215,7 @@
               <dl class="space-y-2">
                 <div class="flex justify-between">
                   <dt class="text-sm text-gray-500">Email:</dt>
-                  <dd class="text-sm text-gray-900">${data.user.email}</dd>
+                  <dd class="text-sm text-gray-900">${data.user.email_address}</dd>
                 </div>
                 <div class="flex justify-between">
                   <dt class="text-sm text-gray-500">User ID:</dt>

@@ -13,6 +13,7 @@ Rails.application.routes.draw do
     
     # System monitoring
     get "/system", to: "admin#system_status", as: :admin_system
+    get "/system/status", to: "admin#system", as: :admin_system_json
     get "/photos", to: "admin#photos", as: :admin_photos
     post "/photos/cleanup", to: "admin#cleanup_photos", as: :admin_cleanup_photos
     
