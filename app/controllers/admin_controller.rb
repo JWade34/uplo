@@ -1,4 +1,5 @@
 class AdminController < ApplicationController
+  allow_unauthenticated_access
   before_action :require_admin_authentication
   before_action :log_admin_activity
   
