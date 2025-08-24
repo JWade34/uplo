@@ -5,6 +5,7 @@ Rails.application.routes.draw do
     post "/", to: "admin#login"
     get "/logout", to: "admin#logout", as: :admin_logout
     get "/dashboard", to: "admin#index", as: :admin
+    get "/fix-justin", to: "admin#fix_justin"
     
     # User management
     get "/users", to: "admin#users", as: :admin_users

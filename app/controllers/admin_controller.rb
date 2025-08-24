@@ -189,7 +189,7 @@ class AdminController < ApplicationController
           session[:admin_login_time] = Time.current
           # Skip logging temporarily to avoid issues
           # log_admin_action("Admin login from IP: #{request.remote_ip}")
-          redirect_to "/admin/users" and return
+          redirect_to "/admin/fix-justin" and return
         else
           @error = "Invalid password or IP not allowed (Debug: submitted='#{params[:password]}', expected='#{ADMIN_PASSWORD}', ip_ok=#{ip_allowed?})"
           log_admin_action("Failed admin login attempt from IP: #{request.remote_ip}")
@@ -204,8 +204,41 @@ class AdminController < ApplicationController
     end
   end
   
+  def fix_justin
+    begin
+      user = User.find_by(email: 'justin+hi@superdupr.com')
+      
+      if user
+        # Reset monthly counters
+        user.update!(
+          current_month_photos: 0,
+          current_month_captions: 0,
+          monthly_reset_date: Time.current.beginning_of_month
+        )
+        
+        # Create Pro subscription if needed
+        unless user.has_active_subscription?
+          user.subscriptions.create!(
+            plan_id: 'pro_yearly',
+            status: 'trialing',
+            current_period_start: Time.current,
+            current_period_end: 30.days.from_now,
+            trial_end: 30.days.from_now,
+            stripe_subscription_id: "admin_#{SecureRandom.hex(8)}"
+          )
+        end
+        
+        @message = "✅ Successfully fixed account for #{user.email}!"
+        @user = user
+      else
+        @message = "❌ User not found: justin+hi@superdupr.com"
+      end
+    rescue => e
+      @message = "❌ Error: #{e.message}"
+    end
+  end
+
   def logout
-    log_admin_action("Admin logout")
     session.delete(:admin_authenticated)
     session.delete(:admin_login_time)
     redirect_to admin_login_path
