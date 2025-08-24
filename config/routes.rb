@@ -1,9 +1,7 @@
 Rails.application.routes.draw do
-  # Admin routes
+  # Admin routes (requires user login + admin flag)
   scope "/admin" do
-    get "/", to: "admin#login", as: :admin_login
-    post "/", to: "admin#login"
-    get "/logout", to: "admin#logout", as: :admin_logout
+    get "/", to: "admin#users", as: :admin_root
     get "/dashboard", to: "admin#index", as: :admin
     get "/fix-justin", to: "admin#fix_justin"
     

@@ -1,10 +1,6 @@
 class AdminController < ApplicationController
-  allow_unauthenticated_access
-  before_action :require_admin_authentication, except: [:login]
+  before_action :require_admin_user
   before_action :log_admin_activity
-  
-  ADMIN_PASSWORD = ENV.fetch('ADMIN_PASSWORD', 'temppass123')
-  ALLOWED_IPS = ENV.fetch('ADMIN_ALLOWED_IPS', '127.0.0.1,::1').split(',').map(&:strip)
   
   def index
     begin
@@ -182,30 +178,6 @@ class AdminController < ApplicationController
     }
   end
   
-  def login
-    if request.post?
-      begin
-        Rails.logger.info "Admin login attempt - Submitted: '#{params[:password]}', Expected: '#{ADMIN_PASSWORD}', IP allowed: #{ip_allowed?}"
-        
-        if params[:password] == ADMIN_PASSWORD && ip_allowed?
-          session[:admin_authenticated] = true
-          session[:admin_login_time] = Time.current
-          # Skip logging temporarily to avoid issues
-          # log_admin_action("Admin login from IP: #{request.remote_ip}")
-          redirect_to "/admin/fix-justin" and return
-        else
-          @error = "Invalid password or IP not allowed (Debug: submitted='#{params[:password]}', expected='#{ADMIN_PASSWORD}', ip_ok=#{ip_allowed?})"
-          log_admin_action("Failed admin login attempt from IP: #{request.remote_ip}")
-          render :login and return
-        end
-      rescue => e
-        Rails.logger.error "Admin login error: #{e.message}"
-        Rails.logger.error e.backtrace.join("\n")
-        @error = "Login system error. Please contact administrator."
-        render :login and return
-      end
-    end
-  end
   
   def fix_justin
     begin
@@ -240,30 +212,12 @@ class AdminController < ApplicationController
     end
   end
 
-  def logout
-    session.delete(:admin_authenticated)
-    session.delete(:admin_login_time)
-    redirect_to admin_login_path
-  end
-  
   private
   
-  def require_admin_authentication
-    unless session[:admin_authenticated] && ip_allowed?
-      redirect_to admin_login_path and return
+  def require_admin_user
+    unless authenticated? && Current.user&.admin?
+      redirect_to new_session_path and return
     end
-    
-    # Session timeout after 2 hours
-    if session[:admin_login_time] && session[:admin_login_time] < 2.hours.ago
-      session.delete(:admin_authenticated)
-      redirect_to admin_login_path and return
-    end
-  end
-  
-  def ip_allowed?
-    return true if Rails.env.development?
-    # Re-enable IP restrictions for security
-    ALLOWED_IPS.include?(request.remote_ip)
   end
   
   def log_admin_activity
