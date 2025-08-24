@@ -15,9 +15,7 @@
             My Photos
           <% end %>
           <span class="text-gray-700">Hi, <%= Current.user.email_address.split('@').first.capitalize %>!</span>
-          <%= link_to session_path, method: :delete, class: "text-gray-700 hover:text-gray-900" do %>
-            Sign Out
-          <% end %>
+          <%= button_to "Sign Out", session_path, method: :delete, data: { turbo_method: :delete }, class: "text-gray-700 hover:text-gray-900" %>
         </div>
       </div>
     </div>

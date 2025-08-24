@@ -20,9 +20,7 @@
           <%= link_to "/dashboard", class: "text-gray-700 hover:text-gray-900" do %>
             Dashboard
           <% end %>
-          <%= link_to session_path, method: :delete, class: "text-gray-700 hover:text-gray-900" do %>
-            Sign Out
-          <% end %>
+          <%= button_to "Sign Out", session_path, method: :delete, data: { turbo_method: :delete }, class: "text-gray-700 hover:text-gray-900" %>
         <% else %>
           <%= link_to new_session_path, class: "text-gray-700 hover:text-gray-900" do %>
             Sign In
