@@ -206,29 +206,32 @@ class AdminController < ApplicationController
   
   def fix_justin
     begin
-      user = User.find_by(email: 'justin+hi@superdupr.com')
+      user = User.find_by(email_address: 'justin+hi@superdupr.com')
       
       if user
         # Reset monthly counters
         user.update!(
           current_month_photos: 0,
           current_month_captions: 0,
-          monthly_reset_date: Time.current.beginning_of_month
+          last_usage_reset: Time.current.beginning_of_month
         )
         
         # Create Pro subscription if needed
-        unless user.has_active_subscription?
+        unless user.subscription_active?
           user.subscriptions.create!(
-            plan_id: 'pro_yearly',
+            stripe_subscription_id: "admin_#{SecureRandom.hex(8)}",
+            stripe_customer_id: "admin_customer_#{SecureRandom.hex(8)}",
             status: 'trialing',
             current_period_start: Time.current,
             current_period_end: 30.days.from_now,
             trial_end: 30.days.from_now,
-            stripe_subscription_id: "admin_#{SecureRandom.hex(8)}"
+            plan_name: 'pro',
+            amount: 39.00,
+            interval: 'month'
           )
         end
         
-        @message = "✅ Successfully fixed account for #{user.email}!"
+        @message = "✅ Successfully fixed account for #{user.email_address}!"
         @user = user
       else
         @message = "❌ User not found: justin+hi@superdupr.com"
