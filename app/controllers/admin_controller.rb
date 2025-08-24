@@ -95,12 +95,15 @@ class AdminController < ApplicationController
     # Create Pro subscription if needed
     unless @user.has_active_subscription?
       @user.subscriptions.create!(
-        plan_id: 'pro_yearly',
+        plan_name: 'pro',
+        interval: 'year',
         status: 'trialing',
         current_period_start: Time.current,
         current_period_end: 30.days.from_now,
         trial_end: 30.days.from_now,
-        stripe_subscription_id: "admin_#{SecureRandom.hex(8)}"
+        stripe_subscription_id: "admin_#{SecureRandom.hex(8)}",
+        stripe_customer_id: "admin_customer_#{SecureRandom.hex(8)}",
+        amount: 390
       )
     end
     
@@ -380,12 +383,17 @@ class AdminController < ApplicationController
   end
   
   def calculate_revenue_stats
-    {
-      monthly: calculate_monthly_revenue,
-      annual: Subscription.active.where(plan_id: 'pro_yearly').count * 390,
-      total_subscribers: Subscription.active.count,
-      trial_users: Subscription.where(status: 'trialing').count
-    }
+    begin
+      {
+        monthly: calculate_monthly_revenue,
+        annual: Subscription.active.where(plan_name: 'pro', interval: 'year').count * 390,
+        total_subscribers: Subscription.active.count,
+        trial_users: Subscription.where(status: 'trialing').count
+      }
+    rescue => e
+      Rails.logger.error "Revenue stats error: #{e.message}"
+      { monthly: 0, annual: 0, total_subscribers: 0, trial_users: 0 }
+    end
   end
   
   def calculate_usage_patterns
