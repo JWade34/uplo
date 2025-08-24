@@ -179,6 +179,16 @@ class AdminController < ApplicationController
   end
   
   
+  def toggle_admin
+    user = User.find(params[:id])
+    user.update!(admin: !user.admin?)
+    
+    action = user.admin? ? "granted" : "removed"
+    log_admin_action("Admin access #{action} for user #{user.email_address}")
+    
+    redirect_to admin_users_path, notice: "Admin access #{action} for #{user.email_address}"
+  end
+
   def fix_justin
     begin
       user = User.find_by(email_address: 'justin+hi@superdupr.com')

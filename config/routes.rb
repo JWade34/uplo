@@ -9,6 +9,7 @@ Rails.application.routes.draw do
     get "/users", to: "admin#users", as: :admin_users
     get "/users/:id", to: "admin#user_details", as: :admin_user_details
     post "/users/:id/fix-limits", to: "admin#fix_user_limits", as: :admin_fix_user_limits
+    post "/users/:id/toggle-admin", to: "admin#toggle_admin", as: :admin_toggle_admin
     
     # System monitoring
     get "/system", to: "admin#system_status", as: :admin_system

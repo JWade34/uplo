@@ -142,6 +142,11 @@
                           class="text-green-600 hover:text-green-900">
                     Fix Limits
                   </button>
+                  <%= button_to (user.admin? ? "Remove Admin" : "Make Admin"), 
+                                admin_toggle_admin_path(user), 
+                                method: :post,
+                                class: "text-xs #{user.admin? ? 'text-red-600 hover:text-red-900' : 'text-blue-600 hover:text-blue-900'}",
+                                confirm: "Are you sure you want to #{user.admin? ? 'remove admin access from' : 'grant admin access to'} #{user.email_address}?" %>
                 </div>
               </td>
             </tr>
