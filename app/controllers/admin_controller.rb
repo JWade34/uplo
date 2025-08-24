@@ -3,7 +3,7 @@ class AdminController < ApplicationController
   before_action :require_admin_authentication, except: [:login]
   before_action :log_admin_activity
   
-  ADMIN_PASSWORD = ENV.fetch('ADMIN_PASSWORD', 'admin123')
+  ADMIN_PASSWORD = ENV.fetch('ADMIN_PASSWORD', 'temppass123')
   ALLOWED_IPS = ENV.fetch('ADMIN_ALLOWED_IPS', '127.0.0.1,::1').split(',').map(&:strip)
   
   def index
