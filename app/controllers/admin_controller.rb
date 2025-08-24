@@ -125,27 +125,33 @@ class AdminController < ApplicationController
   end
   
   def photos
-    @photos = Photo.includes(:user, :captions)
-                   .order(params[:sort] || 'created_at DESC')
-                   .page(params[:page])
-                   .per(20)
-    
-    case params[:filter]
-    when 'processing'
-      @photos = @photos.where(processed: false)
-    when 'failed'
-      @photos = @photos.where(processed: false).where('created_at < ?', 10.minutes.ago)
-    when 'recent'
-      @photos = @photos.where(created_at: 24.hours.ago..Time.current)
+    begin
+      @photos = Photo.includes(:user, :captions)
+                     .order(params[:sort] || 'created_at DESC')
+                     .limit(50)  # Simple limit instead of pagination
+      
+      case params[:filter]
+      when 'processing'
+        @photos = @photos.where(processed: false)
+      when 'failed'
+        @photos = @photos.where(processed: false).where('created_at < ?', 10.minutes.ago)
+      when 'recent'
+        @photos = @photos.where(created_at: 24.hours.ago..Time.current)
+      end
+      
+      @stats = {
+        total: Photo.count || 0,
+        processing: Photo.where(processed: false).count || 0,
+        processed: Photo.where(processed: true).count || 0,
+        with_captions: Photo.joins(:captions).distinct.count || 0,
+        without_captions: Photo.left_joins(:captions).where(captions: { id: nil }).count || 0
+      }
+    rescue => e
+      Rails.logger.error "Admin photos error: #{e.message}"
+      @photos = []
+      @stats = { total: 0, processing: 0, processed: 0, with_captions: 0, without_captions: 0 }
+      @error = "Error loading photos: #{e.message}"
     end
-    
-    @stats = {
-      total: Photo.count,
-      processing: Photo.where(processed: false).count,
-      processed: Photo.where(processed: true).count,
-      with_captions: Photo.joins(:captions).distinct.count,
-      without_captions: Photo.left_joins(:captions).where(captions: { id: nil }).count
-    }
   end
   
   def cleanup_photos
