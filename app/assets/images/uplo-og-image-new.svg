@@ -1,0 +1,51 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background gradient -->
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a1a1a;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2d2d2d;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="accentGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#d2f803;stop-opacity:0.8" />
+      <stop offset="100%" style="stop-color:#a8c403;stop-opacity:0.6" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bgGradient)"/>
+  
+  <!-- Accent shapes -->
+  <circle cx="1050" cy="150" r="80" fill="url(#accentGradient)" opacity="0.3"/>
+  <circle cx="150" cy="500" r="60" fill="url(#accentGradient)" opacity="0.4"/>
+  
+  <!-- Main content container -->
+  <g transform="translate(100, 150)">
+    <!-- UPLO Logo (scaled and positioned) -->
+    <g transform="scale(0.6)" fill="#d2f803">
+      <!-- U -->
+      <path d="M0 40 L0 140 C0 200 40 240 120 240 C200 240 240 200 240 140 L240 40 L180 40 L180 140 C180 160 160 180 120 180 C80 180 60 160 60 140 L60 40 Z"/>
+      <!-- P -->
+      <path d="M280 40 L280 240 L340 240 L340 160 L420 160 C480 160 520 120 520 80 C520 40 480 0 420 0 L280 0 Z M340 60 L420 60 C440 60 460 70 460 80 C460 90 440 100 420 100 L340 100 Z"/>
+      <!-- L -->
+      <path d="M560 40 L560 240 L800 240 L800 180 L620 180 L620 40 Z"/>
+      <!-- O -->
+      <path d="M820 120 C820 40 880 0 960 0 C1040 0 1100 40 1100 120 C1100 200 1040 240 960 240 C880 240 820 200 820 120 Z M880 120 C880 160 910 180 960 180 C1010 180 1040 160 1040 120 C1040 80 1010 60 960 60 C910 60 880 80 880 120 Z"/>
+    </g>
+    
+    <!-- Tagline -->
+    <text x="0" y="220" font-family="Arial, sans-serif" font-size="36" font-weight="600" fill="#ffffff">
+      AI-Powered Social Media for Personal Trainers
+    </text>
+    
+    <!-- Description -->
+    <text x="0" y="270" font-family="Arial, sans-serif" font-size="24" fill="#cccccc">
+      Transform your gym photos into engaging content
+    </text>
+    <text x="0" y="305" font-family="Arial, sans-serif" font-size="24" fill="#cccccc">
+      that attracts more clients
+    </text>
+  </g>
+  
+  <!-- Bottom accent line -->
+  <rect x="0" y="600" width="1200" height="8" fill="#d2f803" opacity="0.8"/>
+</svg>
