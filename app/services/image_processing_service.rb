@@ -328,6 +328,52 @@ class ImageProcessingService
     nil
   end
 
+  private
+
+  def create_variant(source_file, width, height, mode)
+    temp_file = Tempfile.new(["variant_#{width}x#{height}", '.jpg'])
+    
+    begin
+      image = MiniMagick::Image.open(source_file.path)
+      
+      case mode
+      when :crop
+        # Crop to exact dimensions (center crop)
+        image.resize "#{width}x#{height}^"
+        image.gravity 'center'
+        image.crop "#{width}x#{height}+0+0"
+      when :fit
+        # Fit within dimensions (maintain aspect ratio, may have padding)
+        image.resize "#{width}x#{height}"
+      when :resize
+        # Resize with max dimension constraint
+        image.resize "#{width}x#{height}>"
+      end
+      
+      # High quality JPEG for social media
+      image.format 'jpeg'
+      image.quality 92
+      image.strip
+      
+      image.write temp_file.path
+      temp_file.rewind
+      
+      {
+        file: temp_file,
+        width: image.width,
+        height: image.height, 
+        file_size: File.size(temp_file.path),
+        mode: mode
+      }
+    rescue => e
+      temp_file.close
+      temp_file.unlink
+      raise "Variant creation failed: #{e.message}"
+    end
+  end
+
+  public
+
   # Create optimized version for AI processing (smaller, faster)
   def create_ai_optimized_version
     with_converted_image do |processed_file|
@@ -386,52 +432,6 @@ class ImageProcessingService
     
     variants
   end
-
-  private
-
-  def create_variant(source_file, width, height, mode)
-    temp_file = Tempfile.new(["variant_#{width}x#{height}", '.jpg'])
-    
-    begin
-      image = MiniMagick::Image.open(source_file.path)
-      
-      case mode
-      when :crop
-        # Crop to exact dimensions (center crop)
-        image.resize "#{width}x#{height}^"
-        image.gravity 'center'
-        image.crop "#{width}x#{height}+0+0"
-      when :fit
-        # Fit within dimensions (maintain aspect ratio, may have padding)
-        image.resize "#{width}x#{height}"
-      when :resize
-        # Resize with max dimension constraint
-        image.resize "#{width}x#{height}>"
-      end
-      
-      # High quality JPEG for social media
-      image.format 'jpeg'
-      image.quality 92
-      image.strip
-      
-      image.write temp_file.path
-      temp_file.rewind
-      
-      {
-        file: temp_file,
-        width: image.width,
-        height: image.height, 
-        file_size: File.size(temp_file.path),
-        mode: mode
-      }
-    rescue => e
-      temp_file.close
-      temp_file.unlink
-      raise "Variant creation failed: #{e.message}"
-    end
-  end
-
-  public
 
   # Helper method to generate context for AI caption generation
   def self.generate_context_from_metadata(metadata)
