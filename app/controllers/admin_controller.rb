@@ -167,10 +167,11 @@ class AdminController < ApplicationController
         session[:admin_authenticated] = true
         session[:admin_login_time] = Time.current
         log_admin_action("Admin login from IP: #{request.remote_ip}")
-        redirect_to admin_path
+        redirect_to admin_path and return
       else
         @error = "Invalid password or IP not allowed"
         log_admin_action("Failed admin login attempt from IP: #{request.remote_ip}")
+        render :login and return
       end
     end
   end
