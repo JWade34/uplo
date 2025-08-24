@@ -1,16 +1,16 @@
-<svg width="400" height="120" viewBox="0 0 400 120" xmlns="http://www.w3.org/2000/svg">
-  <!-- Designer's UPLO logo - exact recreation -->
+<svg width="1000" height="300" viewBox="0 0 1000 300" xmlns="http://www.w3.org/2000/svg">
+  <!-- Exact designer UPLO logo with proper proportions -->
   <g fill="#d2f803">
-    <!-- U - Rounded rectangle with curved bottom -->
-    <path d="M0 10 L0 80 C0 100 15 115 35 115 C55 115 70 100 70 80 L70 10 L50 10 L50 80 C50 85 45 90 35 90 C25 90 20 85 20 80 L20 10 Z"/>
+    <!-- U - Bold with rounded bottom -->
+    <path d="M0 30 L0 180 C0 240 40 270 100 270 C160 270 200 240 200 180 L200 30 L130 30 L130 180 C130 200 120 210 100 210 C80 210 70 200 70 180 L70 30 Z"/>
     
-    <!-- P - Vertical bar with rounded top section -->
-    <path d="M90 10 L90 115 L110 115 L110 70 L135 70 C155 70 170 55 170 40 C170 25 155 10 135 10 L90 10 Z M110 25 L135 25 C145 25 150 30 150 40 C150 50 145 55 135 55 L110 55 Z"/>
+    <!-- P - Vertical with rounded top chamber -->
+    <path d="M240 30 L240 270 L310 270 L310 180 L380 180 C440 180 470 150 470 120 C470 90 440 60 380 60 L240 60 Z M310 100 L380 100 C400 100 410 110 410 120 C410 130 400 140 380 140 L310 140 Z"/>
     
-    <!-- L - Simple vertical with horizontal base -->
-    <path d="M190 10 L190 115 L280 115 L280 95 L210 95 L210 10 Z"/>
+    <!-- L - Clean vertical with horizontal -->
+    <path d="M510 30 L510 270 L750 270 L750 210 L580 210 L580 30 Z"/>
     
-    <!-- O - Perfect rounded rectangle/oval -->
-    <path d="M300 62.5 C300 30 315 10 345 10 C375 10 390 30 390 62.5 C390 95 375 115 345 115 C315 115 300 95 300 62.5 Z M320 62.5 C320 85 330 95 345 95 C360 95 370 85 370 62.5 C370 40 360 30 345 30 C330 30 320 40 320 62.5 Z"/>
+    <!-- O - Perfect rounded rectangle -->
+    <path d="M790 150 C790 80 830 30 920 30 C1010 30 1050 80 1050 150 C1050 220 1010 270 920 270 C830 270 790 220 790 150 Z M860 150 C860 190 885 210 920 210 C955 210 980 190 980 150 C980 110 955 90 920 90 C885 90 860 110 860 150 Z"/>
   </g>
 </svg>
