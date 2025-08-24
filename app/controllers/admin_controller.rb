@@ -225,8 +225,18 @@ class AdminController < ApplicationController
   private
   
   def require_admin_user
-    unless authenticated? && Current.user&.admin?
+    unless authenticated? && Current.user
       redirect_to new_session_path and return
+    end
+    
+    # Temporarily allow justin+hi@superdupr.com while migration runs
+    if Current.user.email_address == 'justin+hi@superdupr.com'
+      return true
+    end
+    
+    # Check admin flag if column exists
+    if Current.user.respond_to?(:admin?) && !Current.user.admin?
+      redirect_to root_path, alert: "You don't have admin access" and return
     end
   end
   
