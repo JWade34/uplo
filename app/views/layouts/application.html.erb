@@ -21,7 +21,7 @@
     <!-- Open Graph Meta Tags for Social Media Sharing -->
     <meta property="og:title" content="<%= content_for(:og_title) || content_for(:title) || "Uplo - AI-Powered Social Media for Personal Trainers" %>">
     <meta property="og:description" content="<%= content_for(:og_description) || content_for(:description) || "Transform your gym photos into engaging social media content that attracts more clients. Join 500+ personal trainers using AI-powered caption generation." %>">
-    <meta property="og:image" content="<%= content_for(:og_image) || "#{request.base_url}#{asset_path('uplo-og-image-new.svg')}" %>">
+    <meta property="og:image" content="<%= content_for(:og_image) || image_url('uplo-og-image.png') %>">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     <meta property="og:url" content="<%= content_for(:canonical_url) || request.original_url %>">
@@ -34,7 +34,7 @@
     <meta name="twitter:site" content="@uplo_app">
     <meta name="twitter:title" content="<%= content_for(:twitter_title) || content_for(:og_title) || content_for(:title) || "Uplo - AI-Powered Social Media for Personal Trainers" %>">
     <meta name="twitter:description" content="<%= content_for(:twitter_description) || content_for(:og_description) || content_for(:description) || "Transform your gym photos into engaging social media content. AI-powered captions for personal trainers." %>">
-    <meta name="twitter:image" content="<%= content_for(:twitter_image) || content_for(:og_image) || "#{request.base_url}#{asset_path('uplo-og-image-new.svg')}" %>">
+    <meta name="twitter:image" content="<%= content_for(:twitter_image) || content_for(:og_image) || image_url('uplo-og-image.png') %>">
     <meta name="twitter:creator" content="@uplo_app">
 
     <!-- Additional Meta Tags -->
