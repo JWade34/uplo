@@ -47,7 +47,7 @@
   <div class="bg-white shadow rounded-lg overflow-hidden">
     <div class="px-4 py-5 sm:px-6 border-b border-gray-200">
       <h3 class="text-lg leading-6 font-medium text-gray-900">
-        Users (<%= @users.total_count %>)
+        Users (<%= @users.count %>) <span class="text-sm text-gray-500">- Showing first 50</span>
       </h3>
     </div>
     
@@ -77,20 +77,19 @@
         </thead>
         <tbody class="bg-white divide-y divide-gray-200">
           <% @users.each do |user| %>
-            <% active_sub = user.subscriptions.active.first %>
             <tr class="hover:bg-gray-50">
               <td class="px-6 py-4 whitespace-nowrap">
                 <div class="flex items-center">
                   <div class="flex-shrink-0 h-10 w-10">
                     <div class="h-10 w-10 bg-gray-200 rounded-full flex items-center justify-center">
                       <span class="text-sm font-medium text-gray-700">
-                        <%= user.email.first.upcase %>
+                        <%= user.email_address.first.upcase %>
                       </span>
                     </div>
                   </div>
                   <div class="ml-4">
                     <div class="text-sm font-medium text-gray-900">
-                      <%= user.email %>
+                      <%= user.email_address %>
                     </div>
                     <div class="text-sm text-gray-500">
                       ID: <%= user.id %>
@@ -109,18 +108,12 @@
               </td>
               
               <td class="px-6 py-4 whitespace-nowrap">
-                <% if active_sub %>
-                  <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                    <%= active_sub.plan_id %>
-                  </span>
-                  <div class="text-xs text-gray-500 mt-1">
-                    <%= active_sub.status %>
-                  </div>
-                <% else %>
-                  <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
-                    Free
-                  </span>
-                <% end %>
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium <%= user.subscription_tier == 'pro' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800' %>">
+                  <%= user.subscription_tier.capitalize %>
+                </span>
+                <div class="text-xs text-gray-500 mt-1">
+                  <%= user.subscription_status %>
+                </div>
               </td>
               
               <td class="px-6 py-4 whitespace-nowrap">
@@ -158,10 +151,22 @@
     </div>
   </div>
 
-  <!-- Pagination -->
-  <% if @users.respond_to?(:total_pages) && @users.total_pages > 1 %>
-    <div class="flex justify-center">
-      <%= paginate @users, theme: 'twitter-bootstrap-4' %>
+  <!-- Show error if there was one -->
+  <% if defined?(@error) && @error %>
+    <div class="bg-red-50 border border-red-200 rounded-md p-4">
+      <div class="flex">
+        <div class="flex-shrink-0">
+          <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+          </svg>
+        </div>
+        <div class="ml-3">
+          <h3 class="text-sm font-medium text-red-800">Error Loading Users</h3>
+          <div class="mt-2 text-sm text-red-700">
+            <p><%= @error %></p>
+          </div>
+        </div>
+      </div>
     </div>
   <% end %>
 </div>

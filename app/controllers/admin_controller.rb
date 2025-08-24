@@ -42,24 +42,27 @@ class AdminController < ApplicationController
   end
   
   def users
-    @users = User.includes(:subscriptions, :photos)
-                 .order(params[:sort] || 'created_at DESC')
-                 .page(params[:page])
-                 .per(20)
-    
-    if params[:search].present?
-      @users = @users.where('email ILIKE ?', "%#{params[:search]}%")
-    end
-    
-    if params[:subscription_status].present?
-      case params[:subscription_status]
-      when 'active'
-        @users = @users.joins(:subscriptions).where(subscriptions: { status: ['active', 'trialing'] })
-      when 'inactive'
-        @users = @users.left_joins(:subscriptions)
-                       .where(subscriptions: { id: nil })
-                       .or(User.joins(:subscriptions).where.not(subscriptions: { status: ['active', 'trialing'] }))
+    begin
+      @users = User.includes(:photos)
+                   .order(params[:sort] || 'created_at DESC')
+                   .limit(50)  # Simple limit instead of pagination
+      
+      if params[:search].present?
+        @users = @users.where('email_address ILIKE ?', "%#{params[:search]}%")
       end
+      
+      if params[:subscription_status].present?
+        case params[:subscription_status]
+        when 'active'
+          @users = @users.where(subscription_status: ['active', 'trial'])
+        when 'inactive'
+          @users = @users.where(subscription_status: ['expired', 'cancelled'])
+        end
+      end
+    rescue => e
+      Rails.logger.error "Admin users error: #{e.message}"
+      @users = []
+      @error = "Error loading users: #{e.message}"
     end
   end
   
