@@ -1,71 +1,93 @@
 <svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
-  <!-- Background Gradient -->
+  <!-- Background with engaging gradient -->
   <defs>
     <linearGradient id="bg-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" style="stop-color:#111827;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#1f2937;stop-opacity:1" />
       <stop offset="100%" style="stop-color:#000000;stop-opacity:1" />
     </linearGradient>
     <linearGradient id="accent-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
       <stop offset="0%" style="stop-color:#d2f803;stop-opacity:1" />
       <stop offset="100%" style="stop-color:#a3e635;stop-opacity:1" />
     </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="50%">
+      <stop offset="0%" style="stop-color:#d2f803;stop-opacity:0.3" />
+      <stop offset="100%" style="stop-color:#d2f803;stop-opacity:0" />
+    </radialGradient>
   </defs>
   
   <!-- Background -->
   <rect width="1200" height="630" fill="url(#bg-gradient)"/>
   
-  <!-- Decorative Elements -->
-  <circle cx="100" cy="100" r="150" fill="#d2f803" opacity="0.1"/>
-  <circle cx="1100" cy="530" r="200" fill="#d2f803" opacity="0.05"/>
+  <!-- Glow Effects -->
+  <ellipse cx="200" cy="150" rx="300" ry="150" fill="url(#glow)"/>
+  <ellipse cx="1000" cy="450" rx="250" ry="120" fill="url(#glow)"/>
   
-  <!-- Main Content -->
-  <g transform="translate(100, 150)">
-    <!-- Logo/Brand -->
-    <text x="0" y="80" font-family="Inter, Arial, sans-serif" font-size="72" font-weight="800" fill="#d2f803">Uplo</text>
+  <!-- Main Content Container -->
+  <g transform="translate(80, 120)">
+    <!-- Premium Logo -->
+    <text x="0" y="60" font-family="system-ui, -apple-system, sans-serif" font-size="64" font-weight="800" fill="url(#accent-gradient)">UPLO</text>
     
-    <!-- Main Headline -->
-    <text x="0" y="140" font-family="Inter, Arial, sans-serif" font-size="48" font-weight="700" fill="white">AI-Powered Social Media</text>
-    <text x="0" y="195" font-family="Inter, Arial, sans-serif" font-size="48" font-weight="700" fill="white">for Personal Trainers</text>
+    <!-- Compelling Headline -->
+    <text x="0" y="120" font-family="system-ui, -apple-system, sans-serif" font-size="44" font-weight="700" fill="white">Stop Struggling with</text>
+    <text x="0" y="170" font-family="system-ui, -apple-system, sans-serif" font-size="44" font-weight="700" fill="white">Social Media Captions</text>
     
-    <!-- Subline -->
-    <text x="0" y="260" font-family="Inter, Arial, sans-serif" font-size="28" font-weight="400" fill="#9ca3af">Transform your gym photos into engaging content</text>
-    <text x="0" y="300" font-family="Inter, Arial, sans-serif" font-size="28" font-weight="400" fill="#9ca3af">that attracts more clients automatically</text>
+    <!-- Value Proposition -->
+    <text x="0" y="220" font-family="system-ui, -apple-system, sans-serif" font-size="26" font-weight="500" fill="#d2f803">AI creates engaging posts that get clients</text>
+    <text x="0" y="250" font-family="system-ui, -apple-system, sans-serif" font-size="26" font-weight="500" fill="#d2f803">from your gym photos in seconds</text>
     
-    <!-- Call to Action -->
-    <rect x="0" y="340" width="280" height="60" rx="8" fill="url(#accent-gradient)"/>
-    <text x="140" y="380" font-family="Inter, Arial, sans-serif" font-size="24" font-weight="600" fill="#000" text-anchor="middle">Get Early Access</text>
+    <!-- Urgency/Social Proof -->
+    <text x="0" y="300" font-family="system-ui, -apple-system, sans-serif" font-size="18" font-weight="400" fill="#9ca3af">Join 500+ personal trainers already growing their business</text>
+    
+    <!-- Strong CTA Button -->
+    <rect x="0" y="340" width="320" height="65" rx="12" fill="url(#accent-gradient)" stroke="#ffffff" stroke-width="2"/>
+    <text x="160" y="385" font-family="system-ui, -apple-system, sans-serif" font-size="24" font-weight="700" fill="#000" text-anchor="middle">GET EARLY ACCESS FREE</text>
+    
+    <!-- Additional urgency -->
+    <text x="0" y="430" font-family="system-ui, -apple-system, sans-serif" font-size="16" font-weight="600" fill="#d2f803">⚡ Limited spots • 50% launch discount</text>
   </g>
   
-  <!-- Phone Mockup -->
-  <g transform="translate(750, 100)">
-    <!-- Phone Frame -->
-    <rect x="0" y="0" width="200" height="400" rx="25" fill="#1f2937" stroke="#374151" stroke-width="2"/>
-    <rect x="10" y="30" width="180" height="340" rx="15" fill="#000"/>
+  <!-- Visual Proof - Before/After Style -->
+  <g transform="translate(700, 100)">
+    <!-- Phone/Screenshot mockup -->
+    <rect x="0" y="0" width="220" height="420" rx="28" fill="#1f2937" stroke="#d2f803" stroke-width="3"/>
+    <rect x="15" y="35" width="190" height="350" rx="20" fill="#000"/>
     
-    <!-- Screen Content -->
-    <rect x="20" y="50" width="160" height="80" rx="8" fill="#d2f803" opacity="0.2"/>
-    <text x="100" y="75" font-family="Arial, sans-serif" font-size="12" font-weight="600" fill="#d2f803" text-anchor="middle">Upload Photo</text>
-    <text x="100" y="95" font-family="Arial, sans-serif" font-size="10" fill="#9ca3af" text-anchor="middle">📸</text>
+    <!-- App Interface Mockup -->
+    <rect x="25" y="50" width="170" height="100" rx="8" fill="#374151"/>
+    <text x="110" y="75" font-family="system-ui, sans-serif" font-size="12" font-weight="600" fill="#d2f803" text-anchor="middle">Your Photo</text>
+    <text x="110" y="95" font-family="system-ui, sans-serif" font-size="32" text-anchor="middle">📸</text>
+    <text x="110" y="115" font-family="system-ui, sans-serif" font-size="10" fill="#9ca3af" text-anchor="middle">Upload gym photo</text>
+    <text x="110" y="135" font-family="system-ui, sans-serif" font-size="24" text-anchor="middle">⬇️</text>
     
-    <rect x="20" y="140" width="160" height="60" rx="6" fill="#374151"/>
-    <text x="25" y="155" font-family="Arial, sans-serif" font-size="8" fill="#d2f803">AI Caption Generated:</text>
-    <text x="25" y="170" font-family="Arial, sans-serif" font-size="7" fill="white">"Morning grind at the gym! 💪</text>
-    <text x="25" y="180" font-family="Arial, sans-serif" font-size="7" fill="white">Ready to crush today's goals?</text>
-    <text x="25" y="190" font-family="Arial, sans-serif" font-size="7" fill="white">DM me for training tips!"</text>
+    <!-- Generated Caption -->
+    <rect x="25" y="160" width="170" height="140" rx="8" fill="url(#accent-gradient)" opacity="0.9"/>
+    <text x="30" y="180" font-family="system-ui, sans-serif" font-size="10" font-weight="600" fill="#000">AI CAPTION GENERATED:</text>
+    <text x="30" y="200" font-family="system-ui, sans-serif" font-size="11" font-weight="500" fill="#000">"Just crushed leg day! 🔥</text>
+    <text x="30" y="215" font-family="system-ui, sans-serif" font-size="11" font-weight="500" fill="#000">Who else is ready to level</text>
+    <text x="30" y="230" font-family="system-ui, sans-serif" font-size="11" font-weight="500" fill="#000">up their fitness game?</text>
+    <text x="30" y="250" font-family="system-ui, sans-serif" font-size="11" font-weight="500" fill="#000">DM me for a free consultation!</text>
+    <text x="30" y="270" font-family="system-ui, sans-serif" font-size="11" font-weight="500" fill="#000">#PersonalTrainer #Fitness</text>
+    <text x="30" y="285" font-family="system-ui, sans-serif" font-size="11" font-weight="500" fill="#000">#LegDay #FitnessMotivation"</text>
     
-    <!-- Phone highlights -->
-    <ellipse cx="100" cy="20" rx="15" ry="3" fill="#374151"/>
+    <!-- Engagement Stats -->
+    <text x="30" y="320" font-family="system-ui, sans-serif" font-size="10" font-weight="600" fill="#d2f803">RESULT: 3x more engagement</text>
+    <text x="30" y="335" font-family="system-ui, sans-serif" font-size="10" font-weight="600" fill="#d2f803">2 new client inquiries!</text>
   </g>
   
-  <!-- Stats -->
-  <g transform="translate(100, 480)">
-    <text x="0" y="0" font-family="Inter, Arial, sans-serif" font-size="20" font-weight="600" fill="#d2f803">500+</text>
-    <text x="0" y="20" font-family="Inter, Arial, sans-serif" font-size="14" fill="#9ca3af">Personal Trainers</text>
+  <!-- Bottom Stats Bar -->
+  <rect x="0" y="550" width="1200" height="80" fill="#000" opacity="0.7"/>
+  <g transform="translate(100, 580)">
+    <text x="0" y="25" font-family="system-ui, sans-serif" font-size="20" font-weight="700" fill="#d2f803">500+</text>
+    <text x="0" y="45" font-family="system-ui, sans-serif" font-size="12" fill="#9ca3af">Trainers Using</text>
     
-    <text x="180" y="0" font-family="Inter, Arial, sans-serif" font-size="20" font-weight="600" fill="#d2f803">3x</text>
-    <text x="180" y="20" font-family="Inter, Arial, sans-serif" font-size="14" fill="#9ca3af">More Engagement</text>
+    <text x="250" y="25" font-family="system-ui, sans-serif" font-size="20" font-weight="700" fill="#d2f803">3x</text>
+    <text x="250" y="45" font-family="system-ui, sans-serif" font-size="12" fill="#9ca3af">More Clients</text>
     
-    <text x="320" y="0" font-family="Inter, Arial, sans-serif" font-size="20" font-weight="600" fill="#d2f803">2hrs</text>
-    <text x="320" y="20" font-family="Inter, Arial, sans-serif" font-size="14" fill="#9ca3af">Saved Daily</text>
+    <text x="450" y="25" font-family="system-ui, sans-serif" font-size="20" font-weight="700" fill="#d2f803">2hrs</text>
+    <text x="450" y="45" font-family="system-ui, sans-serif" font-size="12" fill="#9ca3af">Saved Daily</text>
+    
+    <text x="650" y="25" font-family="system-ui, sans-serif" font-size="20" font-weight="700" fill="#d2f803">FREE</text>
+    <text x="650" y="45" font-family="system-ui, sans-serif" font-size="12" fill="#9ca3af">Early Access</text>
   </g>
 </svg>
