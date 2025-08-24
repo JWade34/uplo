@@ -12,21 +12,23 @@
       <div class="flex items-center">
         <%= render 'shared/logo', size: '1.75rem', color: 'text-gray-900' %>
       </div>
-      <div class="flex items-center space-x-8">
-        <a href="#features" class="text-gray-700 hover:text-gray-900">Features</a>
-        <a href="#examples" class="text-gray-700 hover:text-gray-900">Examples</a>
-        <a href="#pricing" class="text-gray-700 hover:text-gray-900">Pricing</a>
+      <div class="flex items-center space-x-2 sm:space-x-4 md:space-x-8">
+        <!-- Desktop Navigation Links - Hidden on mobile -->
+        <a href="#features" class="hidden md:block text-gray-700 hover:text-gray-900">Features</a>
+        <a href="#examples" class="hidden md:block text-gray-700 hover:text-gray-900">Examples</a>
+        <a href="#pricing" class="hidden md:block text-gray-700 hover:text-gray-900">Pricing</a>
         <% if Current.user %>
           <%= link_to "/dashboard", class: "text-gray-700 hover:text-gray-900" do %>
             Dashboard
           <% end %>
           <%= button_to "Sign Out", session_path, method: :delete, data: { turbo_method: :delete }, class: "text-gray-700 hover:text-gray-900" %>
         <% else %>
-          <%= link_to new_session_path, class: "text-gray-700 hover:text-gray-900" do %>
+          <%= link_to new_session_path, class: "text-gray-700 hover:text-gray-900 px-2 py-2 text-sm sm:text-base" do %>
             Sign In
           <% end %>
-          <%= link_to early_access_path, class: "bg-accent text-gray-900 px-6 py-2 rounded-lg font-semibold hover:bg-accent-hover transition-colors" do %>
-            Get Started
+          <%= link_to early_access_path, class: "bg-accent text-gray-900 px-3 py-2 sm:px-6 rounded-lg font-semibold hover:bg-accent-hover transition-colors text-sm sm:text-base" do %>
+            <span class="hidden sm:inline">Get Started</span>
+            <span class="sm:hidden">Start</span>
           <% end %>
         <% end %>
       </div>
