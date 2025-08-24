@@ -183,53 +183,65 @@
 </div>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
+function initPhotoUpload() {
   const dropZone = document.getElementById('drop-zone');
   const photoInput = document.getElementById('photo-input');
   const previewArea = document.getElementById('preview-area');
   const previewImage = document.getElementById('preview-image');
   const previewName = document.getElementById('preview-name');
 
+  if (!dropZone || !photoInput) return; // Exit if elements don't exist
+
   console.log('Upload script loaded');
   console.log('Drop zone:', dropZone);
   console.log('Photo input:', photoInput);
 
+  // Remove any existing event listeners to prevent duplicates
+  const newDropZone = dropZone.cloneNode(true);
+  dropZone.parentNode.replaceChild(newDropZone, dropZone);
+  const newPhotoInput = photoInput.cloneNode(true);
+  photoInput.parentNode.replaceChild(newPhotoInput, photoInput);
+
+  // Re-get references after cloning
+  const activeDropZone = document.getElementById('drop-zone');
+  const activePhotoInput = document.getElementById('photo-input');
+
   // Click to upload - with debugging
-  dropZone.addEventListener('click', function(e) {
+  activeDropZone.addEventListener('click', function(e) {
     console.log('Drop zone clicked!');
     e.preventDefault();
-    photoInput.click();
+    activePhotoInput.click();
     console.log('Photo input click triggered');
   });
 
   // File input change
-  photoInput.addEventListener('change', handleFileSelect);
+  activePhotoInput.addEventListener('change', handleFileSelect);
 
   // Drag and drop
-  dropZone.addEventListener('dragover', (e) => {
+  activeDropZone.addEventListener('dragover', (e) => {
     e.preventDefault();
-    dropZone.classList.add('border-accent');
+    activeDropZone.classList.add('border-accent');
   });
 
-  dropZone.addEventListener('dragleave', (e) => {
+  activeDropZone.addEventListener('dragleave', (e) => {
     e.preventDefault();
-    dropZone.classList.remove('border-accent');
+    activeDropZone.classList.remove('border-accent');
   });
 
-  dropZone.addEventListener('drop', (e) => {
+  activeDropZone.addEventListener('drop', (e) => {
     e.preventDefault();
-    dropZone.classList.remove('border-accent');
+    activeDropZone.classList.remove('border-accent');
     
     const files = e.dataTransfer.files;
     if (files.length > 0) {
-      photoInput.files = files;
+      activePhotoInput.files = files;
       handleFileSelect();
     }
   });
 
   function handleFileSelect() {
     console.log('File selection triggered');
-    const file = photoInput.files[0];
+    const file = activePhotoInput.files[0];
     console.log('Selected file:', file);
     
     if (file) {
@@ -249,17 +261,24 @@ document.addEventListener('DOMContentLoaded', function() {
         const reader = new FileReader();
         reader.onload = function(e) {
           console.log('FileReader onload triggered');
-          previewImage.src = e.target.result;
-          previewName.textContent = file.name;
+          const currentPreviewImage = document.getElementById('preview-image');
+          const currentPreviewName = document.getElementById('preview-name');
+          const currentPreviewArea = document.getElementById('preview-area');
+          const currentDropZone = document.getElementById('drop-zone');
           
-          // Add file size info
-          const fileSize = (file.size / (1024 * 1024)).toFixed(1);
-          previewName.textContent = `${file.name} (${fileSize} MB)`;
-          
-          // Show preview, hide upload area
-          previewArea.classList.remove('hidden');
-          dropZone.classList.add('hidden');
-          console.log('Preview updated and shown');
+          if (currentPreviewImage && currentPreviewName) {
+            currentPreviewImage.src = e.target.result;
+            currentPreviewName.textContent = file.name;
+            
+            // Add file size info
+            const fileSize = (file.size / (1024 * 1024)).toFixed(1);
+            currentPreviewName.textContent = `${file.name} (${fileSize} MB)`;
+            
+            // Show preview, hide upload area
+            if (currentPreviewArea) currentPreviewArea.classList.remove('hidden');
+            if (currentDropZone) currentDropZone.classList.add('hidden');
+            console.log('Preview updated and shown');
+          }
         };
         
         reader.onerror = function(e) {
@@ -272,25 +291,44 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log('Invalid file type selected:', file.type);
         alert('Please select a valid image file (JPG, PNG, WebP, HEIC)');
         // Reset if invalid file
-        previewArea.classList.add('hidden');
-        dropZone.classList.remove('hidden');
-        photoInput.value = '';
+        const currentPreviewArea = document.getElementById('preview-area');
+        const currentDropZone = document.getElementById('drop-zone');
+        if (currentPreviewArea) currentPreviewArea.classList.add('hidden');
+        if (currentDropZone) currentDropZone.classList.remove('hidden');
+        activePhotoInput.value = '';
       }
     } else {
       console.log('No file selected');
       // Reset if no file
-      previewArea.classList.add('hidden');
-      dropZone.classList.remove('hidden');
+      const currentPreviewArea = document.getElementById('preview-area');
+      const currentDropZone = document.getElementById('drop-zone');
+      if (currentPreviewArea) currentPreviewArea.classList.add('hidden');
+      if (currentDropZone) currentDropZone.classList.remove('hidden');
     }
   }
 
   // Add global changePhoto function
   window.changePhoto = function() {
     console.log('Change photo clicked');
-    previewArea.classList.add('hidden');
-    dropZone.classList.remove('hidden');
-    photoInput.value = ''; // Clear the input
-    photoInput.click();
+    const currentPreviewArea = document.getElementById('preview-area');
+    const currentDropZone = document.getElementById('drop-zone');
+    const currentPhotoInput = document.getElementById('photo-input');
+    
+    if (currentPreviewArea) currentPreviewArea.classList.add('hidden');
+    if (currentDropZone) currentDropZone.classList.remove('hidden');
+    if (currentPhotoInput) {
+      currentPhotoInput.value = ''; // Clear the input
+      currentPhotoInput.click();
+    }
   };
-});
+}
+
+// Initialize on DOMContentLoaded (first page load)
+document.addEventListener('DOMContentLoaded', initPhotoUpload);
+
+// Initialize on Turbo load (subsequent navigations)
+document.addEventListener('turbo:load', initPhotoUpload);
+
+// Also reinitialize after Turbo renders (for form submissions and frame updates)
+document.addEventListener('turbo:render', initPhotoUpload);
 </script>

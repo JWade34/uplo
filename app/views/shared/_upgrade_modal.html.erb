@@ -134,7 +134,8 @@
 
 <!-- Modal Controller JavaScript -->
 <script>
-document.addEventListener('DOMContentLoaded', function() {
+// Initialize modal when Turbo loads the page
+function initUpgradeModal() {
   // Simple modal controller
   const modal = document.getElementById('upgrade-modal');
   if (!modal) return;
@@ -171,5 +172,14 @@ document.addEventListener('DOMContentLoaded', function() {
       closeModal();
     }
   });
-});
+}
+
+// Initialize on DOMContentLoaded (first page load)
+document.addEventListener('DOMContentLoaded', initUpgradeModal);
+
+// Initialize on Turbo load (subsequent navigations)
+document.addEventListener('turbo:load', initUpgradeModal);
+
+// Also reinitialize after Turbo renders (for form submissions and frame updates)
+document.addEventListener('turbo:render', initUpgradeModal);
 </script>
