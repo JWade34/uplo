@@ -55,7 +55,9 @@ class PhotosController < ApplicationController
   end
 
   def show
-    # This will be used to display the photo and its generated captions
+    @user = Current.user
+    # Load captions with proper ordering
+    @photo.captions.reload if @photo.captions.loaded?
   end
 
   def display_heic
