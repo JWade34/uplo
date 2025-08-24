@@ -328,6 +328,111 @@ class ImageProcessingService
     nil
   end
 
+  # Create optimized version for AI processing (smaller, faster)
+  def create_ai_optimized_version
+    with_converted_image do |processed_file|
+      temp_file = Tempfile.new(['ai_optimized', '.jpg'])
+      
+      begin
+        image = MiniMagick::Image.open(processed_file.path)
+        
+        # Resize to max 1200px on longest side while maintaining aspect ratio
+        image.resize "1200x1200>"
+        
+        # Set JPEG quality to 85% for good balance of quality vs size
+        image.format 'jpeg'
+        image.quality 85
+        
+        # Remove unnecessary metadata to reduce file size
+        image.strip
+        
+        image.write temp_file.path
+        temp_file.rewind
+        
+        {
+          file: temp_file,
+          width: image.width,
+          height: image.height,
+          file_size: File.size(temp_file.path)
+        }
+      rescue => e
+        temp_file.close
+        temp_file.unlink
+        raise "AI optimization failed: #{e.message}"
+      end
+    end
+  end
+
+  # Create social media optimized variants
+  def create_social_variants
+    variants = {}
+    
+    with_converted_image do |processed_file|
+      # Instagram Square (1080x1080)
+      variants[:instagram_square] = create_variant(processed_file, 1080, 1080, :crop)
+      
+      # Instagram Portrait (1080x1350)
+      variants[:instagram_portrait] = create_variant(processed_file, 1080, 1350, :fit)
+      
+      # Instagram Landscape (1080x566)  
+      variants[:instagram_landscape] = create_variant(processed_file, 1080, 566, :fit)
+      
+      # Facebook Recommended (1200x630)
+      variants[:facebook] = create_variant(processed_file, 1200, 630, :fit)
+      
+      # High Quality Web (1920px max width)
+      variants[:web_hq] = create_variant(processed_file, 1920, 1920, :resize)
+    end
+    
+    variants
+  end
+
+  private
+
+  def create_variant(source_file, width, height, mode)
+    temp_file = Tempfile.new(["variant_#{width}x#{height}", '.jpg'])
+    
+    begin
+      image = MiniMagick::Image.open(source_file.path)
+      
+      case mode
+      when :crop
+        # Crop to exact dimensions (center crop)
+        image.resize "#{width}x#{height}^"
+        image.gravity 'center'
+        image.crop "#{width}x#{height}+0+0"
+      when :fit
+        # Fit within dimensions (maintain aspect ratio, may have padding)
+        image.resize "#{width}x#{height}"
+      when :resize
+        # Resize with max dimension constraint
+        image.resize "#{width}x#{height}>"
+      end
+      
+      # High quality JPEG for social media
+      image.format 'jpeg'
+      image.quality 92
+      image.strip
+      
+      image.write temp_file.path
+      temp_file.rewind
+      
+      {
+        file: temp_file,
+        width: image.width,
+        height: image.height, 
+        file_size: File.size(temp_file.path),
+        mode: mode
+      }
+    rescue => e
+      temp_file.close
+      temp_file.unlink
+      raise "Variant creation failed: #{e.message}"
+    end
+  end
+
+  public
+
   # Helper method to generate context for AI caption generation
   def self.generate_context_from_metadata(metadata)
     context_parts = []

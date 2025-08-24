@@ -6,8 +6,11 @@ class PhotoProcessingJob < ApplicationJob
   def perform(photo_id)
     photo = Photo.find(photo_id)
     
-    Rails.logger.info "Starting AI caption generation for photo #{photo.id}"
+    Rails.logger.info "Starting photo processing for photo #{photo.id}"
+    processing_start = Time.current
     
+    # Generate AI captions
+    Rails.logger.info "Generating AI captions..."
     service = AiCaptionService.new(photo)
     captions = service.generate_captions
     
@@ -16,6 +19,19 @@ class PhotoProcessingJob < ApplicationJob
     else
       Rails.logger.error "Failed to generate captions for photo #{photo.id}"
     end
+    
+    # Generate social media variants (background task to not slow down caption generation)
+    Rails.logger.info "Generating social media variants..."
+    begin
+      photo.generate_social_variants!
+      Rails.logger.info "Social media variants generated successfully"
+    rescue => e
+      Rails.logger.error "Failed to generate social variants: #{e.message}"
+      # Don't fail the whole job if variants fail
+    end
+    
+    processing_time = (Time.current - processing_start).round(2)
+    Rails.logger.info "Completed photo processing for #{photo.id} in #{processing_time}s"
     
   rescue ActiveRecord::RecordNotFound
     Rails.logger.error "Photo with ID #{photo_id} not found"

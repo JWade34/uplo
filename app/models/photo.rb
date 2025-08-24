@@ -1,6 +1,7 @@
 class Photo < ApplicationRecord
   belongs_to :user
   has_one_attached :image
+  has_many_attached :social_variants # For storing different social media sizes
   has_many :captions, dependent: :destroy
   has_many :post_performances, dependent: :destroy
   
@@ -141,7 +142,131 @@ class Photo < ApplicationRecord
     image.content_type.in?(['image/heic', 'image/heif'])
   end
   
+  # Processing status helpers for UX
+  def processing_duration
+    return nil unless processing_started_at
+    
+    end_time = processed? ? updated_at : Time.current
+    ((end_time - processing_started_at) / 1.minute).round(1)
+  end
+  
+  def processing_elapsed_seconds
+    return 0 unless processing_started_at
+    
+    end_time = processed? ? updated_at : Time.current
+    (end_time - processing_started_at).to_i
+  end
+  
+  def estimated_completion_time
+    return nil if processed? || !processing_started_at
+    
+    # Estimate based on subscription tier
+    estimated_seconds = user.can_access_pro_features? ? 8 : 5 # Pro users get 3 captions vs 1
+    elapsed = processing_elapsed_seconds
+    
+    [estimated_seconds - elapsed, 0].max
+  end
+  
+  def processing_progress_percentage
+    return 100 if processed?
+    return 0 unless processing_started_at
+    
+    estimated_total = user.can_access_pro_features? ? 8 : 5
+    elapsed = processing_elapsed_seconds
+    
+    [(elapsed.to_f / estimated_total * 100).round, 95].min # Cap at 95% until actually done
+  end
+  
+  # Social media variant management
+  def generate_social_variants!
+    return if social_variants.any? # Don't regenerate if they already exist
+    
+    image.open do |file|
+      service = ImageProcessingService.new(file)
+      variants = service.create_social_variants
+      
+      variants.each do |variant_name, variant_data|
+        begin
+          # Attach each variant with a descriptive filename
+          social_variants.attach(
+            io: variant_data[:file],
+            filename: "#{filename&.split('.')&.first || id}_#{variant_name}.jpg",
+            content_type: 'image/jpeg'
+          )
+          
+          Rails.logger.info "Generated #{variant_name} variant: #{variant_data[:width]}x#{variant_data[:height]} (#{number_to_human_size(variant_data[:file_size])})"
+        ensure
+          # Clean up temporary file
+          variant_data[:file].close
+          variant_data[:file].unlink
+        end
+      end
+      
+      Rails.logger.info "Generated #{variants.count} social media variants for photo #{id}"
+    end
+  end
+  
+  # Get specific social media variant
+  def social_variant(platform)
+    return nil unless social_variants.any?
+    
+    # Find variant by filename pattern
+    variant_name = case platform.to_s
+    when 'instagram_square' then 'instagram_square'
+    when 'instagram_portrait' then 'instagram_portrait'  
+    when 'instagram_landscape' then 'instagram_landscape'
+    when 'facebook' then 'facebook'
+    when 'web_hq' then 'web_hq'
+    else nil
+    end
+    
+    return nil unless variant_name
+    
+    social_variants.find { |variant| variant.filename.to_s.include?(variant_name) }
+  end
+  
+  # Get all available social variants
+  def available_social_variants
+    return [] unless social_variants.any?
+    
+    variants = []
+    %w[instagram_square instagram_portrait instagram_landscape facebook web_hq].each do |variant_name|
+      variant = social_variant(variant_name)
+      if variant
+        variants << {
+          name: variant_name,
+          display_name: variant_name.humanize,
+          attachment: variant,
+          dimensions: get_variant_dimensions(variant_name)
+        }
+      end
+    end
+    
+    variants
+  end
+  
   private
+  
+  def get_variant_dimensions(variant_name)
+    case variant_name
+    when 'instagram_square' then '1080×1080'
+    when 'instagram_portrait' then '1080×1350'
+    when 'instagram_landscape' then '1080×566'
+    when 'facebook' then '1200×630'
+    when 'web_hq' then 'High Quality Web'
+    else 'Unknown'
+    end
+  end
+  
+  def number_to_human_size(size)
+    units = ['B', 'KB', 'MB', 'GB']
+    unit = 0
+    while size >= 1024 && unit < units.length - 1
+      size /= 1024.0
+      unit += 1
+    end
+    "%.1f %s" % [size, units[unit]]
+  end
   
   def image_format
     return unless image.attached?

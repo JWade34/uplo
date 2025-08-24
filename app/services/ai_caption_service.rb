@@ -20,24 +20,52 @@ class AiCaptionService
       ['friendly'] # 1 style for Starter users
     end
     
+    # Pre-generate the image URL once for all API calls
+    image_url = get_image_url
     generated_captions = []
     
-    styles.each do |style|
-      break unless @user.can_generate_caption? # Check again in case we've hit limit mid-generation
-      
-      caption_text = generate_caption_for_style(style)
-      if caption_text.present?
-        caption = @photo.captions.create!(
-          content: caption_text,
-          style: style,
-          generated_at: Time.current
-        )
-        generated_captions << caption
-        
-        # Increment usage counter for each caption
-        @user.increment_caption_usage!
+    Rails.logger.info "Starting parallel AI caption generation for #{styles.count} styles"
+    start_time = Time.current
+    
+    # Process all styles in parallel using threads
+    caption_futures = styles.map do |style|
+      Thread.new do
+        begin
+          next unless @user.can_generate_caption?
+          
+          Rails.logger.info "Generating #{style} caption..."
+          caption_text = generate_caption_for_style_with_url(style, image_url)
+          
+          if caption_text.present?
+            # Thread-safe caption creation
+            caption = nil
+            ActiveRecord::Base.connection_pool.with_connection do
+              caption = @photo.captions.create!(
+                content: caption_text,
+                style: style,
+                generated_at: Time.current
+              )
+              # Increment usage counter for each caption
+              @user.increment_caption_usage!
+            end
+            Rails.logger.info "Generated #{style} caption (#{caption_text.length} chars)"
+            caption
+          end
+        rescue => e
+          Rails.logger.error "Error generating #{style} caption: #{e.message}"
+          nil
+        end
       end
     end
+    
+    # Wait for all threads to complete and collect results
+    caption_futures.each do |future|
+      caption = future.value # This blocks until the thread completes
+      generated_captions << caption if caption
+    end
+    
+    processing_time = (Time.current - start_time).round(2)
+    Rails.logger.info "Completed AI caption generation in #{processing_time}s (#{generated_captions.count}/#{styles.count} successful)"
     
     # Mark photo as processed
     @photo.update!(processed: true)
@@ -48,8 +76,12 @@ class AiCaptionService
   private
   
   def generate_caption_for_style(style)
-    prompt = build_prompt(style)
     image_url = get_image_url
+    generate_caption_for_style_with_url(style, image_url)
+  end
+  
+  def generate_caption_for_style_with_url(style, image_url)
+    prompt = build_prompt(style)
     
     begin
       response = @client.chat(
@@ -79,7 +111,7 @@ class AiCaptionService
       
       response.dig("choices", 0, "message", "content")
     rescue => e
-      Rails.logger.error "OpenAI API error: #{e.message}"
+      Rails.logger.error "OpenAI API error for #{style}: #{e.message}"
       nil
     end
   end
@@ -173,26 +205,37 @@ class AiCaptionService
   end
   
   def get_image_url
-    # OpenAI doesn't support HEIC files, so we need to convert them to JPEG first
-    # and then encode as base64
-    
+    # Use AI-optimized version for faster processing and smaller payloads
     @photo.image.open do |file|
       service = ImageProcessingService.new(file)
       
-      if service.send(:heic_file?)
-        # For HEIC files, use the converted JPEG version
-        service.send(:with_converted_image) do |converted_file|
-          image_data = File.read(converted_file.path)
-          base64_image = Base64.strict_encode64(image_data)
-          return "data:image/jpeg;base64,#{base64_image}"
-        end
-      else
-        # For other formats, use the original file
-        image_data = file.read
+      # Create AI-optimized version (max 1200px, 85% quality)
+      optimized = service.create_ai_optimized_version
+      
+      begin
+        image_data = File.read(optimized[:file].path)
         base64_image = Base64.strict_encode64(image_data)
-        content_type = @photo.image.content_type
-        return "data:#{content_type};base64,#{base64_image}"
+        
+        Rails.logger.info "AI Processing: Optimized image from original to #{number_to_human_size(optimized[:file_size])} (#{optimized[:width]}x#{optimized[:height]})"
+        
+        return "data:image/jpeg;base64,#{base64_image}"
+      ensure
+        # Clean up temporary file
+        optimized[:file].close
+        optimized[:file].unlink
       end
     end
+  end
+  
+  private
+  
+  def number_to_human_size(size)
+    units = ['B', 'KB', 'MB', 'GB']
+    unit = 0
+    while size >= 1024 && unit < units.length - 1
+      size /= 1024.0
+      unit += 1
+    end
+    "%.1f %s" % [size, units[unit]]
   end
 end

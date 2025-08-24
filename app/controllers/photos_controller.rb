@@ -41,9 +41,12 @@ class PhotosController < ApplicationController
         
         # Enqueue background job to generate AI captions
         PhotoProcessingJob.perform_later(@photo.id)
+        
+        # Set processing start time for better UX
+        @photo.update!(processing_started_at: Time.current)
       end
       
-      redirect_to @photo, notice: 'Photo uploaded successfully! We\'re generating personalized captions for you...'
+      redirect_to @photo, notice: 'Photo uploaded successfully! Our AI is analyzing your image and generating personalized captions...'
     else
       render :new, status: :unprocessable_entity
     end

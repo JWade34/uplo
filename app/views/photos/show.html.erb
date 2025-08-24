@@ -88,21 +88,58 @@
                 </button>
               </div>
             <% else %>
-              <!-- Processing State -->
+              <!-- Enhanced Processing State -->
               <div class="text-center py-6 sm:py-8" data-turbo-permanent>
+                <!-- Progress Bar -->
+                <div class="w-full bg-gray-200 rounded-full h-2 mb-4 max-w-xs mx-auto">
+                  <div class="bg-accent h-2 rounded-full transition-all duration-1000 ease-out" 
+                       style="width: <%= @photo.processing_progress_percentage %>%"></div>
+                </div>
+                
+                <!-- Animated Icon -->
                 <div class="animate-spin rounded-full h-6 w-6 sm:h-8 sm:w-8 border-b-2 border-accent mx-auto mb-3 sm:mb-4"></div>
-                <h3 class="text-base sm:text-lg font-medium text-gray-900 mb-2">Analyzing Your Photo</h3>
-                <p class="text-sm sm:text-base text-gray-600 max-w-sm mx-auto px-4">
-                  Our AI is analyzing your photo and generating engaging captions tailored to your fitness content. This usually takes 30-60 seconds.
-                </p>
-                <p class="text-xs text-gray-500 mt-2">Page will refresh automatically...</p>
+                
+                <h3 class="text-base sm:text-lg font-medium text-gray-900 mb-2">
+                  <span class="hidden sm:inline">AI Caption Generation in Progress</span>
+                  <span class="sm:hidden">AI Processing</span>
+                </h3>
+                
+                <div class="text-sm sm:text-base text-gray-600 max-w-sm mx-auto px-4 space-y-2">
+                  <% if @photo.processing_started_at %>
+                    <p>
+                      Processing for <%= pluralize(@photo.processing_elapsed_seconds, 'second') %>...
+                      <% if @photo.estimated_completion_time > 0 %>
+                        <br><span class="text-xs text-gray-500">Est. <%= pluralize(@photo.estimated_completion_time, 'second') %> remaining</span>
+                      <% end %>
+                    </p>
+                  <% end %>
+                  
+                  <p class="text-xs sm:text-sm">
+                    Generating <%= @user.can_access_pro_features? ? '3 personalized caption styles' : '1 personalized caption' %> 
+                    optimized for your fitness content.
+                  </p>
+                </div>
+                
+                <!-- Processing Steps -->
+                <div class="mt-4 text-xs text-gray-500 space-y-1">
+                  <div class="flex items-center justify-center space-x-2">
+                    <span class="w-2 h-2 bg-accent rounded-full"></span>
+                    <span>Image analysis complete</span>
+                  </div>
+                  <div class="flex items-center justify-center space-x-2">
+                    <div class="w-2 h-2 border border-accent rounded-full animate-pulse"></div>
+                    <span>Generating AI captions...</span>
+                  </div>
+                </div>
+                
+                <p class="text-xs text-gray-400 mt-4">Updates automatically • No need to refresh</p>
               </div>
               
-              <!-- Auto-refresh while processing -->
+              <!-- Auto-refresh with shorter interval for better UX -->
               <script>
                 setTimeout(function() {
                   window.location.reload();
-                }, 5000); // Refresh every 5 seconds while processing
+                }, 3000); // Refresh every 3 seconds while processing
               </script>
             <% end %>
           </div>
@@ -132,6 +169,43 @@
               <% end %>
             </div>
           </div>
+
+          <!-- Social Media Variants (only show when available) -->
+          <% if @photo.processed? && @photo.available_social_variants.any? %>
+            <div class="bg-white rounded-lg shadow-sm border p-4 sm:p-6">
+              <h3 class="text-base sm:text-lg font-semibold text-gray-900 mb-3 sm:mb-4">Social Media Formats</h3>
+              <p class="text-xs sm:text-sm text-gray-600 mb-4">Optimized versions for different platforms:</p>
+              
+              <div class="space-y-3">
+                <% @photo.available_social_variants.each do |variant| %>
+                  <div class="flex items-center justify-between p-3 border rounded-lg hover:bg-gray-50 transition-colors">
+                    <div class="flex-1">
+                      <div class="font-medium text-gray-900 text-sm">
+                        <%= variant[:display_name] %>
+                      </div>
+                      <div class="text-xs text-gray-500">
+                        <%= variant[:dimensions] %>
+                      </div>
+                    </div>
+                    <div class="flex space-x-2">
+                      <%= link_to variant[:attachment], class: "text-accent hover:underline text-xs sm:text-sm px-2 py-1", target: "_blank" do %>
+                        Preview
+                      <% end %>
+                      <%= link_to variant[:attachment], class: "bg-accent text-black px-3 py-1 rounded text-xs font-medium hover:bg-accent-hover transition-colors", download: variant[:attachment].filename do %>
+                        Download
+                      <% end %>
+                    </div>
+                  </div>
+                <% end %>
+              </div>
+              
+              <div class="mt-4 p-3 bg-gray-50 rounded-lg">
+                <p class="text-xs text-gray-600">
+                  💡 <strong>Tip:</strong> Each format is optimized for maximum quality and engagement on its respective platform.
+                </p>
+              </div>
+            </div>
+          <% end %>
         </div>
 
         <!-- Photo Info (Third on mobile, Left column on desktop) -->
