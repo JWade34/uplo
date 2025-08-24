@@ -181,14 +181,21 @@ class AdminController < ApplicationController
   
   def login
     if request.post?
-      if params[:password] == ADMIN_PASSWORD && ip_allowed?
-        session[:admin_authenticated] = true
-        session[:admin_login_time] = Time.current
-        log_admin_action("Admin login from IP: #{request.remote_ip}")
-        redirect_to admin_path and return
-      else
-        @error = "Invalid password or IP not allowed"
-        log_admin_action("Failed admin login attempt from IP: #{request.remote_ip}")
+      begin
+        if params[:password] == ADMIN_PASSWORD && ip_allowed?
+          session[:admin_authenticated] = true
+          session[:admin_login_time] = Time.current
+          log_admin_action("Admin login from IP: #{request.remote_ip}")
+          redirect_to admin_path and return
+        else
+          @error = "Invalid password or IP not allowed"
+          log_admin_action("Failed admin login attempt from IP: #{request.remote_ip}")
+          render :login and return
+        end
+      rescue => e
+        Rails.logger.error "Admin login error: #{e.message}"
+        Rails.logger.error e.backtrace.join("\n")
+        @error = "Login system error. Please contact administrator."
         render :login and return
       end
     end
@@ -228,8 +235,12 @@ class AdminController < ApplicationController
   end
   
   def log_admin_action(action)
-    Rails.logger.info "[ADMIN] #{Time.current.iso8601} - IP: #{request.remote_ip} - #{action}"
-    # Could also store in database for audit trail
+    begin
+      Rails.logger.info "[ADMIN] #{Time.current.iso8601} - IP: #{request.remote_ip} - #{action}"
+      # Could also store in database for audit trail
+    rescue => e
+      Rails.logger.error "Admin logging error: #{e.message}"
+    end
   end
   
   def calculate_monthly_revenue
