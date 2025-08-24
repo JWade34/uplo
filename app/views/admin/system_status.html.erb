@@ -1,0 +1,278 @@
+<div class="space-y-6">
+  <!-- Header -->
+  <div class="border-b border-gray-200 pb-4">
+    <div class="flex justify-between items-center">
+      <div>
+        <h1 class="text-2xl font-bold text-gray-900">System Monitoring</h1>
+        <p class="text-sm text-gray-600 mt-1">Real-time system health and performance metrics</p>
+      </div>
+      <button onclick="window.location.reload()" 
+              class="px-4 py-2 bg-accent text-black rounded-md hover:bg-accent-hover">
+        🔄 Refresh
+      </button>
+    </div>
+  </div>
+
+  <div id="systemStatusContent">
+    <div class="text-center py-8">
+      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-accent mx-auto"></div>
+      <p class="mt-4 text-gray-500">Loading system status...</p>
+    </div>
+  </div>
+</div>
+
+<script>
+  function loadSystemStatus() {
+    fetch('/admin/system')
+      .then(response => response.json())
+      .then(data => {
+        document.getElementById('systemStatusContent').innerHTML = `
+          <!-- System Health Overview -->
+          <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            <!-- Database Status -->
+            <div class="bg-white overflow-hidden shadow rounded-lg">
+              <div class="p-5">
+                <div class="flex items-center">
+                  <div class="flex-shrink-0">
+                    ${data.database ? 
+                      '<div class="h-8 w-8 bg-green-100 rounded-full flex items-center justify-center"><div class="h-4 w-4 bg-green-500 rounded-full"></div></div>' :
+                      '<div class="h-8 w-8 bg-red-100 rounded-full flex items-center justify-center"><div class="h-4 w-4 bg-red-500 rounded-full"></div></div>'
+                    }
+                  </div>
+                  <div class="ml-5 w-0 flex-1">
+                    <dl>
+                      <dt class="text-sm font-medium text-gray-500 truncate">Database</dt>
+                      <dd class="text-lg font-medium text-gray-900">
+                        ${data.database ? 'Connected' : 'Disconnected'}
+                      </dd>
+                    </dl>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Storage Status -->
+            <div class="bg-white overflow-hidden shadow rounded-lg">
+              <div class="p-5">
+                <div class="flex items-center">
+                  <div class="flex-shrink-0">
+                    <div class="h-8 w-8 bg-blue-100 rounded-full flex items-center justify-center">
+                      <svg class="h-4 w-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"></path>
+                      </svg>
+                    </div>
+                  </div>
+                  <div class="ml-5 w-0 flex-1">
+                    <dl>
+                      <dt class="text-sm font-medium text-gray-500 truncate">Storage</dt>
+                      <dd class="text-lg font-medium text-gray-900">
+                        ${data.storage.available ? 'Available' : 'Issues Detected'}
+                      </dd>
+                    </dl>
+                  </div>
+                </div>
+              </div>
+              <div class="bg-gray-50 px-5 py-3">
+                <div class="text-sm">
+                  <span class="text-gray-600">Photos: ${data.storage.photo_count || 0}</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Background Jobs -->
+            <div class="bg-white overflow-hidden shadow rounded-lg">
+              <div class="p-5">
+                <div class="flex items-center">
+                  <div class="flex-shrink-0">
+                    ${data.background_jobs.failed > 0 ? 
+                      '<div class="h-8 w-8 bg-red-100 rounded-full flex items-center justify-center"><div class="h-4 w-4 bg-red-500 rounded-full"></div></div>' :
+                      '<div class="h-8 w-8 bg-green-100 rounded-full flex items-center justify-center"><div class="h-4 w-4 bg-green-500 rounded-full"></div></div>'
+                    }
+                  </div>
+                  <div class="ml-5 w-0 flex-1">
+                    <dl>
+                      <dt class="text-sm font-medium text-gray-500 truncate">Background Jobs</dt>
+                      <dd class="text-lg font-medium text-gray-900">
+                        ${data.background_jobs.failed > 0 ? data.background_jobs.failed + ' Failed' : 'Healthy'}
+                      </dd>
+                    </dl>
+                  </div>
+                </div>
+              </div>
+              <div class="bg-gray-50 px-5 py-3">
+                <div class="text-sm">
+                  <span class="text-gray-600">Processing: ${data.background_jobs.processing}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- External APIs Status -->
+          <div class="bg-white shadow rounded-lg">
+            <div class="px-4 py-5 sm:px-6 border-b border-gray-200">
+              <h3 class="text-lg leading-6 font-medium text-gray-900">External APIs</h3>
+            </div>
+            <div class="px-4 py-5 sm:p-6">
+              <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
+                <div class="flex items-center">
+                  <div class="flex-shrink-0">
+                    ${data.external_apis.openai ? 
+                      '<div class="h-3 w-3 bg-green-400 rounded-full"></div>' :
+                      '<div class="h-3 w-3 bg-red-400 rounded-full"></div>'
+                    }
+                  </div>
+                  <div class="ml-3">
+                    <p class="text-sm font-medium text-gray-900">OpenAI API</p>
+                    <p class="text-xs text-gray-500">${data.external_apis.openai ? 'Connected' : 'Not Configured'}</p>
+                  </div>
+                </div>
+                
+                <div class="flex items-center">
+                  <div class="flex-shrink-0">
+                    ${data.external_apis.stripe ? 
+                      '<div class="h-3 w-3 bg-green-400 rounded-full"></div>' :
+                      '<div class="h-3 w-3 bg-red-400 rounded-full"></div>'
+                    }
+                  </div>
+                  <div class="ml-3">
+                    <p class="text-sm font-medium text-gray-900">Stripe API</p>
+                    <p class="text-xs text-gray-500">${data.external_apis.stripe ? 'Connected' : 'Not Configured'}</p>
+                  </div>
+                </div>
+                
+                <div class="flex items-center">
+                  <div class="flex-shrink-0">
+                    ${data.external_apis.resend ? 
+                      '<div class="h-3 w-3 bg-green-400 rounded-full"></div>' :
+                      '<div class="h-3 w-3 bg-red-400 rounded-full"></div>'
+                    }
+                  </div>
+                  <div class="ml-3">
+                    <p class="text-sm font-medium text-gray-900">Resend API</p>
+                    <p class="text-xs text-gray-500">${data.external_apis.resend ? 'Connected' : 'Not Configured'}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Resource Usage -->
+          <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
+            <!-- Memory Usage -->
+            <div class="bg-white shadow rounded-lg">
+              <div class="px-4 py-5 sm:px-6 border-b border-gray-200">
+                <h3 class="text-lg leading-6 font-medium text-gray-900">Memory Usage</h3>
+              </div>
+              <div class="px-4 py-5 sm:p-6">
+                <div class="text-3xl font-bold text-gray-900">
+                  ${data.memory_usage === 'N/A' ? 'N/A' : data.memory_usage + ' MB'}
+                </div>
+                <p class="text-sm text-gray-500 mt-1">Current memory consumption</p>
+              </div>
+            </div>
+
+            <!-- Disk Usage -->
+            <div class="bg-white shadow rounded-lg">
+              <div class="px-4 py-5 sm:px-6 border-b border-gray-200">
+                <h3 class="text-lg leading-6 font-medium text-gray-900">Disk Usage</h3>
+              </div>
+              <div class="px-4 py-5 sm:p-6">
+                <div class="text-3xl font-bold text-gray-900">
+                  ${data.disk_space}
+                </div>
+                <p class="text-sm text-gray-500 mt-1">Root filesystem usage</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Photo Processing Stats -->
+          <div class="bg-white shadow rounded-lg">
+            <div class="px-4 py-5 sm:px-6 border-b border-gray-200">
+              <h3 class="text-lg leading-6 font-medium text-gray-900">Photo Processing</h3>
+            </div>
+            <div class="px-4 py-5 sm:p-6">
+              <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
+                <div class="text-center">
+                  <div class="text-2xl font-bold text-green-600">${data.background_jobs.total_processed}</div>
+                  <div class="text-sm text-gray-500">Completed</div>
+                </div>
+                <div class="text-center">
+                  <div class="text-2xl font-bold text-orange-600">${data.background_jobs.processing}</div>
+                  <div class="text-sm text-gray-500">Processing</div>
+                </div>
+                <div class="text-center">
+                  <div class="text-2xl font-bold text-red-600">${data.background_jobs.failed}</div>
+                  <div class="text-sm text-gray-500">Failed</div>
+                </div>
+              </div>
+              
+              ${data.background_jobs.failed > 0 ? `
+                <div class="mt-4 p-3 bg-red-50 border border-red-200 rounded-md">
+                  <p class="text-sm text-red-700">
+                    ${data.background_jobs.failed} photos are stuck in processing. 
+                    <button onclick="reprocessFailedPhotos()" class="font-medium text-red-800 underline hover:text-red-900">
+                      Click here to reprocess them
+                    </button>
+                  </p>
+                </div>
+              ` : ''}
+            </div>
+          </div>
+        `;
+      })
+      .catch(error => {
+        document.getElementById('systemStatusContent').innerHTML = `
+          <div class="bg-red-50 border border-red-200 rounded-md p-4">
+            <div class="flex">
+              <div class="flex-shrink-0">
+                <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                </svg>
+              </div>
+              <div class="ml-3">
+                <h3 class="text-sm font-medium text-red-800">
+                  Failed to load system status
+                </h3>
+                <div class="mt-2 text-sm text-red-700">
+                  <p>Unable to retrieve system information. Please try refreshing the page.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+      });
+  }
+
+  function reprocessFailedPhotos() {
+    if (!confirm('This will requeue all failed photos for processing. Continue?')) {
+      return;
+    }
+    
+    fetch('/admin/photos/cleanup', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
+      },
+      body: JSON.stringify({ action_type: 'reprocess_failed' })
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        alert(data.message);
+        window.location.reload();
+      } else {
+        alert('Error: ' + data.error);
+      }
+    })
+    .catch(error => {
+      alert('Error reprocessing photos');
+    });
+  }
+
+  // Load system status on page load
+  document.addEventListener('DOMContentLoaded', loadSystemStatus);
+  
+  // Auto-refresh every 30 seconds
+  setInterval(loadSystemStatus, 30000);
+</script>

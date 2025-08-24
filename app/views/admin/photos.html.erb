@@ -1,0 +1,333 @@
+<div class="space-y-6">
+  <!-- Header with Filters -->
+  <div class="border-b border-gray-200 pb-4">
+    <div class="flex justify-between items-center">
+      <div>
+        <h1 class="text-2xl font-bold text-gray-900">Photo Management</h1>
+        <p class="text-sm text-gray-600 mt-1">Monitor and manage uploaded photos</p>
+      </div>
+    </div>
+
+    <!-- Filter Controls -->
+    <div class="mt-4 flex flex-wrap gap-4">
+      <%= form_with url: admin_photos_path, method: :get, local: true, class: "flex flex-wrap gap-4 items-end" do |form| %>
+        <div>
+          <%= form.select :filter, 
+                          options_for_select([
+                            ['All Photos', ''],
+                            ['Processing', 'processing'],
+                            ['Failed', 'failed'],
+                            ['Recent (24h)', 'recent']
+                          ], params[:filter]),
+                          {},
+                          { class: "px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent focus:border-accent" } %>
+        </div>
+        <div>
+          <%= form.select :sort, 
+                          options_for_select([
+                            ['Newest First', 'created_at DESC'],
+                            ['Oldest First', 'created_at ASC'],
+                            ['By User', 'user_id ASC']
+                          ], params[:sort]),
+                          {},
+                          { class: "px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent focus:border-accent" } %>
+        </div>
+        <%= form.submit "Filter", class: "px-4 py-2 bg-accent text-black rounded-md hover:bg-accent-hover" %>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- Photo Stats -->
+  <div class="grid grid-cols-1 gap-5 sm:grid-cols-5">
+    <div class="bg-white overflow-hidden shadow rounded-lg">
+      <div class="p-5">
+        <div class="flex items-center">
+          <div class="flex-shrink-0">
+            <svg class="h-6 w-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 002 2v12a2 2 0 002 2z"></path>
+            </svg>
+          </div>
+          <div class="ml-5">
+            <div class="text-sm font-medium text-gray-500">Total</div>
+            <div class="text-lg font-medium text-gray-900"><%= @stats[:total] %></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white overflow-hidden shadow rounded-lg">
+      <div class="p-5">
+        <div class="flex items-center">
+          <div class="flex-shrink-0">
+            <svg class="h-6 w-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+          </div>
+          <div class="ml-5">
+            <div class="text-sm font-medium text-gray-500">Processed</div>
+            <div class="text-lg font-medium text-gray-900"><%= @stats[:processed] %></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white overflow-hidden shadow rounded-lg">
+      <div class="p-5">
+        <div class="flex items-center">
+          <div class="flex-shrink-0">
+            <svg class="h-6 w-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+          </div>
+          <div class="ml-5">
+            <div class="text-sm font-medium text-gray-500">Processing</div>
+            <div class="text-lg font-medium text-gray-900"><%= @stats[:processing] %></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white overflow-hidden shadow rounded-lg">
+      <div class="p-5">
+        <div class="flex items-center">
+          <div class="flex-shrink-0">
+            <svg class="h-6 w-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"></path>
+            </svg>
+          </div>
+          <div class="ml-5">
+            <div class="text-sm font-medium text-gray-500">With Captions</div>
+            <div class="text-lg font-medium text-gray-900"><%= @stats[:with_captions] %></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white overflow-hidden shadow rounded-lg">
+      <div class="p-5">
+        <div class="flex items-center">
+          <div class="flex-shrink-0">
+            <svg class="h-6 w-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+            </svg>
+          </div>
+          <div class="ml-5">
+            <div class="text-sm font-medium text-gray-500">No Captions</div>
+            <div class="text-lg font-medium text-gray-900"><%= @stats[:without_captions] %></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Photos Table -->
+  <div class="bg-white shadow rounded-lg overflow-hidden">
+    <div class="px-4 py-5 sm:px-6 border-b border-gray-200">
+      <div class="flex justify-between items-center">
+        <h3 class="text-lg leading-6 font-medium text-gray-900">
+          Photos (<%= @photos.total_count %>)
+        </h3>
+        <div class="flex space-x-2">
+          <button onclick="cleanupPhotos()" 
+                  class="px-3 py-2 text-sm bg-orange-100 text-orange-800 rounded-md hover:bg-orange-200">
+            🧹 Cleanup
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <div class="overflow-x-auto">
+      <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
+          <tr>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Photo
+            </th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              User
+            </th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Status
+            </th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Captions
+            </th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Uploaded
+            </th>
+            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Actions
+            </th>
+          </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-200">
+          <% @photos.each do |photo| %>
+            <tr class="hover:bg-gray-50">
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="flex items-center">
+                  <div class="flex-shrink-0 h-10 w-10">
+                    <div class="h-10 w-10 bg-gray-200 rounded-lg flex items-center justify-center">
+                      <svg class="h-6 w-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                      </svg>
+                    </div>
+                  </div>
+                  <div class="ml-4">
+                    <div class="text-sm font-medium text-gray-900">
+                      ID: <%= photo.id %>
+                    </div>
+                    <div class="text-sm text-gray-500">
+                      <%= photo.content_type %>
+                    </div>
+                  </div>
+                </div>
+              </td>
+              
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="text-sm text-gray-900">
+                  <%= photo.user.email %>
+                </div>
+                <div class="text-sm text-gray-500">
+                  ID: <%= photo.user.id %>
+                </div>
+              </td>
+              
+              <td class="px-6 py-4 whitespace-nowrap">
+                <% if photo.processed %>
+                  <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                    Processed
+                  </span>
+                <% else %>
+                  <% if photo.created_at < 10.minutes.ago %>
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                      Failed
+                    </span>
+                  <% else %>
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800">
+                      Processing
+                    </span>
+                  <% end %>
+                <% end %>
+              </td>
+              
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                <%= photo.captions.count %> captions
+              </td>
+              
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                <%= photo.created_at.strftime("%b %d, %H:%M") %>
+                <div class="text-xs text-gray-400">
+                  <%= time_ago_in_words(photo.created_at) %> ago
+                </div>
+              </td>
+              
+              <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                <div class="flex justify-end space-x-2">
+                  <%= link_to "View", photo_path(photo), 
+                              class: "text-accent hover:text-accent-hover", 
+                              target: "_blank" %>
+                  <% unless photo.processed %>
+                    <button onclick="reprocessPhoto(<%= photo.id %>)" 
+                            class="text-orange-600 hover:text-orange-900">
+                      Reprocess
+                    </button>
+                  <% end %>
+                </div>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Pagination -->
+  <% if @photos.respond_to?(:total_pages) && @photos.total_pages > 1 %>
+    <div class="flex justify-center">
+      <%= paginate @photos, theme: 'twitter-bootstrap-4' %>
+    </div>
+  <% end %>
+</div>
+
+<script>
+  function cleanupPhotos() {
+    document.getElementById('modalTitle').textContent = 'Cleanup Photos';
+    document.getElementById('modalContent').innerHTML = `
+      <div class="space-y-3">
+        <label class="flex items-center">
+          <input type="radio" name="cleanupType" value="delete_unprocessed" class="mr-2">
+          Delete unprocessed photos (older than 1 hour)
+        </label>
+        <label class="flex items-center">
+          <input type="radio" name="cleanupType" value="delete_test_photos" class="mr-2">
+          Delete test account photos
+        </label>
+        <label class="flex items-center">
+          <input type="radio" name="cleanupType" value="reprocess_failed" class="mr-2">
+          Requeue failed photos for processing
+        </label>
+      </div>
+    `;
+    document.getElementById('modalConfirm').onclick = function() {
+      const selected = document.querySelector('input[name="cleanupType"]:checked');
+      if (!selected) {
+        alert('Please select a cleanup option');
+        return;
+      }
+      
+      fetch('/admin/photos/cleanup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
+        },
+        body: JSON.stringify({ action_type: selected.value })
+      }).then(response => response.json())
+        .then(data => {
+          alert(data.message);
+          if (data.success) window.location.reload();
+        });
+      
+      closeModal();
+    };
+    showModal();
+  }
+
+  function reprocessPhoto(photoId) {
+    if (!confirm('This will requeue the photo for processing. Continue?')) {
+      return;
+    }
+    
+    fetch('/admin/photos/cleanup', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
+      },
+      body: JSON.stringify({ 
+        action_type: 'reprocess_failed',
+        photo_id: photoId
+      })
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        alert('Photo requeued for processing');
+        window.location.reload();
+      } else {
+        alert('Error: ' + data.error);
+      }
+    })
+    .catch(error => {
+      alert('Error reprocessing photo');
+    });
+  }
+
+  function showModal() {
+    document.getElementById('quickActionModal').classList.remove('hidden');
+  }
+  
+  function closeModal() {
+    document.getElementById('quickActionModal').classList.add('hidden');
+  }
+</script>

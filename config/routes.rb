@@ -1,4 +1,25 @@
 Rails.application.routes.draw do
+  # Admin routes
+  scope "/admin" do
+    get "/", to: "admin#login", as: :admin_login
+    post "/", to: "admin#login"
+    get "/logout", to: "admin#logout", as: :admin_logout
+    get "/dashboard", to: "admin#index", as: :admin
+    
+    # User management
+    get "/users", to: "admin#users", as: :admin_users
+    get "/users/:id", to: "admin#user_details", as: :admin_user_details
+    post "/users/:id/fix-limits", to: "admin#fix_user_limits", as: :admin_fix_user_limits
+    
+    # System monitoring
+    get "/system", to: "admin#system_status", as: :admin_system
+    get "/photos", to: "admin#photos", as: :admin_photos
+    post "/photos/cleanup", to: "admin#cleanup_photos", as: :admin_cleanup_photos
+    
+    # Analytics
+    get "/analytics", to: "admin#analytics", as: :admin_analytics
+  end
+  
   # Stripe webhooks
   post "webhooks/stripe", to: "webhooks#stripe"
   

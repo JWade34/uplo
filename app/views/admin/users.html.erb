@@ -1,0 +1,312 @@
+<div class="space-y-6">
+  <!-- Header with Search -->
+  <div class="border-b border-gray-200 pb-4">
+    <div class="flex justify-between items-center">
+      <div>
+        <h1 class="text-2xl font-bold text-gray-900">User Management</h1>
+        <p class="text-sm text-gray-600 mt-1">Manage users, subscriptions, and limits</p>
+      </div>
+    </div>
+
+    <!-- Search and Filter Controls -->
+    <div class="mt-4 flex flex-col sm:flex-row gap-4">
+      <%= form_with url: admin_users_path, method: :get, local: true, class: "flex flex-col sm:flex-row gap-4 flex-1" do |form| %>
+        <div class="flex-1">
+          <%= form.text_field :search, 
+                              placeholder: "Search by email...", 
+                              value: params[:search],
+                              class: "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent focus:border-accent" %>
+        </div>
+        <div>
+          <%= form.select :subscription_status, 
+                          options_for_select([
+                            ['All Users', ''],
+                            ['Active Subscribers', 'active'],
+                            ['Non-Subscribers', 'inactive']
+                          ], params[:subscription_status]),
+                          {},
+                          { class: "px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent focus:border-accent" } %>
+        </div>
+        <div>
+          <%= form.select :sort, 
+                          options_for_select([
+                            ['Newest First', 'created_at DESC'],
+                            ['Oldest First', 'created_at ASC'],
+                            ['Email A-Z', 'email ASC'],
+                            ['Most Photos', 'photos_count DESC']
+                          ], params[:sort]),
+                          {},
+                          { class: "px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent focus:border-accent" } %>
+        </div>
+        <%= form.submit "Filter", class: "px-4 py-2 bg-accent text-black rounded-md hover:bg-accent-hover" %>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- Users Table -->
+  <div class="bg-white shadow rounded-lg overflow-hidden">
+    <div class="px-4 py-5 sm:px-6 border-b border-gray-200">
+      <h3 class="text-lg leading-6 font-medium text-gray-900">
+        Users (<%= @users.total_count %>)
+      </h3>
+    </div>
+    
+    <div class="overflow-x-auto">
+      <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
+          <tr>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              User
+            </th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Photos
+            </th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Subscription
+            </th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Status
+            </th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Joined
+            </th>
+            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Actions
+            </th>
+          </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-200">
+          <% @users.each do |user| %>
+            <% active_sub = user.subscriptions.active.first %>
+            <tr class="hover:bg-gray-50">
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="flex items-center">
+                  <div class="flex-shrink-0 h-10 w-10">
+                    <div class="h-10 w-10 bg-gray-200 rounded-full flex items-center justify-center">
+                      <span class="text-sm font-medium text-gray-700">
+                        <%= user.email.first.upcase %>
+                      </span>
+                    </div>
+                  </div>
+                  <div class="ml-4">
+                    <div class="text-sm font-medium text-gray-900">
+                      <%= user.email %>
+                    </div>
+                    <div class="text-sm text-gray-500">
+                      ID: <%= user.id %>
+                    </div>
+                  </div>
+                </div>
+              </td>
+              
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="text-sm text-gray-900">
+                  <%= user.photos.count %> total
+                </div>
+                <div class="text-sm text-gray-500">
+                  <%= user.current_month_photos %>/<%= user.effective_monthly_photo_limit %> this month
+                </div>
+              </td>
+              
+              <td class="px-6 py-4 whitespace-nowrap">
+                <% if active_sub %>
+                  <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                    <%= active_sub.plan_id %>
+                  </span>
+                  <div class="text-xs text-gray-500 mt-1">
+                    <%= active_sub.status %>
+                  </div>
+                <% else %>
+                  <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                    Free
+                  </span>
+                <% end %>
+              </td>
+              
+              <td class="px-6 py-4 whitespace-nowrap">
+                <% if user.can_upload_photo? %>
+                  <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                    Can Upload
+                  </span>
+                <% else %>
+                  <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                    Limit Reached
+                  </span>
+                <% end %>
+              </td>
+              
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                <%= user.created_at.strftime("%b %d, %Y") %>
+              </td>
+              
+              <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                <div class="flex justify-end space-x-2">
+                  <button onclick="viewUserDetails(<%= user.id %>)" 
+                          class="text-accent hover:text-accent-hover">
+                    View
+                  </button>
+                  <button onclick="fixUserLimits(<%= user.id %>)" 
+                          class="text-green-600 hover:text-green-900">
+                    Fix Limits
+                  </button>
+                </div>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Pagination -->
+  <% if @users.respond_to?(:total_pages) && @users.total_pages > 1 %>
+    <div class="flex justify-center">
+      <%= paginate @users, theme: 'twitter-bootstrap-4' %>
+    </div>
+  <% end %>
+</div>
+
+<!-- User Details Modal -->
+<div id="userDetailsModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+  <div class="relative top-20 mx-auto p-5 border w-11/12 max-w-4xl shadow-lg rounded-md bg-white">
+    <div class="mt-3">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-lg font-medium text-gray-900">User Details</h3>
+        <button onclick="closeUserDetailsModal()" class="text-gray-400 hover:text-gray-600">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+      
+      <div id="userDetailsContent">
+        <!-- Dynamic content loaded via AJAX -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function viewUserDetails(userId) {
+    const modal = document.getElementById('userDetailsModal');
+    const content = document.getElementById('userDetailsContent');
+    
+    content.innerHTML = '<div class="text-center py-4">Loading...</div>';
+    modal.classList.remove('hidden');
+    
+    fetch(`/admin/users/${userId}`)
+      .then(response => response.json())
+      .then(data => {
+        content.innerHTML = `
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- User Info -->
+            <div class="bg-gray-50 rounded-lg p-4">
+              <h4 class="font-medium text-gray-900 mb-3">User Information</h4>
+              <dl class="space-y-2">
+                <div class="flex justify-between">
+                  <dt class="text-sm text-gray-500">Email:</dt>
+                  <dd class="text-sm text-gray-900">${data.user.email}</dd>
+                </div>
+                <div class="flex justify-between">
+                  <dt class="text-sm text-gray-500">User ID:</dt>
+                  <dd class="text-sm text-gray-900">${data.user.id}</dd>
+                </div>
+                <div class="flex justify-between">
+                  <dt class="text-sm text-gray-500">Joined:</dt>
+                  <dd class="text-sm text-gray-900">${new Date(data.stats.account_created).toLocaleDateString()}</dd>
+                </div>
+                <div class="flex justify-between">
+                  <dt class="text-sm text-gray-500">Last Login:</dt>
+                  <dd class="text-sm text-gray-900">${data.stats.last_login ? new Date(data.stats.last_login).toLocaleDateString() : 'Never'}</dd>
+                </div>
+              </dl>
+            </div>
+            
+            <!-- Usage Stats -->
+            <div class="bg-gray-50 rounded-lg p-4">
+              <h4 class="font-medium text-gray-900 mb-3">Usage Statistics</h4>
+              <dl class="space-y-2">
+                <div class="flex justify-between">
+                  <dt class="text-sm text-gray-500">Total Photos:</dt>
+                  <dd class="text-sm text-gray-900">${data.stats.photos_count}</dd>
+                </div>
+                <div class="flex justify-between">
+                  <dt class="text-sm text-gray-500">This Month:</dt>
+                  <dd class="text-sm text-gray-900">${data.stats.photos_this_month}</dd>
+                </div>
+                <div class="flex justify-between">
+                  <dt class="text-sm text-gray-500">Total Captions:</dt>
+                  <dd class="text-sm text-gray-900">${data.stats.captions_count}</dd>
+                </div>
+              </dl>
+            </div>
+          </div>
+          
+          <!-- Recent Photos -->
+          <div class="mt-6">
+            <h4 class="font-medium text-gray-900 mb-3">Recent Photos</h4>
+            <div class="bg-gray-50 rounded-lg p-4 max-h-64 overflow-y-auto">
+              ${data.recent_photos.map(photo => `
+                <div class="flex justify-between items-center py-2 border-b border-gray-200 last:border-b-0">
+                  <span class="text-sm text-gray-900">${new Date(photo.created_at).toLocaleDateString()}</span>
+                  <span class="text-xs ${photo.processed ? 'text-green-600' : 'text-orange-600'}">
+                    ${photo.processed ? 'Processed' : 'Processing'}
+                  </span>
+                </div>
+              `).join('') || '<p class="text-sm text-gray-500">No photos yet</p>'}
+            </div>
+          </div>
+          
+          <!-- Actions -->
+          <div class="mt-6 flex justify-end space-x-3">
+            <button onclick="fixUserLimits(${data.user.id})" 
+                    class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700">
+              Fix User Limits
+            </button>
+            <button onclick="closeUserDetailsModal()" 
+                    class="px-4 py-2 bg-gray-300 text-gray-800 rounded-md hover:bg-gray-400">
+              Close
+            </button>
+          </div>
+        `;
+      })
+      .catch(error => {
+        content.innerHTML = '<div class="text-red-600 text-center py-4">Error loading user details</div>';
+      });
+  }
+  
+  function fixUserLimits(userId) {
+    if (!confirm('This will reset monthly counters and add Pro subscription. Continue?')) {
+      return;
+    }
+    
+    fetch(`/admin/users/${userId}/fix-limits`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
+      }
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        alert(data.message);
+        window.location.reload();
+      } else {
+        alert('Error: ' + data.error);
+      }
+    })
+    .catch(error => {
+      alert('Error fixing user limits');
+    });
+  }
+  
+  function closeUserDetailsModal() {
+    document.getElementById('userDetailsModal').classList.add('hidden');
+  }
+  
+  // Close modal when clicking outside
+  document.getElementById('userDetailsModal').addEventListener('click', function(e) {
+    if (e.target === this) closeUserDetailsModal();
+  });
+</script>

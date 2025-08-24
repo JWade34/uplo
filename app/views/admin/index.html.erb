@@ -1,0 +1,291 @@
+<div class="space-y-6">
+  <!-- Header -->
+  <div class="border-b border-gray-200 pb-4">
+    <h1 class="text-2xl font-bold text-gray-900">Admin Dashboard</h1>
+    <p class="text-sm text-gray-600 mt-1">System overview and management tools</p>
+  </div>
+
+  <!-- Stats Overview -->
+  <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+    <!-- Total Users -->
+    <div class="bg-white overflow-hidden shadow rounded-lg">
+      <div class="p-5">
+        <div class="flex items-center">
+          <div class="flex-shrink-0">
+            <svg class="h-6 w-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
+            </svg>
+          </div>
+          <div class="ml-5 w-0 flex-1">
+            <dl>
+              <dt class="text-sm font-medium text-gray-500 truncate">Total Users</dt>
+              <dd class="text-lg font-medium text-gray-900"><%= @stats[:total_users] %></dd>
+            </dl>
+          </div>
+        </div>
+      </div>
+      <div class="bg-gray-50 px-5 py-3">
+        <div class="text-sm">
+          <span class="text-green-600 font-medium"><%= @stats[:active_users] %></span>
+          <span class="text-gray-500"> active this week</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Total Photos -->
+    <div class="bg-white overflow-hidden shadow rounded-lg">
+      <div class="p-5">
+        <div class="flex items-center">
+          <div class="flex-shrink-0">
+            <svg class="h-6 w-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+            </svg>
+          </div>
+          <div class="ml-5 w-0 flex-1">
+            <dl>
+              <dt class="text-sm font-medium text-gray-500 truncate">Total Photos</dt>
+              <dd class="text-lg font-medium text-gray-900"><%= @stats[:total_photos] %></dd>
+            </dl>
+          </div>
+        </div>
+      </div>
+      <div class="bg-gray-50 px-5 py-3">
+        <div class="text-sm">
+          <span class="text-green-600 font-medium"><%= @stats[:photos_this_month] %></span>
+          <span class="text-gray-500"> this month</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Active Subscriptions -->
+    <div class="bg-white overflow-hidden shadow rounded-lg">
+      <div class="p-5">
+        <div class="flex items-center">
+          <div class="flex-shrink-0">
+            <svg class="h-6 w-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
+            </svg>
+          </div>
+          <div class="ml-5 w-0 flex-1">
+            <dl>
+              <dt class="text-sm font-medium text-gray-500 truncate">Active Subscriptions</dt>
+              <dd class="text-lg font-medium text-gray-900"><%= @stats[:active_subscriptions] %></dd>
+            </dl>
+          </div>
+        </div>
+      </div>
+      <div class="bg-gray-50 px-5 py-3">
+        <div class="text-sm">
+          <span class="text-green-600 font-medium">$<%= @stats[:revenue_this_month] %></span>
+          <span class="text-gray-500"> revenue this month</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Processing Queue -->
+    <div class="bg-white overflow-hidden shadow rounded-lg">
+      <div class="p-5">
+        <div class="flex items-center">
+          <div class="flex-shrink-0">
+            <svg class="h-6 w-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+          </div>
+          <div class="ml-5 w-0 flex-1">
+            <dl>
+              <dt class="text-sm font-medium text-gray-500 truncate">Processing Queue</dt>
+              <dd class="text-lg font-medium text-gray-900"><%= @stats[:processing_photos] %></dd>
+            </dl>
+          </div>
+        </div>
+      </div>
+      <div class="bg-gray-50 px-5 py-3">
+        <div class="text-sm">
+          <% if @stats[:processing_photos] > 0 %>
+            <span class="text-orange-600 font-medium">Processing</span>
+          <% else %>
+            <span class="text-green-600 font-medium">All caught up</span>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- System Health -->
+  <div class="bg-white shadow rounded-lg">
+    <div class="px-4 py-5 sm:px-6 border-b border-gray-200">
+      <h3 class="text-lg leading-6 font-medium text-gray-900">System Health</h3>
+    </div>
+    <div class="px-4 py-5 sm:p-6">
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-4">
+        <div class="flex items-center">
+          <div class="flex-shrink-0">
+            <% if @stats[:system_health][:database] %>
+              <div class="h-3 w-3 bg-green-400 rounded-full"></div>
+            <% else %>
+              <div class="h-3 w-3 bg-red-400 rounded-full"></div>
+            <% end %>
+          </div>
+          <div class="ml-3">
+            <p class="text-sm font-medium text-gray-900">Database</p>
+          </div>
+        </div>
+        
+        <div class="flex items-center">
+          <div class="flex-shrink-0">
+            <% if @stats[:system_health][:storage] %>
+              <div class="h-3 w-3 bg-green-400 rounded-full"></div>
+            <% else %>
+              <div class="h-3 w-3 bg-red-400 rounded-full"></div>
+            <% end %>
+          </div>
+          <div class="ml-3">
+            <p class="text-sm font-medium text-gray-900">Storage</p>
+          </div>
+        </div>
+        
+        <div class="flex items-center">
+          <div class="flex-shrink-0">
+            <% if @stats[:system_health][:jobs] %>
+              <div class="h-3 w-3 bg-green-400 rounded-full"></div>
+            <% else %>
+              <div class="h-3 w-3 bg-red-400 rounded-full"></div>
+            <% end %>
+          </div>
+          <div class="ml-3">
+            <p class="text-sm font-medium text-gray-900">Background Jobs</p>
+          </div>
+        </div>
+        
+        <div class="flex items-center">
+          <div class="flex-shrink-0">
+            <% if @stats[:system_health][:overall] %>
+              <div class="h-3 w-3 bg-green-400 rounded-full"></div>
+            <% else %>
+              <div class="h-3 w-3 bg-red-400 rounded-full"></div>
+            <% end %>
+          </div>
+          <div class="ml-3">
+            <p class="text-sm font-medium text-gray-900">Overall</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Two Column Layout -->
+  <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
+    <!-- Recent Users -->
+    <div class="bg-white shadow rounded-lg">
+      <div class="px-4 py-5 sm:px-6 border-b border-gray-200">
+        <h3 class="text-lg leading-6 font-medium text-gray-900">Recent Users</h3>
+      </div>
+      <div class="px-4 py-5 sm:p-6">
+        <div class="flow-root">
+          <ul class="-my-5 divide-y divide-gray-200">
+            <% @recent_users.each do |user| %>
+              <li class="py-4">
+                <div class="flex items-center space-x-4">
+                  <div class="flex-shrink-0">
+                    <div class="h-8 w-8 bg-gray-200 rounded-full flex items-center justify-center">
+                      <span class="text-sm font-medium text-gray-700">
+                        <%= user.email.first.upcase %>
+                      </span>
+                    </div>
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <p class="text-sm font-medium text-gray-900 truncate">
+                      <%= user.email %>
+                    </p>
+                    <p class="text-sm text-gray-500">
+                      Joined <%= user.created_at.strftime("%b %d, %Y") %>
+                    </p>
+                  </div>
+                  <div>
+                    <%= link_to admin_user_details_path(user), 
+                                class: "text-sm text-accent hover:text-accent-hover" do %>
+                      View →
+                    <% end %>
+                  </div>
+                </div>
+              </li>
+            <% end %>
+          </ul>
+        </div>
+        <div class="mt-6">
+          <%= link_to "View all users →", admin_users_path, 
+                      class: "text-sm font-medium text-accent hover:text-accent-hover" %>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent Photos -->
+    <div class="bg-white shadow rounded-lg">
+      <div class="px-4 py-5 sm:px-6 border-b border-gray-200">
+        <h3 class="text-lg leading-6 font-medium text-gray-900">Recent Photos</h3>
+      </div>
+      <div class="px-4 py-5 sm:p-6">
+        <div class="flow-root">
+          <ul class="-my-5 divide-y divide-gray-200">
+            <% @recent_photos.each do |photo| %>
+              <li class="py-4">
+                <div class="flex items-center space-x-4">
+                  <div class="flex-shrink-0">
+                    <div class="h-10 w-10 bg-gray-200 rounded-lg flex items-center justify-center">
+                      <svg class="h-6 w-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                      </svg>
+                    </div>
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <p class="text-sm font-medium text-gray-900 truncate">
+                      <%= photo.user.email %>
+                    </p>
+                    <p class="text-sm text-gray-500">
+                      <%= photo.created_at.strftime("%b %d, %H:%M") %> • 
+                      <% if photo.processed %>
+                        <span class="text-green-600">Processed</span>
+                      <% else %>
+                        <span class="text-orange-600">Processing</span>
+                      <% end %>
+                    </p>
+                  </div>
+                </div>
+              </li>
+            <% end %>
+          </ul>
+        </div>
+        <div class="mt-6">
+          <%= link_to "View all photos →", admin_photos_path, 
+                      class: "text-sm font-medium text-accent hover:text-accent-hover" %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Failed Jobs Alert -->
+  <% if @failed_jobs.any? %>
+    <div class="bg-red-50 border border-red-200 rounded-md p-4">
+      <div class="flex">
+        <div class="flex-shrink-0">
+          <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+          </svg>
+        </div>
+        <div class="ml-3">
+          <h3 class="text-sm font-medium text-red-800">
+            <%= pluralize(@failed_jobs.count, 'photo') %> stuck in processing queue
+          </h3>
+          <div class="mt-2 text-sm text-red-700">
+            <p>Some photos have been processing for over 10 minutes. You may want to requeue them.</p>
+          </div>
+          <div class="mt-4">
+            <button onclick="refreshStats()" class="text-sm bg-red-100 text-red-800 px-3 py-2 rounded-md hover:bg-red-200">
+              🔄 Refresh Status
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>

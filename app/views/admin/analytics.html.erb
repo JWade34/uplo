@@ -1,0 +1,280 @@
+<div class="space-y-6">
+  <!-- Header -->
+  <div class="border-b border-gray-200 pb-4">
+    <h1 class="text-2xl font-bold text-gray-900">Analytics & Reporting</h1>
+    <p class="text-sm text-gray-600 mt-1">Comprehensive analytics and business insights</p>
+  </div>
+
+  <div id="analyticsContent">
+    <div class="text-center py-8">
+      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-accent mx-auto"></div>
+      <p class="mt-4 text-gray-500">Loading analytics...</p>
+    </div>
+  </div>
+</div>
+
+<script>
+  function loadAnalytics() {
+    const analyticsData = <%= @analytics.to_json.html_safe %>;
+    
+    document.getElementById('analyticsContent').innerHTML = `
+      <!-- User Growth -->
+      <div class="bg-white shadow rounded-lg">
+        <div class="px-4 py-5 sm:px-6 border-b border-gray-200">
+          <h3 class="text-lg leading-6 font-medium text-gray-900">User Growth</h3>
+        </div>
+        <div class="px-4 py-5 sm:p-6">
+          <div class="grid grid-cols-1 gap-5 sm:grid-cols-4">
+            <div class="text-center">
+              <div class="text-3xl font-bold text-blue-600">${analyticsData.user_growth.total}</div>
+              <div class="text-sm text-gray-500">Total Users</div>
+            </div>
+            <div class="text-center">
+              <div class="text-3xl font-bold text-green-600">${analyticsData.user_growth.this_month}</div>
+              <div class="text-sm text-gray-500">This Month</div>
+            </div>
+            <div class="text-center">
+              <div class="text-3xl font-bold text-gray-600">${analyticsData.user_growth.last_month}</div>
+              <div class="text-sm text-gray-500">Last Month</div>
+            </div>
+            <div class="text-center">
+              <div class="text-3xl font-bold ${analyticsData.user_growth.growth_rate >= 0 ? 'text-green-600' : 'text-red-600'}">
+                ${analyticsData.user_growth.growth_rate >= 0 ? '+' : ''}${analyticsData.user_growth.growth_rate}%
+              </div>
+              <div class="text-sm text-gray-500">Growth Rate</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Photo Statistics -->
+      <div class="bg-white shadow rounded-lg">
+        <div class="px-4 py-5 sm:px-6 border-b border-gray-200">
+          <h3 class="text-lg leading-6 font-medium text-gray-900">Photo Statistics</h3>
+        </div>
+        <div class="px-4 py-5 sm:p-6">
+          <div class="grid grid-cols-1 gap-5 sm:grid-cols-5">
+            <div class="text-center">
+              <div class="text-3xl font-bold text-blue-600">${analyticsData.photo_stats.total}</div>
+              <div class="text-sm text-gray-500">Total Photos</div>
+            </div>
+            <div class="text-center">
+              <div class="text-3xl font-bold text-green-600">${analyticsData.photo_stats.this_month}</div>
+              <div class="text-sm text-gray-500">This Month</div>
+            </div>
+            <div class="text-center">
+              <div class="text-3xl font-bold text-purple-600">${analyticsData.photo_stats.processed}</div>
+              <div class="text-sm text-gray-500">Processed</div>
+            </div>
+            <div class="text-center">
+              <div class="text-3xl font-bold text-orange-600">${analyticsData.photo_stats.processing}</div>
+              <div class="text-sm text-gray-500">Processing</div>
+            </div>
+            <div class="text-center">
+              <div class="text-3xl font-bold text-gray-600">${analyticsData.photo_stats.avg_per_user.toFixed(1)}</div>
+              <div class="text-sm text-gray-500">Avg per User</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Revenue Statistics -->
+      <div class="bg-white shadow rounded-lg">
+        <div class="px-4 py-5 sm:px-6 border-b border-gray-200">
+          <h3 class="text-lg leading-6 font-medium text-gray-900">Revenue & Subscriptions</h3>
+        </div>
+        <div class="px-4 py-5 sm:p-6">
+          <div class="grid grid-cols-1 gap-5 sm:grid-cols-4">
+            <div class="text-center">
+              <div class="text-3xl font-bold text-green-600">$${analyticsData.revenue_stats.monthly}</div>
+              <div class="text-sm text-gray-500">Monthly Revenue</div>
+            </div>
+            <div class="text-center">
+              <div class="text-3xl font-bold text-green-600">$${analyticsData.revenue_stats.annual}</div>
+              <div class="text-sm text-gray-500">Annual Revenue</div>
+            </div>
+            <div class="text-center">
+              <div class="text-3xl font-bold text-blue-600">${analyticsData.revenue_stats.total_subscribers}</div>
+              <div class="text-sm text-gray-500">Active Subscribers</div>
+            </div>
+            <div class="text-center">
+              <div class="text-3xl font-bold text-purple-600">${analyticsData.revenue_stats.trial_users}</div>
+              <div class="text-sm text-gray-500">Trial Users</div>
+            </div>
+          </div>
+          
+          <div class="mt-6 p-4 bg-gray-50 rounded-lg">
+            <div class="flex justify-between items-center">
+              <span class="text-sm font-medium text-gray-700">Conversion Rate</span>
+              <span class="text-sm text-gray-900">
+                ${analyticsData.revenue_stats.total_subscribers > 0 && analyticsData.user_growth.total > 0 ? 
+                  ((analyticsData.revenue_stats.total_subscribers / analyticsData.user_growth.total) * 100).toFixed(1) + '%' : 
+                  '0%'
+                }
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Usage Patterns -->
+      <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
+        <!-- Peak Usage -->
+        <div class="bg-white shadow rounded-lg">
+          <div class="px-4 py-5 sm:px-6 border-b border-gray-200">
+            <h3 class="text-lg leading-6 font-medium text-gray-900">Usage Patterns</h3>
+          </div>
+          <div class="px-4 py-5 sm:p-6">
+            <div class="space-y-4">
+              <div>
+                <div class="flex justify-between items-center">
+                  <span class="text-sm font-medium text-gray-700">Peak Upload Hour</span>
+                  <span class="text-sm text-gray-900">${analyticsData.usage_patterns.peak_upload_hour}:00</span>
+                </div>
+              </div>
+              <div>
+                <div class="flex justify-between items-center">
+                  <span class="text-sm font-medium text-gray-700">Avg Photos per User</span>
+                  <span class="text-sm text-gray-900">${analyticsData.usage_patterns.avg_photos_per_user.toFixed(1)}</span>
+                </div>
+              </div>
+              <div>
+                <div class="flex justify-between items-center">
+                  <span class="text-sm font-medium text-gray-700">Most Active Day</span>
+                  <span class="text-sm text-gray-900">
+                    ${['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][analyticsData.usage_patterns.most_active_day] || 'N/A'}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Feature Usage -->
+        <div class="bg-white shadow rounded-lg">
+          <div class="px-4 py-5 sm:px-6 border-b border-gray-200">
+            <h3 class="text-lg leading-6 font-medium text-gray-900">Feature Usage</h3>
+          </div>
+          <div class="px-4 py-5 sm:p-6">
+            <div class="space-y-4">
+              <div>
+                <div class="flex justify-between items-center">
+                  <span class="text-sm font-medium text-gray-700">HEIC Uploads</span>
+                  <span class="text-sm text-gray-900">${analyticsData.popular_features.heic_uploads}</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2 mt-1">
+                  <div class="bg-blue-600 h-2 rounded-full" style="width: ${analyticsData.photo_stats.total > 0 ? (analyticsData.popular_features.heic_uploads / analyticsData.photo_stats.total) * 100 : 0}%"></div>
+                </div>
+              </div>
+              <div>
+                <div class="flex justify-between items-center">
+                  <span class="text-sm font-medium text-gray-700">Total Captions</span>
+                  <span class="text-sm text-gray-900">${analyticsData.popular_features.total_captions}</span>
+                </div>
+              </div>
+              <div>
+                <div class="flex justify-between items-center">
+                  <span class="text-sm font-medium text-gray-700">Avg Captions per Photo</span>
+                  <span class="text-sm text-gray-900">${analyticsData.popular_features.avg_captions_per_photo.toFixed(1)}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Performance Metrics -->
+      <div class="bg-white shadow rounded-lg">
+        <div class="px-4 py-5 sm:px-6 border-b border-gray-200">
+          <h3 class="text-lg leading-6 font-medium text-gray-900">Performance Metrics</h3>
+        </div>
+        <div class="px-4 py-5 sm:p-6">
+          <div class="grid grid-cols-1 gap-5 sm:grid-cols-3">
+            <div class="text-center">
+              <div class="text-3xl font-bold text-green-600">
+                ${analyticsData.photo_stats.total > 0 ? ((analyticsData.photo_stats.processed / analyticsData.photo_stats.total) * 100).toFixed(1) : 0}%
+              </div>
+              <div class="text-sm text-gray-500">Success Rate</div>
+            </div>
+            <div class="text-center">
+              <div class="text-3xl font-bold text-blue-600">
+                ${analyticsData.photo_stats.processed > 0 ? ((analyticsData.popular_features.total_captions / analyticsData.photo_stats.processed) * 100).toFixed(1) : 0}%
+              </div>
+              <div class="text-sm text-gray-500">Caption Generation Rate</div>
+            </div>
+            <div class="text-center">
+              <div class="text-3xl font-bold text-purple-600">
+                ${analyticsData.user_growth.total > 0 ? ((analyticsData.photo_stats.total / analyticsData.user_growth.total)).toFixed(1) : 0}
+              </div>
+              <div class="text-sm text-gray-500">Engagement Score</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Export Actions -->
+      <div class="bg-gray-50 border border-gray-200 rounded-lg p-6">
+        <h3 class="text-lg font-medium text-gray-900 mb-4">Export & Reports</h3>
+        <div class="flex flex-wrap gap-3">
+          <button onclick="exportData('users')" 
+                  class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+            📊 Export User Data
+          </button>
+          <button onclick="exportData('photos')" 
+                  class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700">
+            📸 Export Photo Data
+          </button>
+          <button onclick="exportData('revenue')" 
+                  class="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700">
+            💰 Export Revenue Data
+          </button>
+          <button onclick="window.print()" 
+                  class="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700">
+            🖨️ Print Report
+          </button>
+        </div>
+      </div>
+    `;
+  }
+
+  function exportData(type) {
+    const data = <%= @analytics.to_json.html_safe %>;
+    let exportContent = '';
+    
+    switch(type) {
+      case 'users':
+        exportContent = `User Growth Report
+Total Users: ${data.user_growth.total}
+This Month: ${data.user_growth.this_month}
+Last Month: ${data.user_growth.last_month}
+Growth Rate: ${data.user_growth.growth_rate}%`;
+        break;
+      case 'photos':
+        exportContent = `Photo Statistics Report
+Total Photos: ${data.photo_stats.total}
+This Month: ${data.photo_stats.this_month}
+Processed: ${data.photo_stats.processed}
+Processing: ${data.photo_stats.processing}
+Average per User: ${data.photo_stats.avg_per_user}`;
+        break;
+      case 'revenue':
+        exportContent = `Revenue Report
+Monthly Revenue: $${data.revenue_stats.monthly}
+Annual Revenue: $${data.revenue_stats.annual}
+Total Subscribers: ${data.revenue_stats.total_subscribers}
+Trial Users: ${data.revenue_stats.trial_users}`;
+        break;
+    }
+    
+    const blob = new Blob([exportContent], { type: 'text/plain' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${type}-report-${new Date().toISOString().split('T')[0]}.txt`;
+    a.click();
+    window.URL.revokeObjectURL(url);
+  }
+
+  // Load analytics on page load
+  document.addEventListener('DOMContentLoaded', loadAnalytics);
+</script>
