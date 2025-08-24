@@ -5,14 +5,22 @@ class AdminController < ApplicationController
   def index
     begin
       @stats = {
-        total_users: User.count || 0,
-        active_users: User.joins(:sessions).where('sessions.created_at > ?', 7.days.ago).distinct.count || 0,
-        total_photos: Photo.count || 0,
-        photos_this_month: Photo.where(created_at: Time.current.beginning_of_month..Time.current).count || 0,
-        processing_photos: Photo.where(processed: false).count || 0,
-        active_subscriptions: Subscription.active.count || 0,
-        revenue_this_month: calculate_monthly_revenue || 0,
-        system_health: check_system_health || {}
+        total_users: User.count,
+        active_users: begin
+          User.joins(:sessions).where('sessions.created_at > ?', 7.days.ago).distinct.count
+        rescue
+          0
+        end,
+        total_photos: Photo.count,
+        photos_this_month: Photo.where(created_at: Time.current.beginning_of_month..Time.current).count,
+        processing_photos: Photo.where(processed: false).count,
+        active_subscriptions: begin
+          Subscription.active.count
+        rescue
+          0
+        end,
+        revenue_this_month: calculate_monthly_revenue,
+        system_health: check_system_health
       }
       
       @recent_users = User.order(created_at: :desc).limit(5)
@@ -118,7 +126,9 @@ class AdminController < ApplicationController
   
   def system_status
     # Render HTML view for /admin/system
-    render 'admin/system_status'
+    respond_to do |format|
+      format.html { render 'admin/system_status' }
+    end
   end
   
   def system
