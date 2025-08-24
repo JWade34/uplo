@@ -27,14 +27,30 @@
             <%= @message %>
           </div>
           
+          <% if @details %>
+            <div class="text-sm text-gray-600 mb-4">
+              <%= @details %>
+            </div>
+          <% end %>
+          
+          <% if @error_details %>
+            <div class="bg-red-50 border border-red-200 rounded-md p-4 mb-4">
+              <h3 class="font-medium text-red-800">Error Details:</h3>
+              <pre class="mt-2 text-xs text-red-700 whitespace-pre-wrap"><%= @error_details %></pre>
+            </div>
+          <% end %>
+          
           <% if @user %>
             <div class="bg-green-50 border border-green-200 rounded-md p-4 mb-4">
               <h3 class="font-medium text-green-800">Account Status:</h3>
               <ul class="mt-2 text-sm text-green-700 text-left">
+                <li>• Email: <%= @user.email_address %></li>
                 <li>• Monthly photos: <%= @user.current_month_photos %></li>
-                <li>• Photo limit: <%= @user.effective_monthly_photo_limit %></li>
+                <li>• Photo limit: <%= @user.effective_monthly_photo_limit == Float::INFINITY ? 'Unlimited' : @user.effective_monthly_photo_limit %></li>
                 <li>• Can upload: <%= @user.can_upload_photo? ? 'Yes' : 'No' %></li>
-                <li>• Has subscription: <%= @user.has_active_subscription? ? 'Yes' : 'No' %></li>
+                <li>• Subscription tier: <%= @user.subscription_tier %></li>
+                <li>• Subscription status: <%= @user.subscription_status %></li>
+                <li>• Can access pro: <%= @user.can_access_pro_features? ? 'Yes' : 'No' %></li>
               </ul>
             </div>
           <% end %>

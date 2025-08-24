@@ -213,31 +213,27 @@ class AdminController < ApplicationController
         user.update!(
           current_month_photos: 0,
           current_month_captions: 0,
-          last_usage_reset: Time.current.beginning_of_month
+          last_usage_reset: Time.current
         )
         
-        # Create Pro subscription if needed
-        unless user.subscription_active?
-          user.subscriptions.create!(
-            stripe_subscription_id: "admin_#{SecureRandom.hex(8)}",
-            stripe_customer_id: "admin_customer_#{SecureRandom.hex(8)}",
-            status: 'trialing',
-            current_period_start: Time.current,
-            current_period_end: 30.days.from_now,
-            trial_end: 30.days.from_now,
-            plan_name: 'pro',
-            amount: 39.00,
-            interval: 'month'
-          )
-        end
+        # Set user to Pro tier
+        user.update!(
+          subscription_tier: 'pro',
+          subscription_status: 'active',
+          trial_ends_at: 30.days.from_now
+        )
         
         @message = "✅ Successfully fixed account for #{user.email_address}!"
+        @details = "Monthly photos reset to 0, Pro access enabled"
         @user = user
       else
         @message = "❌ User not found: justin+hi@superdupr.com"
       end
     rescue => e
+      Rails.logger.error "Fix Justin error: #{e.message}"
+      Rails.logger.error e.backtrace.join("\n")
       @message = "❌ Error: #{e.message}"
+      @error_details = e.backtrace.first(3).join("\n")
     end
   end
 
