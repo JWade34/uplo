@@ -421,9 +421,9 @@ function showUpgradeModal(feature) {
           Perfect for growing your fitness business!
         </p>
         <div class="space-y-3">
-          <form action="/checkout" method="post" class="inline-block w-full">
+          <form action="/checkout/create" method="post" class="inline-block w-full">
             <input type="hidden" name="plan_id" value="pro_monthly">
-            <input type="hidden" name="authenticity_token" value="${document.querySelector('meta[name="csrf-token"]').content}">
+            <input type="hidden" name="authenticity_token" value="${document.querySelector('meta[name="csrf-token"]')?.content || ''}">
             <button type="submit" class="w-full bg-accent text-black py-3 rounded-lg font-semibold hover:bg-accent-hover transition-colors">
               Start 14-Day Free Trial - $39/month
             </button>
