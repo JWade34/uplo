@@ -36,31 +36,28 @@ class PhotosController < ApplicationController
     @photo = @user.photos.build(photo_params)
     
     if @photo.save
-      # Increment photo usage counter and daily tracking
-      @user.increment_photo_usage!
-      usage_monitor.increment_daily_usage!
-      
-      # Check and send usage warnings
-      usage_monitor.check_monthly_usage_and_warn
-      
-      # Populate metadata from the uploaded file
-      if @photo.image.attached?
-        @photo.update!(
-          filename: @photo.image.filename.to_s,
-          content_type: @photo.image.content_type,
-          file_size: @photo.image.byte_size
-        )
+      # Do all database updates in a single transaction for better performance
+      ActiveRecord::Base.transaction do
+        # Increment photo usage counter and daily tracking
+        @user.increment_photo_usage!
+        usage_monitor.increment_daily_usage!
         
-        # Image optimization will be handled in the background job for better performance
-        
-        # Enqueue background job to generate AI captions
-        PhotoProcessingJob.perform_later(@photo.id)
-        
-        # Set processing start time for better UX
-        @photo.update!(processing_started_at: Time.current)
+        # Populate metadata from the uploaded file
+        if @photo.image.attached?
+          @photo.update_columns(
+            filename: @photo.image.filename.to_s,
+            content_type: @photo.image.content_type,
+            file_size: @photo.image.byte_size,
+            processing_started_at: Time.current
+          )
+        end
       end
       
+      # Redirect immediately for better UX - do heavy processing after
       redirect_to @photo, notice: 'Photo uploaded successfully! Our AI is analyzing your image and generating personalized captions...'
+      
+      # Enqueue background job to generate AI captions (this is async)
+      PhotoProcessingJob.perform_later(@photo.id) if @photo.image.attached?
     else
       render :new, status: :unprocessable_entity
     end
