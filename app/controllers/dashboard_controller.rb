@@ -72,6 +72,9 @@ class DashboardController < ApplicationController
     
     # Monthly growth trends
     @monthly_trends = @user.analytics_summaries.recent.limit(6)
+    
+    # Usage stats for Pro users
+    @usage_stats = get_usage_stats
   end
   
   def calculate_upgrade_potential
