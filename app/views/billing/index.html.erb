@@ -275,8 +275,7 @@
         
         <% if @active_subscription&.stripe_customer_id %>
           <div class="mt-4 text-sm text-gray-600">
-            <%= button_to "View Full History in Stripe", update_payment_method_billing_index_path, 
-                method: :post,
+            <%= link_to "View Full History in Stripe", update_payment_method_billing_index_path,
                 class: "text-blue-600 hover:text-blue-700 font-medium" %>
           </div>
         <% end %>
@@ -298,7 +297,7 @@
                   Amount due on <%= Time.at(@upcoming_invoice.period_end).strftime('%B %d, %Y') %>
                 </p>
                 <p class="text-2xl font-bold text-gray-900 mt-1">
-                  $<%= (@upcoming_invoice.amount_due / 100.0).round(2) %>
+                  $<%= sprintf("%.2f", @upcoming_invoice.amount_due / 100.0) %>
                 </p>
               <% elsif @active_subscription&.trial_active? %>
                 <p class="text-sm text-gray-700">

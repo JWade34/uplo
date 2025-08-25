@@ -62,7 +62,7 @@ class Subscription < ApplicationRecord
   def price_display
     return "Free Trial" if trial_active?
     
-    formatted_amount = "$#{amount.to_i}"
+    formatted_amount = "$#{sprintf('%.2f', amount)}"
     case interval
     when 'month' then "#{formatted_amount}/month"
     when 'year' then "#{formatted_amount}/year"
