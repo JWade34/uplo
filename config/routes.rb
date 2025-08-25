@@ -19,6 +19,9 @@ Rails.application.routes.draw do
     
     # Analytics
     get "/analytics", to: "admin#analytics", as: :admin_analytics
+    
+    # Usage monitoring
+    get "/usage", to: "admin#usage_monitoring", as: :admin_usage_monitoring
   end
   
   # Stripe webhooks
@@ -71,6 +74,11 @@ Rails.application.routes.draw do
   # get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
+  # Legal pages
+  get "terms", to: "terms#terms_of_service", as: :terms_of_service
+  get "privacy", to: "terms#privacy_policy", as: :privacy_policy
+  get "fair-use", to: "terms#fair_use_policy", as: :fair_use_policy
+  
   # Defines the root path route ("/")
   root "home#index"
 end

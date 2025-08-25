@@ -1,0 +1,45 @@
+<h1>Hi <%= @name %>!</h1>
+
+<p>🔒 Your photo uploads have been temporarily paused. You've used <strong><%= @usage_data[:current_usage] %> photos</strong> this month, which exceeds your plan limit by more than our 10% grace period.</p>
+
+<p style="background: #fef2f2; padding: 15px; border-left: 4px solid #ef4444; margin: 20px 0;">
+  <strong>Uploads Paused:</strong> To ensure fair service for all users, photo uploads are temporarily paused until your limit resets or you upgrade your plan.
+</p>
+
+<h2>Your Usage This Month</h2>
+<ul>
+  <li><strong>Plan limit:</strong> <%= @usage_data[:monthly_limit] %> photos</li>
+  <li><strong>Grace period limit:</strong> <%= (@usage_data[:monthly_limit] * 1.1).to_i %> photos</li>
+  <li><strong>Photos processed:</strong> <%= @usage_data[:current_usage] %> photos</li>
+  <li><strong>Days until reset:</strong> <%= @usage_data[:days_remaining] %> days</li>
+</ul>
+
+<h2>Get Back to Creating Content</h2>
+<p>Getting back up and running is easy:</p>
+
+<div style="background: #f0f9ff; padding: 20px; border-radius: 8px; border: 1px solid #0ea5e9;">
+  <h3 style="color: #0369a1; margin-top: 0;">✅ Option 1: Upgrade Now (Instant Access)</h3>
+  <p>Upgrade to higher limits and unlock additional Pro features immediately.</p>
+  <p style="margin-bottom: 0;"><strong>Benefits:</strong> Higher limits, priority support, advanced features, and no more interruptions.</p>
+</div>
+
+<div style="background: #f8fafc; padding: 20px; border-radius: 8px; border: 1px solid #64748b; margin-top: 15px;">
+  <h3 style="color: #475569; margin-top: 0;">⏰ Option 2: Wait for Reset</h3>
+  <p style="margin-bottom: 0;">Your limits automatically reset in <strong><%= @usage_data[:days_remaining] %> days</strong>. You'll receive an email confirmation when uploads resume.</p>
+</div>
+
+<h2>Let's Find the Right Solution</h2>
+<p>If you're consistently hitting limits, that's fantastic - it means your fitness business is thriving! Let's make sure Uplo scales with your success.</p>
+
+<p>We're here to help you find the perfect plan for your growing business. Contact us at <a href="mailto:hello@getuplo.com">hello@getuplo.com</a> and we'll get you back to creating amazing content right away.</p>
+
+<p>
+  The Uplo Team<br>
+  <em>Your partners in fitness business growth</em>
+</p>
+
+<hr style="margin: 30px 0; border: none; border-top: 1px solid #eee;">
+
+<p style="font-size: 12px; color: #666;">
+  This temporary pause is part of our <a href="<%= fair_use_policy_url %>">Fair Use Policy</a> to ensure quality service for all users.
+</p>

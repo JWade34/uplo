@@ -20,12 +20,16 @@ class AdminController < ApplicationController
           0
         end,
         revenue_this_month: calculate_monthly_revenue,
-        system_health: check_system_health
+        system_health: check_system_health,
+        usage_warnings_sent: User.where('usage_warnings_sent > 0').count,
+        high_usage_users: User.joins(:photos).where('current_month_photos > ?', 200).count,
+        fair_use_violations: User.where('fair_use_violations > 0').count
       }
       
       @recent_users = User.order(created_at: :desc).limit(5)
       @recent_photos = Photo.order(created_at: :desc).limit(5)
       @failed_jobs = get_failed_jobs.first(5) || []
+      @usage_alerts = get_usage_alerts
     rescue => e
       Rails.logger.error "Admin dashboard error: #{e.message}"
       @stats = {
@@ -215,6 +219,32 @@ class AdminController < ApplicationController
     end
   end
   
+  def usage_monitoring
+    begin
+      # Get users with high usage
+      @high_usage_users = User.includes(:subscriptions)
+                             .where(subscriptions: { status: 'active' })
+                             .select { |user| user.current_month_photos.to_f / user.effective_monthly_photo_limit >= 0.80 }
+                             .sort_by { |user| user.current_month_photos.to_f / user.effective_monthly_photo_limit }
+                             .reverse
+      
+      # Usage statistics
+      @usage_stats = {
+        total_warnings_sent: User.sum(:usage_warnings_sent),
+        users_with_violations: User.where('fair_use_violations > 0').count,
+        users_over_daily_limit: User.where('daily_photos_uploaded > 10').count,
+        users_approaching_limit: @high_usage_users.select { |u| (u.current_month_photos.to_f / u.effective_monthly_photo_limit) >= 0.95 }.count
+      }
+      
+      @usage_alerts = get_usage_alerts
+    rescue => e
+      Rails.logger.error "Usage monitoring error: #{e.message}"
+      @usage_stats = { total_warnings_sent: 0, users_with_violations: 0, users_over_daily_limit: 0, users_approaching_limit: 0 }
+      @usage_alerts = []
+      @high_usage_users = []
+      @error = "Error loading usage monitoring: #{e.message}"
+    end
+  end
   
   def toggle_admin
     user = User.find(params[:id])
@@ -444,5 +474,48 @@ class AdminController < ApplicationController
     
     return 0 if last_month.zero?
     ((this_month - last_month).to_f / last_month * 100).round(1)
+  end
+  
+  def get_usage_alerts
+    alerts = []
+    
+    # Users approaching monthly limits (95%+ usage)
+    high_usage_users = User.includes(:subscriptions)
+                          .where(subscriptions: { status: 'active' })
+                          .select { |user| user.current_month_photos.to_f / user.effective_monthly_photo_limit >= 0.95 }
+    
+    high_usage_users.each do |user|
+      usage_percentage = (user.current_month_photos.to_f / user.effective_monthly_photo_limit * 100).round
+      alerts << {
+        type: 'high_usage',
+        user: user,
+        message: "#{user.email_address} at #{usage_percentage}% usage (#{user.current_month_photos}/#{user.effective_monthly_photo_limit})",
+        severity: usage_percentage >= 110 ? 'critical' : usage_percentage >= 100 ? 'high' : 'medium'
+      }
+    end
+    
+    # Users with fair use violations
+    violation_users = User.where('fair_use_violations > 0')
+    violation_users.each do |user|
+      alerts << {
+        type: 'fair_use_violation',
+        user: user,
+        message: "#{user.email_address} has #{user.fair_use_violations} fair use violations",
+        severity: 'high'
+      }
+    end
+    
+    # Users with excessive daily uploads
+    daily_limit_users = User.where('daily_photos_uploaded > 10')
+    daily_limit_users.each do |user|
+      alerts << {
+        type: 'daily_limit_exceeded',
+        user: user,
+        message: "#{user.email_address} uploaded #{user.daily_photos_uploaded} photos today (limit: 10)",
+        severity: 'medium'
+      }
+    end
+    
+    alerts.sort_by { |alert| alert[:severity] == 'critical' ? 0 : alert[:severity] == 'high' ? 1 : 2 }
   end
 end

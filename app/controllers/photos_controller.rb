@@ -17,11 +17,15 @@ class PhotosController < ApplicationController
     @user = Current.user
     @user.reset_monthly_usage_if_needed
     
-    # Check photo upload limits
-    unless @user.can_upload_photo?
+    # Use enhanced usage monitoring
+    usage_monitor = UsageMonitoringService.new(@user)
+    
+    unless usage_monitor.can_upload_photo?
       @photo = @user.photos.build(photo_params)
+      
       if @user.can_access_pro_features?
-        @photo.errors.add(:base, "You've reached your monthly photo limit (#{@user.effective_monthly_photo_limit}). Please contact support if you need additional capacity.")
+        warning_message = usage_monitor.usage_warning_message || "You've reached your usage limit. Please contact support if you need additional capacity."
+        @photo.errors.add(:base, warning_message)
       else
         @photo.errors.add(:base, "You've used all 5 trial photos. Upgrade to Pro for professional-grade processing with 250 photos per month!")
       end
@@ -32,8 +36,12 @@ class PhotosController < ApplicationController
     @photo = @user.photos.build(photo_params)
     
     if @photo.save
-      # Increment photo usage counter
+      # Increment photo usage counter and daily tracking
       @user.increment_photo_usage!
+      usage_monitor.increment_daily_usage!
+      
+      # Check and send usage warnings
+      usage_monitor.check_monthly_usage_and_warn
       
       # Populate metadata from the uploaded file
       if @photo.image.attached?

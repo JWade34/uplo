@@ -1,0 +1,27 @@
+<h1>Hi <%= @name %>!</h1>
+
+<p>Just a friendly heads up - you've used <strong><%= @usage_data[:current_usage] %> out of <%= @usage_data[:monthly_limit] %></strong> photos this month (<%= @usage_data[:percentage] %>%). You're doing great with your content creation! 📸</p>
+
+<p>At your current pace, you're well within your professional-grade limit. Keep up the excellent work growing your fitness business!</p>
+
+<h2>Your Usage This Month</h2>
+<ul>
+  <li><strong>Photos processed:</strong> <%= @usage_data[:current_usage] %>/<%= @usage_data[:monthly_limit] %></li>
+  <li><strong>Remaining photos:</strong> <%= @usage_data[:monthly_limit] - @usage_data[:current_usage] %></li>
+  <li><strong>Days until reset:</strong> <%= @usage_data[:days_remaining] %> days</li>
+</ul>
+
+<p>Need more capacity for your growing business? You can always upgrade or contact us at <a href="mailto:hello@getuplo.com">hello@getuplo.com</a>.</p>
+
+<p>Keep creating amazing content!</p>
+
+<p>
+  The Uplo Team<br>
+  <em>Helping fitness professionals create engaging social media content</em>
+</p>
+
+<hr style="margin: 30px 0; border: none; border-top: 1px solid #eee;">
+
+<p style="font-size: 12px; color: #666;">
+  Questions about your usage? Check out our <a href="<%= fair_use_policy_url %>">Fair Use Policy</a> for details.
+</p>

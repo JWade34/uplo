@@ -1,0 +1,39 @@
+<h1>Hi <%= @name %>!</h1>
+
+<p>⚠️ You're approaching your monthly photo processing limit - you've used <strong><%= @usage_data[:current_usage] %> out of <%= @usage_data[:monthly_limit] %></strong> photos this month (<%= @usage_data[:percentage] %>%).</p>
+
+<p>You have <strong><%= @usage_data[:monthly_limit] - @usage_data[:current_usage] %> photos remaining</strong> before reaching your limit.</p>
+
+<h2>Your Usage This Month</h2>
+<ul>
+  <li><strong>Photos processed:</strong> <%= @usage_data[:current_usage] %>/<%= @usage_data[:monthly_limit] %></li>
+  <li><strong>Remaining photos:</strong> <%= @usage_data[:monthly_limit] - @usage_data[:current_usage] %></li>
+  <li><strong>Days until reset:</strong> <%= @usage_data[:days_remaining] %> days</li>
+</ul>
+
+<h2>What happens next?</h2>
+<p>Don't worry - you have options:</p>
+
+<ul>
+  <li><strong>Continue as normal:</strong> We provide a 10% grace period, so you can upload up to <%= (@usage_data[:monthly_limit] * 1.1).to_i %> photos with warnings</li>
+  <li><strong>Wait for reset:</strong> Your limit automatically resets in <%= @usage_data[:days_remaining] %> days</li>
+  <li><strong>Upgrade your plan:</strong> Get higher limits immediately</li>
+</ul>
+
+<p style="background: #f0f9ff; padding: 15px; border-left: 4px solid #0ea5e9; margin: 20px 0;">
+  <strong>💡 Growing fast?</strong> That's awesome! If you're consistently approaching limits, 
+  it might be time to consider additional capacity or a custom plan for your expanding business.
+</p>
+
+<p>Questions? We're here to help at <a href="mailto:hello@getuplo.com">hello@getuplo.com</a>.</p>
+
+<p>
+  The Uplo Team<br>
+  <em>Supporting your fitness business growth</em>
+</p>
+
+<hr style="margin: 30px 0; border: none; border-top: 1px solid #eee;">
+
+<p style="font-size: 12px; color: #666;">
+  Questions about limits? Check out our <a href="<%= fair_use_policy_url %>">Fair Use Policy</a> for details.
+</p>

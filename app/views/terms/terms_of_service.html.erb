@@ -1,0 +1,92 @@
+<% content_for :title, "Terms of Service - Uplo" %>
+<% content_for :description, "Uplo's Terms of Service outline the agreement between you and Uplo for using our AI-powered fitness social media tools." %>
+
+<div class="min-h-screen bg-gray-50">
+  <%= render 'shared/navigation' %>
+  
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+    <div class="bg-white rounded-lg shadow-sm p-6 sm:p-8">
+      <h1 class="text-3xl font-bold text-gray-900 mb-6">Terms of Service</h1>
+      <p class="text-gray-600 mb-8">Last updated: <%= Date.current.strftime("%B %d, %Y") %></p>
+      
+      <div class="prose max-w-none text-gray-700">
+        <h2 class="text-2xl font-semibold text-gray-900 mt-8 mb-4">1. Acceptance of Terms</h2>
+        <p class="mb-6">
+          By accessing and using Uplo, you accept and agree to be bound by the terms and provision of this agreement. 
+          If you do not agree to abide by the above, please do not use this service.
+        </p>
+        
+        <h2 class="text-2xl font-semibold text-gray-900 mt-8 mb-4">2. Service Description</h2>
+        <p class="mb-6">
+          Uplo provides AI-powered photo processing and caption generation services specifically designed for fitness professionals. 
+          Our service analyzes your fitness-related photos and generates personalized social media captions.
+        </p>
+        
+        <h2 class="text-2xl font-semibold text-gray-900 mt-8 mb-4">3. Fair Use Policy</h2>
+        <p class="mb-4">
+          Your use of Uplo is subject to our Fair Use Policy, which ensures quality service for all users. Key points include:
+        </p>
+        <ul class="mb-6 space-y-2">
+          <li>• Monthly photo processing limits based on your subscription plan</li>
+          <li>• Daily upload limits to prevent system abuse</li>
+          <li>• Professional fitness-related use only</li>
+        </ul>
+        <p class="mb-6">
+          For complete details, please review our 
+          <%= link_to "Fair Use Policy", fair_use_policy_path, class: "text-accent hover:underline" %>.
+        </p>
+        
+        <h2 class="text-2xl font-semibold text-gray-900 mt-8 mb-4">4. Account Registration</h2>
+        <p class="mb-6">
+          To use certain features of the service, you must register for an account. You agree to provide accurate, 
+          current, and complete information during registration and to update such information to keep it accurate, current, and complete.
+        </p>
+        
+        <h2 class="text-2xl font-semibent text-gray-900 mt-8 mb-4">5. Subscription and Billing</h2>
+        <ul class="mb-6 space-y-2">
+          <li>• Subscriptions automatically renew unless canceled</li>
+          <li>• You may cancel your subscription at any time</li>
+          <li>• Refunds are provided according to our 30-day money-back guarantee</li>
+          <li>• Price changes will be communicated 30 days in advance</li>
+        </ul>
+        
+        <h2 class="text-2xl font-semibold text-gray-900 mt-8 mb-4">6. Intellectual Property</h2>
+        <p class="mb-6">
+          You retain ownership of your uploaded photos. AI-generated captions are provided for your commercial use. 
+          You may not resell or redistribute our AI-generated content to other businesses.
+        </p>
+        
+        <h2 class="text-2xl font-semibold text-gray-900 mt-8 mb-4">7. Privacy</h2>
+        <p class="mb-6">
+          Your privacy is important to us. Please review our 
+          <%= link_to "Privacy Policy", privacy_policy_path, class: "text-accent hover:underline" %>, 
+          which also governs your use of the service.
+        </p>
+        
+        <h2 class="text-2xl font-semibold text-gray-900 mt-8 mb-4">8. Limitation of Liability</h2>
+        <p class="mb-6">
+          Uplo shall not be liable for any indirect, incidental, special, consequential, or punitive damages, 
+          or any loss of profits or revenues, whether incurred directly or indirectly.
+        </p>
+        
+        <h2 class="text-2xl font-semibold text-gray-900 mt-8 mb-4">9. Termination</h2>
+        <p class="mb-6">
+          We may terminate or suspend your account immediately, without prior notice, for conduct that we believe 
+          violates these Terms of Service or is harmful to other users, us, or third parties.
+        </p>
+        
+        <h2 class="text-2xl font-semibold text-gray-900 mt-8 mb-4">10. Changes to Terms</h2>
+        <p class="mb-6">
+          We reserve the right to modify these terms at any time. We will notify users of significant changes 
+          via email or through the service.
+        </p>
+        
+        <h2 class="text-2xl font-semibent text-gray-900 mt-8 mb-4">Contact Us</h2>
+        <p>
+          If you have any questions about these Terms of Service, please contact us at 
+          <a href="mailto:hello@getuplo.com" class="text-accent hover:underline">hello@getuplo.com</a>.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

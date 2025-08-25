@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_08_25_051715) do
+ActiveRecord::Schema[8.0].define(version: 2025_08_25_154533) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -169,6 +169,11 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_25_051715) do
     t.integer "current_month_captions", default: 0
     t.datetime "last_usage_reset", default: -> { "CURRENT_TIMESTAMP" }
     t.boolean "admin", default: false, null: false
+    t.integer "usage_warnings_sent", default: 0
+    t.datetime "last_warning_sent_at"
+    t.integer "fair_use_violations", default: 0
+    t.integer "daily_photos_uploaded", default: 0
+    t.date "last_daily_reset"
     t.index ["email_address"], name: "index_users_on_email_address", unique: true
   end
 

@@ -32,10 +32,13 @@
       <div class="max-w-5xl mx-auto mb-6 sm:mb-8">
         <div class="bg-white rounded-lg shadow-sm border p-4 sm:p-6">
           <div class="flex items-center justify-between mb-4">
-            <h3 class="text-lg font-semibold text-gray-900">Monthly Usage</h3>
-            <span class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full">
-              Starter Plan
-            </span>
+            <h3 class="text-lg font-semibold text-gray-900">Trial Usage</h3>
+            <div class="flex items-center space-x-2">
+              <span class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full">
+                Starter Plan
+              </span>
+              <%= link_to "Fair Use Policy", fair_use_policy_path, class: "text-xs text-gray-500 hover:text-gray-700 hover:underline" %>
+            </div>
           </div>
           
           <div class="grid grid-cols-2 gap-4 sm:gap-6">
@@ -73,7 +76,7 @@
                     You're running low on <%= @usage_stats[:photos_remaining] <= 2 ? 'photos' : 'captions' %>!
                   </p>
                   <p class="text-xs text-yellow-700 mt-1">
-                    Upgrade to Pro for unlimited uploads and 3 caption styles per photo.
+                    Upgrade to Pro for professional-grade processing with 250 photos per month and 3 caption styles per photo.
                   </p>
                 </div>
                 <button onclick="openUpgradeModal()" class="text-xs bg-yellow-100 text-yellow-800 px-3 py-1 rounded hover:bg-yellow-200 transition-colors">
@@ -82,6 +85,107 @@
               </div>
             </div>
           <% end %>
+        </div>
+      </div>
+    <% end %>
+    
+    <!-- Enhanced Usage Display for Pro Users -->
+    <% if @user.can_access_pro_features? %>
+      <% usage_monitor = UsageMonitoringService.new(@user) %>
+      <% warning_level = usage_monitor.check_monthly_usage_and_warn %>
+      
+      <div class="max-w-5xl mx-auto mb-6 sm:mb-8">
+        <div class="bg-white rounded-lg shadow-sm border p-4 sm:p-6">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-lg font-semibold text-gray-900">Professional Usage</h3>
+            <div class="flex items-center space-x-3">
+              <span class="text-xs bg-accent text-black px-2 py-1 rounded-full">
+                Pro Plan
+              </span>
+              <%= link_to "Fair Use Policy", fair_use_policy_path, class: "text-xs text-gray-500 hover:text-gray-700 hover:underline" %>
+            </div>
+          </div>
+          
+          <!-- Usage Warning Banner -->
+          <% if warning_message = usage_monitor.usage_warning_message %>
+            <div class="mb-4 p-3 rounded-lg <%= case warning_level
+              when :gentle_warning then 'bg-blue-50 border border-blue-200'
+              when :approaching_limit then 'bg-yellow-50 border border-yellow-200' 
+              when :limit_exceeded then 'bg-orange-50 border border-orange-200'
+              when :hard_limit then 'bg-red-50 border border-red-200'
+              else 'bg-gray-50 border border-gray-200'
+              end %>">
+              <div class="flex items-start">
+                <span class="mr-2 <%= case warning_level
+                  when :gentle_warning then 'text-blue-500'
+                  when :approaching_limit then 'text-yellow-500'
+                  when :limit_exceeded then 'text-orange-500'
+                  when :hard_limit then 'text-red-500'
+                  else 'text-gray-500'
+                  end %>">📊</span>
+                <div class="flex-1">
+                  <p class="text-sm font-medium <%= case warning_level
+                    when :gentle_warning then 'text-blue-800'
+                    when :approaching_limit then 'text-yellow-800'
+                    when :limit_exceeded then 'text-orange-800'
+                    when :hard_limit then 'text-red-800'
+                    else 'text-gray-800'
+                    end %>"><%= warning_message %></p>
+                </div>
+              </div>
+            </div>
+          <% end %>
+          
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
+            <!-- Monthly Photos Usage -->
+            <div>
+              <div class="flex justify-between text-sm mb-2">
+                <span class="text-gray-600">Monthly Photos</span>
+                <span class="font-medium"><%= @usage_stats[:photos_used] %>/<%= @usage_stats[:photos_limit] %></span>
+              </div>
+              <div class="w-full bg-gray-200 rounded-full h-2">
+                <% percentage = [@usage_stats[:photos_percentage], 100].min %>
+                <div class="h-2 rounded-full transition-all duration-300 <%= case percentage
+                  when 0...80 then 'bg-green-500'
+                  when 80...95 then 'bg-yellow-500' 
+                  when 95...100 then 'bg-orange-500'
+                  else 'bg-red-500'
+                  end %>" style="width: <%= percentage %>%"></div>
+              </div>
+              <p class="text-xs text-gray-500 mt-1"><%= @usage_stats[:photos_remaining] %> remaining this month</p>
+            </div>
+            
+            <!-- Daily Photos Tracking -->
+            <div>
+              <div class="flex justify-between text-sm mb-2">
+                <span class="text-gray-600">Today's Photos</span>
+                <span class="font-medium"><%= @user.daily_photos_uploaded || 0 %>/10</span>
+              </div>
+              <div class="w-full bg-gray-200 rounded-full h-2">
+                <% daily_percentage = [(@user.daily_photos_uploaded || 0).to_f / 10 * 100, 100].min %>
+                <div class="bg-blue-500 h-2 rounded-full transition-all duration-300" style="width: <%= daily_percentage %>%"></div>
+              </div>
+              <p class="text-xs text-gray-500 mt-1"><%= 10 - (@user.daily_photos_uploaded || 0) %> remaining today</p>
+            </div>
+            
+            <!-- AI Captions Usage -->
+            <div>
+              <div class="flex justify-between text-sm mb-2">
+                <span class="text-gray-600">AI Captions</span>
+                <span class="font-medium"><%= @usage_stats[:captions_used] %>/<%= @usage_stats[:captions_limit] %></span>
+              </div>
+              <div class="w-full bg-gray-200 rounded-full h-2">
+                <% caption_percentage = [@usage_stats[:captions_percentage], 100].min %>
+                <div class="bg-purple-500 h-2 rounded-full transition-all duration-300" style="width: <%= caption_percentage %>%"></div>
+              </div>
+              <p class="text-xs text-gray-500 mt-1"><%= @usage_stats[:captions_remaining] %> remaining this month</p>
+            </div>
+          </div>
+          
+          <div class="mt-4 pt-3 border-t border-gray-100 text-xs text-gray-500">
+            Limits reset <%= @user.next_billing_date ? "on #{@user.next_billing_date.strftime('%B %d')}" : "monthly" %>. 
+            Questions about usage? Check our <%= link_to "Fair Use Policy", fair_use_policy_path, class: "text-accent hover:underline" %>.
+          </div>
         </div>
       </div>
     <% end %>

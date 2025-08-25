@@ -1,0 +1,120 @@
+<% content_for :title, "Fair Use Policy - Uplo" %>
+<% content_for :description, "Uplo's Fair Use Policy outlines reasonable usage guidelines for our AI-powered photo processing service to ensure quality service for all users." %>
+
+<div class="min-h-screen bg-gray-50">
+  <%= render 'shared/navigation' %>
+  
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+    <div class="bg-white rounded-lg shadow-sm p-6 sm:p-8">
+      <h1 class="text-3xl font-bold text-gray-900 mb-6">Fair Use Policy</h1>
+      <p class="text-gray-600 mb-8">Last updated: <%= Date.current.strftime("%B %d, %Y") %></p>
+      
+      <div class="prose max-w-none">
+        <h2 class="text-2xl font-semibold text-gray-900 mt-8 mb-4">Overview</h2>
+        <p class="text-gray-700 mb-6">
+          Uplo's Fair Use Policy ensures that our AI-powered photo processing service remains fast, reliable, and cost-effective for all users. 
+          These guidelines help us maintain high-quality service while preventing abuse that could impact other users' experience.
+        </p>
+        
+        <h2 class="text-2xl font-semibold text-gray-900 mt-8 mb-4">Usage Limits</h2>
+        
+        <div class="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-6">
+          <h3 class="text-lg font-semibold text-blue-900 mb-3">Pro Monthly ($39/month)</h3>
+          <ul class="text-blue-800 space-y-2">
+            <li><strong>250 photos per month</strong> - Professional-grade processing</li>
+            <li><strong>Maximum 10 photos per day</strong> - Prevents burst usage</li>
+            <li><strong>10% grace period</strong> - Up to 275 photos with warnings</li>
+          </ul>
+        </div>
+        
+        <div class="bg-green-50 border border-green-200 rounded-lg p-6 mb-6">
+          <h3 class="text-lg font-semibold text-green-900 mb-3">Pro Annual ($390/year)</h3>
+          <ul class="text-green-800 space-y-2">
+            <li><strong>250 photos per month</strong> - Same great limits, better value</li>
+            <li><strong>Maximum 10 photos per day</strong> - Prevents burst usage</li>
+            <li><strong>10% grace period</strong> - Up to 275 photos with warnings</li>
+          </ul>
+        </div>
+        
+        <h2 class="text-2xl font-semibold text-gray-900 mt-8 mb-4">Acceptable Use</h2>
+        <ul class="text-gray-700 space-y-3 mb-6">
+          <li><strong>✅ Professional fitness content</strong> - Photos for your personal training or fitness business</li>
+          <li><strong>✅ Social media marketing</strong> - Content to promote your fitness services</li>
+          <li><strong>✅ Client transformation photos</strong> - Before/after photos for your business</li>
+          <li><strong>✅ Educational content</strong> - Fitness tips, exercise demonstrations, nutrition advice</li>
+        </ul>
+        
+        <h2 class="text-2xl font-semibold text-gray-900 mt-8 mb-4">Prohibited Use</h2>
+        <ul class="text-red-700 space-y-3 mb-6">
+          <li><strong>❌ Automated uploading</strong> - Using scripts or bots to upload photos</li>
+          <li><strong>❌ Reselling content</strong> - Selling AI-generated captions to other businesses</li>
+          <li><strong>❌ Non-fitness content</strong> - Processing photos unrelated to fitness/health</li>
+          <li><strong>❌ Bulk processing</strong> - Uploading large batches for other businesses</li>
+          <li><strong>❌ Account sharing</strong> - Multiple people using one account</li>
+        </ul>
+        
+        <h2 class="text-2xl font-semibold text-gray-900 mt-8 mb-4">Soft Enforcement</h2>
+        <p class="text-gray-700 mb-4">
+          We believe in working with our users to maintain fair usage. Our enforcement approach includes:
+        </p>
+        
+        <div class="space-y-4 mb-6">
+          <div class="flex items-start">
+            <div class="w-8 h-8 bg-yellow-100 text-yellow-800 rounded-full flex items-center justify-center text-sm font-semibold mr-4 mt-0.5">80%</div>
+            <div>
+              <h4 class="font-semibold text-gray-900">Gentle Reminder</h4>
+              <p class="text-gray-600 text-sm">Friendly email reminder that you're approaching your monthly limit</p>
+            </div>
+          </div>
+          
+          <div class="flex items-start">
+            <div class="w-8 h-8 bg-orange-100 text-orange-800 rounded-full flex items-center justify-center text-sm font-semibold mr-4 mt-0.5">95%</div>
+            <div>
+              <h4 class="font-semibold text-gray-900">Approaching Limit</h4>
+              <p class="text-gray-600 text-sm">Urgent warning with suggestions for managing usage or upgrading</p>
+            </div>
+          </div>
+          
+          <div class="flex items-start">
+            <div class="w-8 h-8 bg-red-100 text-red-800 rounded-full flex items-center justify-center text-sm font-semibold mr-4 mt-0.5">100%</div>
+            <div>
+              <h4 class="font-semibold text-gray-900">Limit Reached</h4>
+              <p class="text-gray-600 text-sm">Grace period begins - continued uploads with warnings</p>
+            </div>
+          </div>
+          
+          <div class="flex items-start">
+            <div class="w-8 h-8 bg-gray-100 text-gray-800 rounded-full flex items-center justify-center text-sm font-semibold mr-4 mt-0.5">110%</div>
+            <div>
+              <h4 class="font-semibold text-gray-900">Hard Limit</h4>
+              <p class="text-gray-600 text-sm">Uploads temporarily blocked until next billing cycle or upgrade</p>
+            </div>
+          </div>
+        </div>
+        
+        <h2 class="text-2xl font-semibold text-gray-900 mt-8 mb-4">Resolution Process</h2>
+        <p class="text-gray-700 mb-4">
+          If you exceed your limits, here's how to resolve it:
+        </p>
+        <ol class="text-gray-700 space-y-2 mb-6">
+          <li><strong>1. Wait for reset</strong> - Limits automatically reset on your monthly billing date</li>
+          <li><strong>2. Upgrade your plan</strong> - Get immediate access with higher limits</li>
+          <li><strong>3. Contact support</strong> - We're happy to discuss your specific needs</li>
+        </ol>
+        
+        <h2 class="text-2xl font-semibent text-gray-900 mt-8 mb-4">Questions?</h2>
+        <p class="text-gray-700">
+          If you have questions about fair usage or need higher limits for your business, 
+          please contact us at <a href="mailto:hello@getuplo.com" class="text-accent hover:underline">hello@getuplo.com</a>. 
+          We're here to help you succeed!
+        </p>
+        
+        <div class="mt-8 pt-6 border-t border-gray-200">
+          <p class="text-sm text-gray-500">
+            This policy may be updated from time to time. Continued use of Uplo constitutes acceptance of any changes.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
