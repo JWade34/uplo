@@ -59,6 +59,7 @@ Rails.application.routes.draw do
   end
   get "dashboard/index"
   resource :session
+  get "/logout", to: "sessions#destroy"
   resources :passwords, param: :token
   get "early-access", to: "early_access#index", as: :early_access
   post "early-access", to: "early_access#create"
