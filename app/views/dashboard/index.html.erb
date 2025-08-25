@@ -190,18 +190,18 @@
       </div>
     <% end %>
 
-    <!-- Key Metrics - Better Desktop Layout -->
+    <!-- Key Metrics - Mobile Optimized Compact Layout -->
     <div class="max-w-6xl mx-auto">
-      <div class="grid grid-cols-1 gap-4 mb-6 sm:grid-cols-2 sm:mb-8 lg:grid-cols-4 sm:gap-6">
+      <div class="grid grid-cols-2 gap-3 mb-4 sm:grid-cols-2 sm:mb-8 lg:grid-cols-4 sm:gap-6">
         <!-- Total Posts -->
-        <div class="bg-white rounded-lg shadow-sm border p-4 sm:p-6">
-          <div class="flex flex-col sm:flex-row sm:items-center">
-            <div class="mb-2 sm:mb-0 sm:mr-4">
-              <span class="text-2xl sm:text-3xl">📸</span>
+        <div class="bg-white rounded-lg shadow-sm border p-3 sm:p-6">
+          <div class="flex items-center sm:flex-col sm:items-center">
+            <div class="mr-3 sm:mb-2 sm:mr-0">
+              <span class="text-xl sm:text-3xl">📸</span>
             </div>
-            <div>
-              <p class="text-2xl sm:text-3xl font-bold text-gray-900"><%= @total_photos %></p>
-              <p class="text-sm sm:text-base text-gray-600">
+            <div class="sm:text-center">
+              <p class="text-xl sm:text-3xl font-bold text-gray-900"><%= @total_photos %></p>
+              <p class="text-xs sm:text-base text-gray-600">
                 Total Posts
                 <% unless @user.can_access_pro_features? %>
                   <span class="block text-xs text-gray-500">(Last 7 days)</span>
@@ -212,42 +212,42 @@
         </div>
 
         <!-- Average Engagement -->
-        <div class="bg-white rounded-lg shadow-sm border p-4 sm:p-6">
-          <div class="flex flex-col sm:flex-row sm:items-center">
-            <div class="mb-2 sm:mb-0 sm:mr-4">
-              <span class="text-2xl sm:text-3xl">💚</span>
+        <div class="bg-white rounded-lg shadow-sm border p-3 sm:p-6">
+          <div class="flex items-center sm:flex-col sm:items-center">
+            <div class="mr-3 sm:mb-2 sm:mr-0">
+              <span class="text-xl sm:text-3xl">💚</span>
             </div>
-            <div>
-              <p class="text-2xl sm:text-3xl font-bold text-gray-900"><%= number_with_precision(@avg_engagement, precision: 1) %>%</p>
-              <p class="text-sm sm:text-base text-gray-600">Avg Engagement</p>
+            <div class="sm:text-center">
+              <p class="text-xl sm:text-3xl font-bold text-gray-900"><%= number_with_precision(@avg_engagement, precision: 1) %>%</p>
+              <p class="text-xs sm:text-base text-gray-600">Avg Engagement</p>
             </div>
           </div>
         </div>
 
         <!-- Total Engagement -->
-        <div class="bg-white rounded-lg shadow-sm border p-4 sm:p-6">
-          <div class="flex flex-col sm:flex-row sm:items-center">
-            <div class="mb-2 sm:mb-0 sm:mr-4">
-              <span class="text-2xl sm:text-3xl">👥</span>
+        <div class="bg-white rounded-lg shadow-sm border p-3 sm:p-6">
+          <div class="flex items-center sm:flex-col sm:items-center">
+            <div class="mr-3 sm:mb-2 sm:mr-0">
+              <span class="text-xl sm:text-3xl">👥</span>
             </div>
-            <div>
-              <p class="text-2xl sm:text-3xl font-bold text-gray-900"><%= number_with_delimiter(@total_engagement) %></p>
-              <p class="text-sm sm:text-base text-gray-600">Total Interactions</p>
+            <div class="sm:text-center">
+              <p class="text-xl sm:text-3xl font-bold text-gray-900"><%= number_with_delimiter(@total_engagement) %></p>
+              <p class="text-xs sm:text-base text-gray-600">Total Interactions</p>
             </div>
           </div>
         </div>
 
         <!-- Monthly Growth -->
-        <div class="bg-white rounded-lg shadow-sm border p-4 sm:p-6">
-          <div class="flex flex-col sm:flex-row sm:items-center">
-            <div class="mb-2 sm:mb-0 sm:mr-4">
-              <span class="text-2xl sm:text-3xl">📈</span>
+        <div class="bg-white rounded-lg shadow-sm border p-3 sm:p-6">
+          <div class="flex items-center sm:flex-col sm:items-center">
+            <div class="mr-3 sm:mb-2 sm:mr-0">
+              <span class="text-xl sm:text-3xl">📈</span>
             </div>
-            <div>
-              <p class="text-2xl sm:text-3xl font-bold text-gray-900">
+            <div class="sm:text-center">
+              <p class="text-xl sm:text-3xl font-bold text-gray-900">
                 <%= @latest_summary&.followers_gained || 0 %>
               </p>
-              <p class="text-sm sm:text-base text-gray-600">New Followers</p>
+              <p class="text-xs sm:text-base text-gray-600">New Followers</p>
             </div>
           </div>
         </div>
