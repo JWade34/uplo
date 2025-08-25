@@ -34,8 +34,21 @@ class BillingController < ApplicationController
       if @active_subscription.stripe_customer_id
         begin
           customer = Stripe::Customer.retrieve(@active_subscription.stripe_customer_id)
-          @default_payment_method = customer.invoice_settings.default_payment_method ? 
-            Stripe::PaymentMethod.retrieve(customer.invoice_settings.default_payment_method) : nil
+          Rails.logger.info "Customer retrieved: #{customer.id}, default_payment_method: #{customer.invoice_settings.default_payment_method}"
+          
+          # Try multiple ways to get payment method
+          if customer.invoice_settings.default_payment_method
+            @default_payment_method = Stripe::PaymentMethod.retrieve(customer.invoice_settings.default_payment_method)
+          elsif customer.default_source
+            # Fallback to default source (older Stripe setup)
+            @default_payment_method = Stripe::PaymentMethod.retrieve(customer.default_source)
+          else
+            # Get the first attached payment method
+            payment_methods = Stripe::PaymentMethod.list(customer: customer.id, type: 'card')
+            @default_payment_method = payment_methods.data.first
+          end
+          
+          Rails.logger.info "Payment method found: #{@default_payment_method ? @default_payment_method.id : 'none'}"
         rescue Stripe::StripeError => e
           Rails.logger.error "Error retrieving payment method: #{e.message}"
           @default_payment_method = nil
