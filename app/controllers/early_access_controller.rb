@@ -7,13 +7,15 @@ class EarlyAccessController < ApplicationController
 
   def create
     @signup = EarlyAccessSignup.new(signup_params)
+    create_account = params[:early_access_signup][:create_account] == '1'
+    password = params[:early_access_signup][:password]
     
     if @signup.save
       # Create user account if requested
-      if params[:early_access_signup][:create_account] == '1' && params[:early_access_signup][:password].present?
+      if create_account && password.present?
         user = User.create(
           email_address: @signup.email,
-          password: params[:early_access_signup][:password]
+          password: password
         )
         
         if user.persisted?
@@ -31,12 +33,16 @@ class EarlyAccessController < ApplicationController
         end
       end
       
-      # Temporarily disable emails due to rate limits - re-enable later
-      flash[:notice] = "Thanks for signing up! We'll be in touch soon with early access details."
+      # Send confirmation emails
+      flash[:notice] = "Thanks for signing up! Check your email for next steps."
       
-      # TODO: Re-enable emails when rate limits resolve
-      # EarlyAccessMailer.admin_notification(@signup).deliver_later
-      # EarlyAccessMailer.user_confirmation(@signup).deliver_later
+      begin
+        EarlyAccessMailer.admin_notification(@signup).deliver_later
+        EarlyAccessMailer.user_confirmation(@signup).deliver_later
+      rescue => e
+        Rails.logger.error "Email delivery failed: #{e.message}"
+        # Don't fail the signup if email fails
+      end
       
       redirect_to early_access_path
     else
@@ -48,6 +54,6 @@ class EarlyAccessController < ApplicationController
   private
 
   def signup_params
-    params.require(:early_access_signup).permit(:name, :email, :business_type, :current_challenge, :marketing_emails, :create_account, :password)
+    params.require(:early_access_signup).permit(:name, :email, :business_type, :current_challenge, :marketing_emails)
   end
 end

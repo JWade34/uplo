@@ -24,10 +24,21 @@ Rails.application.routes.draw do
   # Stripe webhooks
   post "webhooks/stripe", to: "webhooks#stripe"
   
-  # Checkout routes
+  # Pricing and Checkout routes
+  get "pricing", to: "pricing#index"
   post "checkout/create", to: "checkout#create"
   get "checkout/success", to: "checkout#success"
   get "checkout/cancel", to: "checkout#cancel"
+  
+  # Billing management routes
+  resources :billing, only: [:index] do
+    collection do
+      post :update_payment_method
+      post :cancel_subscription
+      post :reactivate_subscription
+      get :download_invoice
+    end
+  end
   get "profile", to: "profile#show"
   get "profile/edit", to: "profile#edit"
   patch "profile", to: "profile#update"

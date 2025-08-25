@@ -6,29 +6,30 @@
         <%= render 'shared/logo', size: '1.5rem' %>
       </div>
       <div class="flex items-center space-x-2 sm:space-x-4">
-        <!-- Dashboard Link (hidden on dashboard page) -->
-        <% unless current_page?(dashboard_path) %>
-          <%= link_to dashboard_path, class: "text-gray-700 hover:text-gray-900 flex items-center px-2 py-1.5 sm:px-3 sm:py-2 rounded-lg hover:bg-gray-100 transition-colors text-sm font-medium" do %>
-            Dashboard
+        <% if Current.user %>
+          <!-- Dashboard Link (hidden on dashboard page) -->
+          <% unless current_page?(dashboard_path) %>
+            <%= link_to dashboard_path, class: "text-gray-700 hover:text-gray-900 flex items-center px-2 py-1.5 sm:px-3 sm:py-2 rounded-lg hover:bg-gray-100 transition-colors text-sm font-medium" do %>
+              Dashboard
+            <% end %>
           <% end %>
-        <% end %>
-        
-        <!-- Photos Link (hidden on photos index page) -->
-        <% unless current_page?(photos_path) %>
-          <%= link_to photos_path, class: "text-gray-700 hover:text-gray-900 flex items-center px-2 py-1.5 sm:px-3 sm:py-2 rounded-lg hover:bg-gray-100 transition-colors text-sm font-medium" do %>
-            My Photos
+          
+          <!-- Photos Link (hidden on photos index page) -->
+          <% unless current_page?(photos_path) %>
+            <%= link_to photos_path, class: "text-gray-700 hover:text-gray-900 flex items-center px-2 py-1.5 sm:px-3 sm:py-2 rounded-lg hover:bg-gray-100 transition-colors text-sm font-medium" do %>
+              My Photos
+            <% end %>
           <% end %>
-        <% end %>
-        
-        <!-- Upload Link (hidden on upload page) -->
-        <% unless current_page?(new_photo_path) %>
-          <%= link_to new_photo_path, class: "bg-accent text-black px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg text-sm sm:text-base font-semibold hover:bg-accent-hover transition-colors" do %>
-            <span class="hidden sm:inline">Upload Photo</span>
-            <span class="sm:hidden">Upload</span>
+          
+          <!-- Upload Link (hidden on upload page) -->
+          <% unless current_page?(new_photo_path) %>
+            <%= link_to new_photo_path, class: "bg-accent text-black px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg text-sm sm:text-base font-semibold hover:bg-accent-hover transition-colors" do %>
+              <span class="hidden sm:inline">Upload Photo</span>
+              <span class="sm:hidden">Upload</span>
+            <% end %>
           <% end %>
-        <% end %>
-        
-        <!-- Profile Dropdown -->
+          
+          <!-- Profile Dropdown -->
         <div class="relative" data-controller="dropdown">
           <button data-dropdown-target="button" data-action="click->dropdown#toggle" class="flex items-center text-gray-700 hover:text-gray-900 focus:outline-none">
             <div class="w-8 h-8 rounded-full overflow-hidden bg-gray-100 border border-gray-200 sm:mr-2">
@@ -65,6 +66,26 @@
                 My Profile
               <% end %>
               
+              <!-- Pricing link -->
+              <%= link_to pricing_path, class: "block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors font-medium" do %>
+                <span class="flex items-center">
+                  Pricing & Plans
+                  <% unless Current.user.can_access_pro_features? %>
+                    <span class="ml-2 text-xs bg-accent text-black px-2 py-0.5 rounded-full">Upgrade</span>
+                  <% end %>
+                </span>
+              <% end %>
+              
+              <!-- Billing link -->
+              <%= link_to billing_index_path, class: "block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors font-medium" do %>
+                <span class="flex items-center">
+                  Billing & Subscription
+                  <% if Current.user.needs_payment_attention? %>
+                    <span class="ml-2 text-xs bg-red-500 text-white px-2 py-0.5 rounded-full">!</span>
+                  <% end %>
+                </span>
+              <% end %>
+              
               <hr class="my-1 border-gray-100">
               
               <!-- Sign out -->
@@ -74,6 +95,16 @@
             </div>
           </div>
         </div>
+        
+        <% else %>
+          <!-- Navigation for non-authenticated users -->
+          <%= link_to new_session_path, class: "text-gray-700 hover:text-gray-900 px-3 py-2 text-sm font-medium" do %>
+            Sign In
+          <% end %>
+          <%= link_to pricing_path, class: "bg-accent text-black px-4 py-2 rounded-lg text-sm font-semibold hover:bg-accent-hover transition-colors" do %>
+            View Plans
+          <% end %>
+        <% end %>
       </div>
     </div>
   </div>

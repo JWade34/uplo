@@ -1,0 +1,322 @@
+<% content_for :title, "Billing & Subscription - Uplo" %>
+<% content_for :description, "Manage your Uplo subscription, payment methods, and billing information" %>
+<% content_for :robots, "noindex, follow" %>
+
+<!-- Billing Management Page -->
+<div class="min-h-screen bg-gray-50">
+  <%= render 'shared/navigation' %>
+  
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Page Header -->
+    <div class="mb-8">
+      <h1 class="text-3xl font-bold text-gray-900">Billing & Subscription</h1>
+      <p class="text-gray-600 mt-2">Manage your subscription and payment information</p>
+    </div>
+    
+    <!-- Current Plan Section -->
+    <div class="bg-white rounded-xl shadow-sm border p-6 mb-6">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-xl font-semibold text-gray-900">Current Plan</h2>
+        <% if @active_subscription %>
+          <span class="px-3 py-1 rounded-full text-sm font-semibold <%= @active_subscription.provides_pro_access? ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800' %>">
+            <%= @active_subscription.status.humanize %>
+          </span>
+        <% else %>
+          <span class="px-3 py-1 rounded-full text-sm font-semibold bg-gray-100 text-gray-800">
+            Free Plan
+          </span>
+        <% end %>
+      </div>
+      
+      <% if @active_subscription %>
+        <!-- Pro Subscription Details -->
+        <div class="grid md:grid-cols-2 gap-6">
+          <div>
+            <div class="space-y-3">
+              <div class="flex items-center">
+                <span class="text-2xl mr-3">💎</span>
+                <div>
+                  <h3 class="font-bold text-lg text-gray-900"><%= @active_subscription.plan_name %></h3>
+                  <p class="text-2xl font-bold text-gray-900"><%= @active_subscription.price_display %></p>
+                </div>
+              </div>
+              
+              <% if @active_subscription.trial_active? %>
+                <div class="bg-blue-50 rounded-lg p-3">
+                  <p class="text-sm text-blue-800">
+                    <strong>Free Trial Active</strong><br>
+                    Your trial ends on <%= @active_subscription.trial_end.strftime('%B %d, %Y') %>
+                    (<%= @active_subscription.trial_days_remaining %> days remaining)
+                  </p>
+                </div>
+              <% elsif @active_subscription.cancel_at_period_end %>
+                <div class="bg-yellow-50 rounded-lg p-3">
+                  <p class="text-sm text-yellow-800">
+                    <strong>Subscription Ending</strong><br>
+                    Your Pro access ends on <%= @active_subscription.current_period_end.strftime('%B %d, %Y') %>
+                  </p>
+                </div>
+              <% else %>
+                <div class="bg-green-50 rounded-lg p-3">
+                  <p class="text-sm text-green-800">
+                    <strong>Next Billing Date</strong><br>
+                    <%= @active_subscription.current_period_end.strftime('%B %d, %Y') %>
+                  </p>
+                </div>
+              <% end %>
+              
+              <% if @active_subscription.needs_attention? %>
+                <div class="bg-red-50 rounded-lg p-3">
+                  <p class="text-sm text-red-800">
+                    <strong>Action Required</strong><br>
+                    Please update your payment method to continue your subscription.
+                  </p>
+                </div>
+              <% end %>
+            </div>
+          </div>
+          
+          <div>
+            <h4 class="font-semibold text-gray-900 mb-3">Plan Features</h4>
+            <ul class="space-y-2 text-sm text-gray-700">
+              <li class="flex items-start">
+                <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                </svg>
+                Unlimited photo uploads
+              </li>
+              <li class="flex items-start">
+                <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                </svg>
+                3 AI caption styles per photo
+              </li>
+              <li class="flex items-start">
+                <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                </svg>
+                Advanced analytics & insights
+              </li>
+              <li class="flex items-start">
+                <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                </svg>
+                Priority support
+              </li>
+            </ul>
+          </div>
+        </div>
+        
+        <!-- Subscription Actions -->
+        <div class="mt-6 pt-6 border-t border-gray-200">
+          <div class="flex flex-wrap gap-3">
+            <% if @active_subscription.cancel_at_period_end %>
+              <%= button_to "Reactivate Subscription", reactivate_subscription_billing_index_path, 
+                  method: :post, 
+                  class: "bg-green-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-green-700 transition-colors",
+                  data: { turbo_confirm: "Are you sure you want to reactivate your subscription?" } %>
+            <% else %>
+              <%= button_to "Update Payment Method", update_payment_method_billing_index_path, 
+                  method: :post,
+                  class: "bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-700 transition-colors" %>
+              
+              <% unless @active_subscription.trial_active? %>
+                <%= button_to "Cancel Subscription", cancel_subscription_billing_index_path, 
+                    method: :post,
+                    class: "border border-red-300 text-red-600 px-4 py-2 rounded-lg font-semibold hover:bg-red-50 transition-colors",
+                    data: { turbo_confirm: "Are you sure you want to cancel your subscription? You'll keep Pro access until #{@active_subscription.current_period_end.strftime('%B %d, %Y')}." } %>
+              <% end %>
+            <% end %>
+            
+            <%= link_to "Change Plan", pricing_path, 
+                class: "border border-gray-300 text-gray-700 px-4 py-2 rounded-lg font-semibold hover:bg-gray-50 transition-colors" %>
+          </div>
+        </div>
+        
+      <% else %>
+        <!-- Free Plan Details -->
+        <div class="bg-gradient-to-r from-gray-50 to-blue-50 rounded-lg p-6">
+          <div class="grid md:grid-cols-2 gap-6">
+            <div>
+              <h3 class="font-bold text-lg text-gray-900 mb-3">Starter Plan (Free)</h3>
+              <p class="text-gray-600 mb-4">You're currently on our free Starter plan with limited features.</p>
+              
+              <h4 class="font-semibold text-gray-900 mb-2">Current Limits:</h4>
+              <ul class="space-y-1 text-sm text-gray-700">
+                <li>• 5 photos per month</li>
+                <li>• 1 AI caption per photo</li>
+                <li>• Basic analytics (7 days)</li>
+                <li>• Email support</li>
+              </ul>
+            </div>
+            
+            <div>
+              <h4 class="font-semibold text-gray-900 mb-3">Upgrade to Pro for:</h4>
+              <ul class="space-y-2 text-sm">
+                <li class="flex items-start">
+                  <span class="text-green-500 mr-2">✓</span>
+                  <span><strong>Unlimited</strong> photo uploads</span>
+                </li>
+                <li class="flex items-start">
+                  <span class="text-green-500 mr-2">✓</span>
+                  <span><strong>3 caption styles</strong> per photo</span>
+                </li>
+                <li class="flex items-start">
+                  <span class="text-green-500 mr-2">✓</span>
+                  <span>90-day analytics history</span>
+                </li>
+                <li class="flex items-start">
+                  <span class="text-green-500 mr-2">✓</span>
+                  <span>Competitor analysis</span>
+                </li>
+                <li class="flex items-start">
+                  <span class="text-green-500 mr-2">✓</span>
+                  <span>Priority support</span>
+                </li>
+              </ul>
+              
+              <div class="mt-4">
+                <%= link_to pricing_path, class: "inline-block bg-accent text-black px-6 py-3 rounded-lg font-semibold hover:bg-accent-hover transition-colors" do %>
+                  Upgrade to Pro →
+                <% end %>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+    
+    <!-- Usage Statistics -->
+    <div class="bg-white rounded-xl shadow-sm border p-6 mb-6">
+      <h2 class="text-xl font-semibold text-gray-900 mb-4">Current Month Usage</h2>
+      
+      <div class="grid md:grid-cols-2 gap-6">
+        <!-- Photos Usage -->
+        <div>
+          <div class="flex justify-between items-center mb-2">
+            <span class="text-gray-700 font-medium">Photos Uploaded</span>
+            <span class="text-sm text-gray-600">
+              <%= @usage_stats[:photos_used] %><%= @user.can_access_pro_features? ? '' : "/#{@usage_stats[:photos_limit]}" %>
+            </span>
+          </div>
+          <div class="w-full bg-gray-200 rounded-full h-2 mb-2">
+            <div class="bg-blue-600 h-2 rounded-full transition-all duration-300" 
+                 style="width: <%= @user.can_access_pro_features? ? '0' : "#{[@usage_stats[:photos_percentage], 100].min}%" %>"></div>
+          </div>
+          <p class="text-xs text-gray-500">
+            <%= @user.can_access_pro_features? ? 'Unlimited uploads with Pro' : "#{@usage_stats[:photos_remaining]} remaining this month" %>
+          </p>
+        </div>
+        
+        <!-- Captions Usage -->
+        <div>
+          <div class="flex justify-between items-center mb-2">
+            <span class="text-gray-700 font-medium">AI Captions Generated</span>
+            <span class="text-sm text-gray-600">
+              <%= @usage_stats[:captions_used] %><%= @user.can_access_pro_features? ? '' : "/#{@usage_stats[:captions_limit]}" %>
+            </span>
+          </div>
+          <div class="w-full bg-gray-200 rounded-full h-2 mb-2">
+            <div class="bg-accent h-2 rounded-full transition-all duration-300" 
+                 style="width: <%= @user.can_access_pro_features? ? '0' : "#{[@usage_stats[:captions_percentage], 100].min}%" %>"></div>
+          </div>
+          <p class="text-xs text-gray-500">
+            <%= @user.can_access_pro_features? ? '3 styles per photo with Pro' : "#{@usage_stats[:captions_remaining]} remaining this month" %>
+          </p>
+        </div>
+      </div>
+      
+      <% if !@user.can_access_pro_features? && (@usage_stats[:photos_remaining] <= 2 || @usage_stats[:captions_remaining] <= 2) %>
+        <div class="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
+          <p class="text-sm text-yellow-800">
+            <strong>⚠️ Running low on <%= @usage_stats[:photos_remaining] <= 2 ? 'photos' : 'captions' %>!</strong>
+            Upgrade to Pro for unlimited access.
+          </p>
+        </div>
+      <% end %>
+    </div>
+    
+    <!-- Billing History -->
+    <% if @subscriptions.any? %>
+      <div class="bg-white rounded-xl shadow-sm border p-6 mb-6">
+        <h2 class="text-xl font-semibold text-gray-900 mb-4">Billing History</h2>
+        
+        <div class="overflow-x-auto">
+          <table class="w-full">
+            <thead>
+              <tr class="border-b border-gray-200">
+                <th class="text-left py-3 px-2 text-sm font-semibold text-gray-900">Date</th>
+                <th class="text-left py-3 px-2 text-sm font-semibold text-gray-900">Plan</th>
+                <th class="text-left py-3 px-2 text-sm font-semibold text-gray-900">Amount</th>
+                <th class="text-left py-3 px-2 text-sm font-semibold text-gray-900">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @subscriptions.each do |subscription| %>
+                <tr class="border-b border-gray-100">
+                  <td class="py-3 px-2 text-sm text-gray-700">
+                    <%= subscription.created_at.strftime('%b %d, %Y') %>
+                  </td>
+                  <td class="py-3 px-2 text-sm text-gray-700">
+                    <%= subscription.plan_name %>
+                  </td>
+                  <td class="py-3 px-2 text-sm text-gray-700">
+                    <%= subscription.price_display %>
+                  </td>
+                  <td class="py-3 px-2">
+                    <span class="inline-flex px-2 py-1 text-xs rounded-full <%= subscription_status_class(subscription.status) %>">
+                      <%= subscription.status.humanize %>
+                    </span>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+        
+        <% if @active_subscription&.stripe_customer_id %>
+          <div class="mt-4 text-sm text-gray-600">
+            <%= button_to "View Full History in Stripe", update_payment_method_billing_index_path, 
+                method: :post,
+                class: "text-blue-600 hover:text-blue-700 font-medium" %>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+    
+    <!-- Upcoming Invoice -->
+    <% if @upcoming_invoice %>
+      <div class="bg-white rounded-xl shadow-sm border p-6">
+        <h2 class="text-xl font-semibold text-gray-900 mb-4">Next Invoice</h2>
+        
+        <div class="bg-blue-50 rounded-lg p-4">
+          <div class="flex justify-between items-center">
+            <div>
+              <p class="text-sm text-gray-700">
+                Amount due on <%= Time.at(@upcoming_invoice.period_end).strftime('%B %d, %Y') %>
+              </p>
+              <p class="text-2xl font-bold text-gray-900 mt-1">
+                $<%= (@upcoming_invoice.amount_due / 100.0).round(2) %>
+              </p>
+            </div>
+            <div class="text-right">
+              <p class="text-xs text-gray-600">Payment method</p>
+              <p class="text-sm font-medium text-gray-900">
+                <%= @upcoming_invoice.default_payment_method ? "•••• #{@upcoming_invoice.default_payment_method.card.last4}" : "No payment method" %>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+    
+    <!-- Help Section -->
+    <div class="mt-8 text-center">
+      <p class="text-gray-600">
+        Need help with billing? 
+        <a href="mailto:support@getuplo.com" class="text-accent font-semibold hover:underline">Contact Support</a>
+      </p>
+    </div>
+  </div>
+</div>
+

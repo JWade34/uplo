@@ -1,34 +1,111 @@
-<!-- Payment Cancelled Page -->
-<div class="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-  <div class="max-w-md w-full">
-    <div class="bg-white rounded-xl shadow-lg p-6 sm:p-8 text-center">
-      <div class="text-6xl mb-4">💭</div>
-      <h1 class="text-2xl font-bold text-gray-900 mb-2">No Problem!</h1>
-      <p class="text-gray-600 mb-6">
-        <%= @cancel_message || 'Your payment was cancelled. You can upgrade anytime when you\'re ready.' %>
-      </p>
-      
-      <!-- Continue using free features -->
-      <div class="bg-gray-50 rounded-lg p-4 mb-6">
-        <h3 class="font-semibold text-gray-900 mb-2">Your Free Account Includes:</h3>
-        <div class="text-sm text-gray-600 space-y-1">
-          <div>✓ 8 photo uploads per month</div>
-          <div>✓ 5 AI captions per month</div>
-          <div>✓ 7-day analytics history</div>
-          <div>✓ Basic performance insights</div>
+<!-- Enhanced Payment Cancelled Page with Win-Back Strategy -->
+<div class="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 flex items-center justify-center p-4">
+  <div class="max-w-lg w-full">
+    <div class="bg-white rounded-2xl shadow-xl p-8 text-center">
+      <!-- Friendly Header -->
+      <div class="mb-6">
+        <div class="inline-flex items-center justify-center w-20 h-20 bg-blue-100 rounded-full">
+          <svg class="w-10 h-10 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
         </div>
       </div>
       
-      <div class="space-y-3">
-        <%= link_to "Continue with Free Account", dashboard_path, class: "block w-full bg-accent text-black py-3 rounded-lg font-semibold hover:bg-accent-hover transition-colors" %>
-        <button onclick="openUpgradeModal()" class="block w-full border border-gray-300 text-gray-700 py-3 rounded-lg font-semibold hover:bg-gray-50 transition-colors">
-          View Pro Plans Again
-        </button>
+      <h1 class="text-2xl font-bold text-gray-900 mb-3">No Worries!</h1>
+      <p class="text-lg text-gray-600 mb-6">
+        Your upgrade was cancelled. Take your time - we'll be here when you're ready.
+      </p>
+      
+      <!-- Special Offer Banner -->
+      <div class="bg-gradient-to-r from-accent/20 to-yellow-100 rounded-xl p-4 mb-6">
+        <div class="flex items-center justify-center mb-2">
+          <span class="text-2xl mr-2">🎁</span>
+          <h3 class="font-bold text-gray-900">Wait! Special Offer</h3>
+        </div>
+        <p class="text-sm text-gray-700 mb-3">
+          Come back within 24 hours and we'll extend your trial to <strong>21 days</strong> instead of 14!
+        </p>
+        <div class="text-xs text-gray-600 bg-white rounded-lg px-3 py-1 inline-block">
+          No code needed - automatically applied
+        </div>
       </div>
       
+      <!-- What You're Missing Section -->
+      <div class="bg-gray-50 rounded-xl p-5 mb-6 text-left">
+        <h4 class="font-semibold text-gray-900 mb-3 text-center">What Pro Users Are Doing Right Now:</h4>
+        <div class="space-y-2 text-sm text-gray-700">
+          <div class="flex items-start">
+            <span class="text-green-500 mr-2">✓</span>
+            <span>Uploading unlimited photos without worrying about limits</span>
+          </div>
+          <div class="flex items-start">
+            <span class="text-green-500 mr-2">✓</span>
+            <span>Getting 3 different caption styles to A/B test engagement</span>
+          </div>
+          <div class="flex items-start">
+            <span class="text-green-500 mr-2">✓</span>
+            <span>Tracking which posts perform best with advanced analytics</span>
+          </div>
+          <div class="flex items-start">
+            <span class="text-green-500 mr-2">✓</span>
+            <span>Growing their client base 3x faster on average</span>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Current Plan Reminder -->
+      <div class="bg-blue-50 rounded-lg p-4 mb-6">
+        <h4 class="font-semibold text-gray-900 mb-2">Your Current Starter Plan:</h4>
+        <div class="grid grid-cols-2 gap-3 text-sm text-gray-600">
+          <div>5 photos/month</div>
+          <div>1 caption style</div>
+          <div>Basic analytics</div>
+          <div>Email support</div>
+        </div>
+      </div>
+      
+      <!-- Action Buttons -->
+      <div class="space-y-3">
+        <%= link_to pricing_path, class: "block w-full bg-accent text-black py-4 rounded-lg font-bold text-lg hover:bg-accent-hover transition-all transform hover:scale-105 shadow-lg" do %>
+          <span class="flex items-center justify-center">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+            </svg>
+            Reconsider Pro (21-Day Trial)
+          </span>
+        <% end %>
+        
+        <%= link_to dashboard_path, class: "block w-full bg-white border-2 border-gray-200 text-gray-700 py-3 rounded-lg font-semibold hover:bg-gray-50 transition-colors" do %>
+          Continue with Starter
+        <% end %>
+      </div>
+      
+      <!-- FAQ Quick Links -->
+      <div class="mt-8 pt-6 border-t border-gray-200">
+        <p class="text-sm text-gray-600 mb-3">Common questions:</p>
+        <div class="flex flex-wrap justify-center gap-2">
+          <a href="#" class="text-xs bg-gray-100 text-gray-700 px-3 py-1 rounded-full hover:bg-gray-200">
+            Can I upgrade later?
+          </a>
+          <a href="#" class="text-xs bg-gray-100 text-gray-700 px-3 py-1 rounded-full hover:bg-gray-200">
+            What's included in Pro?
+          </a>
+          <a href="#" class="text-xs bg-gray-100 text-gray-700 px-3 py-1 rounded-full hover:bg-gray-200">
+            Refund policy
+          </a>
+        </div>
+      </div>
+      
+      <!-- Support -->
       <div class="mt-6 text-sm text-gray-500">
-        <p>Questions? Email us at <a href="mailto:support@uplo.com" class="text-accent hover:underline">support@uplo.com</a></p>
+        <p>
+          Questions? We're here to help at 
+          <a href="mailto:support@getuplo.com" class="text-accent font-semibold hover:underline">support@getuplo.com</a>
+        </p>
       </div>
     </div>
   </div>
 </div>
+
+<!-- Include the upgrade modal -->
+<%= render 'shared/upgrade_modal' %>

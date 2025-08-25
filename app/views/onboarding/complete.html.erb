@@ -56,6 +56,50 @@
       </div>
     </div>
 
+    <!-- Pro Upgrade Callout -->
+    <% unless Current.user.can_access_pro_features? %>
+      <div class="bg-gradient-to-r from-accent/20 to-yellow-100 rounded-xl p-6 mb-8">
+        <div class="flex items-center justify-center mb-4">
+          <span class="text-3xl mr-3">🚀</span>
+          <h3 class="text-xl font-bold text-gray-900">Ready to Go Pro?</h3>
+        </div>
+        
+        <p class="text-gray-700 mb-4 text-center">
+          You've set up your profile perfectly! Now supercharge your content creation with unlimited uploads and advanced features.
+        </p>
+        
+        <div class="grid md:grid-cols-2 gap-4 mb-4">
+          <div class="bg-white rounded-lg p-3">
+            <h4 class="font-semibold text-gray-900 text-sm mb-2">Starter (Current)</h4>
+            <ul class="text-xs text-gray-600 space-y-1">
+              <li>• 5 photos/month</li>
+              <li>• 1 caption style</li>
+              <li>• Basic analytics</li>
+            </ul>
+          </div>
+          
+          <div class="bg-green-50 border-2 border-green-200 rounded-lg p-3">
+            <h4 class="font-semibold text-green-800 text-sm mb-2">Pro Upgrade</h4>
+            <ul class="text-xs text-green-700 space-y-1">
+              <li>• Unlimited photos</li>
+              <li>• 3 caption styles per photo</li>
+              <li>• Advanced analytics</li>
+              <li>• Priority support</li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="flex flex-col sm:flex-row gap-3 justify-center">
+          <button onclick="openUpgradeModal()" class="bg-accent text-black px-6 py-3 rounded-lg font-semibold hover:bg-accent-hover transition-colors">
+            Start 14-Day Free Trial
+          </button>
+          <%= link_to pricing_path, class: "border border-gray-400 text-gray-700 px-6 py-3 rounded-lg font-semibold hover:bg-gray-50 transition-colors text-center" do %>
+            View All Plans
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+    
     <!-- Pro Tips -->
     <div class="bg-white/10 backdrop-blur-sm rounded-xl p-6 mb-8">
       <h3 class="text-lg font-semibold text-white mb-4">💡 Pro Tips</h3>
@@ -63,7 +107,7 @@
         <p>• Upload photos showing different exercises for variety</p>
         <p>• The more context you give (photo title/description), the better the captions</p>
         <p>• You can always update your profile preferences to fine-tune the AI</p>
-        <p>• Copy captions to your clipboard with one click</p>
+        <p>• <% unless Current.user.can_access_pro_features? %>Try uploading your first photo to see the AI in action<% else %>With Pro, get 3 caption variations to A/B test<% end %></p>
       </div>
     </div>
 
@@ -83,3 +127,8 @@
     </p>
   </div>
 </div>
+
+<!-- Include upgrade modal for free users -->
+<% unless Current.user.can_access_pro_features? %>
+  <%= render 'shared/upgrade_modal' %>
+<% end %>

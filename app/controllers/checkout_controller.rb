@@ -1,19 +1,23 @@
 class CheckoutController < ApplicationController
   before_action :require_authentication
   
-  # Pricing configuration
+  # Pricing configuration with live price IDs
   PLANS = {
     'pro_monthly' => {
-      price_id: ENV['STRIPE_PRO_MONTHLY_PRICE_ID'] || 'price_pro_monthly',
+      price_id: ENV['STRIPE_PRO_MONTHLY_PRICE_ID'],
       amount: 39.00,
       interval: 'month',
-      plan_name: 'Pro'
+      plan_name: 'Pro Monthly',
+      display_name: 'Pro Monthly',
+      savings: nil
     },
     'pro_yearly' => {
-      price_id: ENV['STRIPE_PRO_YEARLY_PRICE_ID'] || 'price_pro_yearly',
+      price_id: ENV['STRIPE_PRO_YEARLY_PRICE_ID'],
       amount: 390.00,
-      interval: 'year',
-      plan_name: 'Pro'
+      interval: 'year', 
+      plan_name: 'Pro Annual',
+      display_name: 'Pro Annual',
+      savings: 78.00 # Save $78 compared to monthly
     }
   }.freeze
 
