@@ -29,6 +29,18 @@ class BillingController < ApplicationController
         # No upcoming invoice (might be in trial or canceled)
         @upcoming_invoice = nil
       end
+      
+      # Get customer's default payment method for display during trial
+      if @active_subscription.stripe_customer_id
+        begin
+          customer = Stripe::Customer.retrieve(@active_subscription.stripe_customer_id)
+          @default_payment_method = customer.invoice_settings.default_payment_method ? 
+            Stripe::PaymentMethod.retrieve(customer.invoice_settings.default_payment_method) : nil
+        rescue Stripe::StripeError => e
+          Rails.logger.error "Error retrieving payment method: #{e.message}"
+          @default_payment_method = nil
+        end
+      end
     end
   end
   
