@@ -44,7 +44,7 @@ class CheckoutController < ApplicationController
         }],
         mode: 'subscription',
         subscription_data: {
-          trial_period_days: 14,
+          trial_period_days: 7,
           metadata: {
             user_id: Current.user.id.to_s,
             plan_name: plan[:plan_name]
