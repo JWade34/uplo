@@ -4,7 +4,38 @@ class DashboardController < ApplicationController
   
   def index
     @user = Current.user
+    
+    # Debug logging for production issues
+    Rails.logger.info "Dashboard access for user #{@user.id} - Pro: #{@user.can_access_pro_features?}"
+    Rails.logger.info "User subscription status: #{@user.subscription_status}"
+    Rails.logger.info "User has active subscription: #{@user.has_active_subscription?}"
+    
     load_dashboard_data
+  rescue => e
+    Rails.logger.error "Dashboard error for user #{@user.id}: #{e.message}"
+    Rails.logger.error e.backtrace.join("\n")
+    
+    # Fallback to basic dashboard data to prevent 500
+    @usage_stats = {
+      photos_used: 0,
+      photos_limit: @user.can_access_pro_features? ? 250 : 5,
+      photos_remaining: @user.can_access_pro_features? ? 250 : 5,
+      captions_used: 0,
+      captions_limit: @user.can_access_pro_features? ? 750 : 5,
+      captions_remaining: @user.can_access_pro_features? ? 750 : 5,
+      photos_percentage: 0,
+      captions_percentage: 0
+    }
+    @total_photos = 0
+    @processed_photos = 0
+    @avg_engagement = 0
+    @top_posts = []
+    @total_engagement = 0
+    @latest_summary = nil
+    @platform_stats = {}
+    @locked_features = []
+    @potential_followers = 0
+    @value_gaps = {}
   end
   
   private

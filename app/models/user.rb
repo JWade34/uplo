@@ -98,8 +98,8 @@ class User < ApplicationRecord
   end
   
   def can_access_pro_features?
-    # Check Stripe subscription first, then fallback to legacy fields
-    active_subscription&.provides_pro_access? || pro? || enterprise?
+    # Check Stripe subscription first (including trials), then fallback to legacy fields
+    active_subscription&.provides_pro_access? || trial_active? || pro? || enterprise?
   end
   
   def days_left_in_trial
