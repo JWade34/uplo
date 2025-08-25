@@ -1,4 +1,6 @@
 class TermsController < ApplicationController
+  skip_before_action :require_authentication
+  
   def terms_of_service
     @page_title = "Terms of Service"
   end
