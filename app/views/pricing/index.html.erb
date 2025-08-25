@@ -479,6 +479,26 @@
       </p>
     </div>
   </section>
+  
+  <!-- Footer -->
+  <footer class="bg-gray-900 border-t border-gray-800 py-4">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col sm:flex-row justify-between items-center space-y-2 sm:space-y-0">
+        <div class="flex items-center space-x-4 text-sm text-gray-400">
+          <%= link_to "Fair Use Policy", fair_use_policy_path, class: "hover:text-gray-300 transition-colors" %>
+          <span class="text-gray-600">•</span>
+          <%= link_to "Terms of Service", terms_of_service_path, class: "hover:text-gray-300 transition-colors" %>
+          <span class="text-gray-600">•</span>
+          <%= link_to "Privacy Policy", privacy_policy_path, class: "hover:text-gray-300 transition-colors" %>
+        </div>
+        <div class="flex items-center space-x-4 text-sm text-gray-400">
+          <a href="mailto:hello@getuplo.com" class="hover:text-gray-300 transition-colors">Contact Us</a>
+          <span class="text-gray-600">•</span>
+          <span>&copy; <%= Date.current.year %> Uplo. All rights reserved.</span>
+        </div>
+      </div>
+    </div>
+  </footer>
 </div>
 
 <!-- Include the upgrade modal for logged-in users -->
