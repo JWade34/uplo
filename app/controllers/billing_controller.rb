@@ -40,7 +40,7 @@ class BillingController < ApplicationController
       if subscription&.stripe_customer_id
         portal_session = Stripe::BillingPortal::Session.create({
           customer: subscription.stripe_customer_id,
-          return_url: billing_url
+          return_url: billing_index_url
         })
         
         redirect_to portal_session.url, allow_other_host: true
