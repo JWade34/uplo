@@ -189,7 +189,7 @@
           </div>
           
           <div class="mt-4 pt-3 border-t border-gray-100 text-xs text-gray-500">
-            Limits reset <%= @user.next_billing_date ? "on #{@user.next_billing_date.strftime('%B %d')}" : "monthly" %>. 
+            Limits reset <%= @user.active_subscription&.current_period_end ? "on #{@user.active_subscription.current_period_end.strftime('%B %d')}" : "monthly" %>. 
             Questions about usage? Check our <%= link_to "Fair Use Policy", fair_use_policy_path, class: "text-accent hover:underline" %>.
           </div>
         </div>
