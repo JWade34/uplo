@@ -5,37 +5,21 @@ class DashboardController < ApplicationController
   def index
     @user = Current.user
     
-    # Debug logging for production issues
-    Rails.logger.info "Dashboard access for user #{@user.id} - Pro: #{@user.can_access_pro_features?}"
-    Rails.logger.info "User subscription status: #{@user.subscription_status}"
-    Rails.logger.info "User has active subscription: #{@user.has_active_subscription?}"
+    # Always set minimal defaults first
+    set_dashboard_defaults
     
-    load_dashboard_data
-  rescue => e
-    Rails.logger.error "Dashboard error for user #{@user.id}: #{e.message}"
-    Rails.logger.error e.backtrace.join("\n")
-    
-    # Fallback to basic dashboard data to prevent 500
-    @usage_stats = {
-      photos_used: 0,
-      photos_limit: @user.can_access_pro_features? ? 250 : 5,
-      photos_remaining: @user.can_access_pro_features? ? 250 : 5,
-      captions_used: 0,
-      captions_limit: @user.can_access_pro_features? ? 750 : 5,
-      captions_remaining: @user.can_access_pro_features? ? 750 : 5,
-      photos_percentage: 0,
-      captions_percentage: 0
-    }
-    @total_photos = 0
-    @processed_photos = 0
-    @avg_engagement = 0
-    @top_posts = []
-    @total_engagement = 0
-    @latest_summary = nil
-    @platform_stats = {}
-    @locked_features = []
-    @potential_followers = 0
-    @value_gaps = {}
+    begin
+      # Debug logging for production issues
+      Rails.logger.info "Dashboard access for user #{@user.id} - Pro: #{@user.can_access_pro_features?}"
+      Rails.logger.info "User subscription status: #{@user.subscription_status}"
+      Rails.logger.info "User has active subscription: #{@user.has_active_subscription?}"
+      
+      load_dashboard_data
+    rescue => e
+      Rails.logger.error "Dashboard error for user #{@user.id}: #{e.message}"
+      Rails.logger.error e.backtrace.join("\n")
+      # Defaults already set above, just continue with basic dashboard
+    end
   end
   
   private
@@ -56,9 +40,20 @@ class DashboardController < ApplicationController
     end
     
     # Common data for all users
-    @latest_summary = @user.analytics_summaries.recent.first
+    @latest_summary = @user.analytics_summaries.recent.first if @user.analytics_summaries.exists?
     @total_photos = @user.photos.count
     @processed_photos = @user.photos.processed.count
+  rescue => e
+    Rails.logger.error "Error in load_dashboard_data: #{e.message}"
+    Rails.logger.error e.backtrace.first(5).join("\n")
+    # Set minimal defaults
+    @latest_summary = nil
+    @total_photos = 0
+    @processed_photos = 0
+    @usage_stats ||= get_default_usage_stats
+    @avg_engagement ||= 0
+    @top_posts ||= []
+    @total_engagement ||= 0
   end
   
   def load_starter_dashboard_data
@@ -221,5 +216,34 @@ class DashboardController < ApplicationController
       @user.last_usage_reset ||= Time.current
       @user.last_daily_reset ||= Date.current
     end
+  end
+  
+  def get_default_usage_stats
+    limit = @user.can_access_pro_features? ? 250 : 5
+    caption_limit = @user.can_access_pro_features? ? 750 : 5
+    {
+      photos_used: 0,
+      photos_limit: limit,
+      photos_remaining: limit,
+      captions_used: 0,
+      captions_limit: caption_limit,
+      captions_remaining: caption_limit,
+      photos_percentage: 0,
+      captions_percentage: 0
+    }
+  end
+  
+  def set_dashboard_defaults
+    @usage_stats = get_default_usage_stats
+    @total_photos = 0
+    @processed_photos = 0
+    @avg_engagement = 0
+    @top_posts = []
+    @total_engagement = 0
+    @latest_summary = nil
+    @platform_stats = {}
+    @locked_features = []
+    @potential_followers = 0
+    @value_gaps = {}
   end
 end
