@@ -3,6 +3,14 @@ class CheckoutController < ApplicationController
   
   # Pricing configuration with live price IDs
   PLANS = {
+    'basic_monthly' => {
+      price_id: ENV['STRIPE_BASIC_MONTHLY_PRICE_ID'],
+      amount: 19.00,
+      interval: 'month',
+      plan_name: 'Basic',
+      display_name: 'Basic Monthly',
+      savings: nil
+    },
     'pro_monthly' => {
       price_id: ENV['STRIPE_PRO_MONTHLY_PRICE_ID'],
       amount: 39.00,
