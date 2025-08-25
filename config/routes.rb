@@ -4,6 +4,7 @@ Rails.application.routes.draw do
     get "/", to: "admin#users", as: :admin_root
     get "/dashboard", to: "admin#index", as: :admin
     get "/fix-justin", to: "admin#fix_justin"
+    get "/debug-user", to: "admin#debug_user"
     
     # User management
     get "/users", to: "admin#users", as: :admin_users

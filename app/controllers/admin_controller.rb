@@ -128,6 +128,36 @@ class AdminController < ApplicationController
     }
   end
   
+  def debug_user
+    email = params[:email] || "justin+jwade@superdupr.com"
+    user = User.find_by(email_address: email)
+    
+    if user
+      render json: {
+        success: true,
+        user_data: {
+          id: user.id,
+          email: user.email_address,
+          subscription_tier: user.subscription_tier,
+          subscription_status: user.subscription_status,
+          can_access_pro_features: user.can_access_pro_features?,
+          trial_active: user.trial_active?,
+          trial_ends_at: user.trial_ends_at,
+          subscriptions_count: user.subscriptions.count,
+          active_subscription: user.active_subscription&.attributes,
+          all_subscriptions: user.subscriptions.map(&:attributes),
+          current_month_photos: user.current_month_photos,
+          current_month_captions: user.current_month_captions,
+          daily_photos_uploaded: user.daily_photos_uploaded,
+          last_usage_reset: user.last_usage_reset,
+          last_daily_reset: user.last_daily_reset
+        }
+      }
+    else
+      render json: { success: false, message: "User not found: #{email}" }
+    end
+  end
+  
   def system_status
     # Render HTML view for /admin/system
     respond_to do |format|
