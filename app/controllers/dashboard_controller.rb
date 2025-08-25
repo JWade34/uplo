@@ -14,8 +14,8 @@ class DashboardController < ApplicationController
   end
   
   def load_dashboard_data
-    # Ensure usage tracking fields are initialized for Pro users
-    initialize_usage_tracking if @user.can_access_pro_features?
+    # Ensure usage tracking fields are initialized FIRST
+    initialize_usage_tracking
     
     # Performance data based on subscription tier
     if @user.can_access_pro_features?
@@ -151,45 +151,44 @@ class DashboardController < ApplicationController
   end
   
   def get_usage_stats
-    @user.reset_monthly_usage_if_needed
+    # Ensure fields exist before trying to reset
+    @user.reset_monthly_usage_if_needed rescue nil
+    
     {
-      photos_used: @user.current_month_photos,
-      photos_limit: @user.effective_monthly_photo_limit,
-      photos_remaining: @user.photos_remaining_this_month,
-      captions_used: @user.current_month_captions,
-      captions_limit: @user.effective_monthly_caption_limit,
-      captions_remaining: @user.captions_remaining_this_month,
-      photos_percentage: @user.usage_percentage(:photos),
-      captions_percentage: @user.usage_percentage(:captions)
+      photos_used: @user.current_month_photos || 0,
+      photos_limit: @user.effective_monthly_photo_limit || 250,
+      photos_remaining: @user.photos_remaining_this_month || 0,
+      captions_used: @user.current_month_captions || 0,
+      captions_limit: @user.effective_monthly_caption_limit || 750,
+      captions_remaining: @user.captions_remaining_this_month || 0,
+      photos_percentage: @user.usage_percentage(:photos) || 0,
+      captions_percentage: @user.usage_percentage(:captions) || 0
     }
   end
   
   def initialize_usage_tracking
-    # Initialize usage tracking fields for Pro users if they're nil
-    updates = {}
-    
-    if @user.current_month_photos.nil?
-      updates[:current_month_photos] = 0
+    # Initialize usage tracking fields if they're nil
+    begin
+      updates = {}
+      
+      updates[:current_month_photos] = 0 if @user.current_month_photos.nil?
+      updates[:current_month_captions] = 0 if @user.current_month_captions.nil?
+      updates[:daily_photos_uploaded] = 0 if @user.daily_photos_uploaded.nil?
+      updates[:last_usage_reset] = Time.current if @user.last_usage_reset.nil?
+      updates[:last_daily_reset] = Date.current if @user.last_daily_reset.nil?
+      
+      if updates.any?
+        @user.update_columns(updates) # Use update_columns to skip validations and callbacks
+        @user.reload # Reload to get the updated values
+      end
+    rescue => e
+      Rails.logger.error "Failed to initialize usage tracking for user #{@user.id}: #{e.message}"
+      # Set defaults in memory even if database update fails
+      @user.current_month_photos ||= 0
+      @user.current_month_captions ||= 0
+      @user.daily_photos_uploaded ||= 0
+      @user.last_usage_reset ||= Time.current
+      @user.last_daily_reset ||= Date.current
     end
-    
-    if @user.current_month_captions.nil?
-      updates[:current_month_captions] = 0
-    end
-    
-    if @user.daily_photos_uploaded.nil?
-      updates[:daily_photos_uploaded] = 0
-    end
-    
-    if @user.last_usage_reset.nil?
-      updates[:last_usage_reset] = Time.current
-    end
-    
-    if @user.last_daily_reset.nil?
-      updates[:last_daily_reset] = Date.current
-    end
-    
-    @user.update!(updates) if updates.any?
-  rescue => e
-    Rails.logger.error "Failed to initialize usage tracking for user #{@user.id}: #{e.message}"
   end
 end

@@ -148,11 +148,13 @@ class User < ApplicationRecord
   def reset_monthly_usage_if_needed
     return unless last_usage_reset.nil? || last_usage_reset.beginning_of_month < Time.current.beginning_of_month
     
-    update!(
+    update_columns(
       current_month_photos: 0,
       current_month_captions: 0,
       last_usage_reset: Time.current
     )
+  rescue => e
+    Rails.logger.error "Failed to reset monthly usage for user #{id}: #{e.message}"
   end
   
   def effective_monthly_photo_limit
