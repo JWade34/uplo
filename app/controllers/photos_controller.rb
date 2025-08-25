@@ -20,7 +20,11 @@ class PhotosController < ApplicationController
     # Check photo upload limits
     unless @user.can_upload_photo?
       @photo = @user.photos.build(photo_params)
-      @photo.errors.add(:base, "You've reached your monthly photo limit (#{@user.effective_monthly_photo_limit}). Upgrade to Pro for unlimited uploads!")
+      if @user.can_access_pro_features?
+        @photo.errors.add(:base, "You've reached your monthly photo limit (#{@user.effective_monthly_photo_limit}). Please contact support if you need additional capacity.")
+      else
+        @photo.errors.add(:base, "You've used all 5 trial photos. Upgrade to Pro for professional-grade processing with 250 photos per month!")
+      end
       render :new, status: :unprocessable_entity
       return
     end

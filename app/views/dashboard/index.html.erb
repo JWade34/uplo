@@ -274,12 +274,16 @@
                   You've uploaded <%= pluralize(@total_photos, 'photo') %>! Connect your social media accounts to track engagement and performance.
                 </p>
                 <div class="space-y-2">
-                  <button class="bg-accent text-black px-4 py-2 sm:px-6 text-sm sm:text-base rounded-lg font-semibold hover:bg-accent-hover transition-colors inline-block mr-2">
-                    Connect Instagram
-                  </button>
-                  <% unless @user.can_access_pro_features? %>
+                  <% if @user.can_access_pro_features? %>
+                    <button class="bg-accent text-black px-4 py-2 sm:px-6 text-sm sm:text-base rounded-lg font-semibold hover:bg-accent-hover transition-colors inline-block mr-2">
+                      Connect Instagram
+                    </button>
+                  <% else %>
+                    <button onclick="showUpgradeModal('social-integration')" class="bg-accent text-black px-4 py-2 sm:px-6 text-sm sm:text-base rounded-lg font-semibold hover:bg-accent-hover transition-colors inline-block mr-2">
+                      Connect Instagram
+                    </button>
                     <p class="text-xs text-gray-500 mt-2">
-                      <button onclick="openUpgradeModal()" class="text-accent hover:underline">Upgrade to Pro</button> for advanced analytics and insights
+                      <button onclick="showUpgradeModal('social-integration')" class="text-accent hover:underline">Upgrade to Pro</button> for social media integration and advanced analytics
                     </p>
                   <% end %>
                 </div>
@@ -469,3 +473,43 @@
     </div>
   </div>
 </div>
+
+<script>
+function showUpgradeModal(feature) {
+  const modal = document.createElement('div');
+  modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4';
+  modal.innerHTML = `
+    <div class="bg-white rounded-lg max-w-md w-full p-6">
+      <div class="text-center">
+        <div class="text-4xl mb-4">🚀</div>
+        <h3 class="text-xl font-bold text-gray-900 mb-2">Unlock Social Media Automation</h3>
+        <p class="text-gray-600 mb-6">
+          Save 5+ hours per week with automated posting and scheduling. 
+          Get professional-grade processing with 250 photos per month.
+        </p>
+        <div class="space-y-3">
+          <form action="/checkout" method="post" class="inline-block w-full">
+            <input type="hidden" name="plan_id" value="pro_monthly">
+            <input type="hidden" name="authenticity_token" value="${document.querySelector('meta[name="csrf-token"]').content}">
+            <button type="submit" class="w-full bg-accent text-black py-3 rounded-lg font-semibold hover:bg-accent-hover transition-colors">
+              Upgrade to Pro - $39/month
+            </button>
+          </form>
+          <button onclick="closeUpgradeModal()" class="w-full text-gray-500 py-2">
+            Maybe later
+          </button>
+        </div>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(modal);
+  window.currentUpgradeModal = modal;
+}
+
+function closeUpgradeModal() {
+  if (window.currentUpgradeModal) {
+    document.body.removeChild(window.currentUpgradeModal);
+    window.currentUpgradeModal = null;
+  }
+}
+</script>

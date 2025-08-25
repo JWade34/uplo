@@ -27,14 +27,40 @@ class AiCaptionService
     Rails.logger.info "Starting parallel AI caption generation for #{styles.count} styles"
     start_time = Time.current
     
-    # Process all styles in parallel using threads
-    caption_futures = styles.map do |style|
+    # Smart caption generation: Full analysis for first style, variations for others
+    primary_style = styles.first
+    base_caption = nil
+    
+    # Generate primary caption with full GPT-4o analysis
+    Rails.logger.info "Generating primary #{primary_style} caption with GPT-4o..."
+    base_caption_text = generate_caption_for_style_with_url(primary_style, image_url, use_premium_model: true)
+    
+    if base_caption_text.present?
+      # Create primary caption
+      caption = @photo.captions.create!(
+        content: base_caption_text,
+        style: primary_style,
+        generated_at: Time.current
+      )
+      generated_captions << caption
+      base_caption = caption
+      @user.increment_caption_usage!
+    end
+    
+    # Process remaining styles with cost optimizations
+    remaining_styles = styles[1..] || []
+    caption_futures = remaining_styles.map do |style|
       Thread.new do
         begin
           next unless @user.can_generate_caption?
           
-          Rails.logger.info "Generating #{style} caption..."
-          caption_text = generate_caption_for_style_with_url(style, image_url)
+          Rails.logger.info "Generating optimized #{style} caption..."
+          # Use variation method if we have a base caption, otherwise use optimized API call
+          caption_text = if base_caption
+            generate_caption_variation(style, base_caption.content)
+          else
+            generate_caption_for_style_with_url(style, image_url, use_premium_model: false)
+          end
           
           if caption_text.present?
             # Thread-safe caption creation
@@ -80,13 +106,16 @@ class AiCaptionService
     generate_caption_for_style_with_url(style, image_url)
   end
   
-  def generate_caption_for_style_with_url(style, image_url)
+  def generate_caption_for_style_with_url(style, image_url, use_premium_model: true)
     prompt = build_prompt(style)
+    
+    # Choose model based on optimization settings
+    model = use_premium_model ? "gpt-4o" : "gpt-4o-mini"
     
     begin
       response = @client.chat(
         parameters: {
-          model: "gpt-4o",  # GPT-4 with vision
+          model: model,
           messages: [
             {
               role: "user",
@@ -104,14 +133,40 @@ class AiCaptionService
               ]
             }
           ],
-          max_tokens: 300,
+          max_tokens: 180,  # Reduced from 300 for punchier captions
           temperature: 0.7
         }
       )
       
       response.dig("choices", 0, "message", "content")
     rescue => e
-      Rails.logger.error "OpenAI API error for #{style}: #{e.message}"
+      Rails.logger.error "OpenAI API error for #{style} with #{model}: #{e.message}"
+      nil
+    end
+  end
+  
+  # Generate caption variation without image analysis
+  def generate_caption_variation(target_style, base_caption)
+    prompt = build_variation_prompt(target_style, base_caption)
+    
+    begin
+      response = @client.chat(
+        parameters: {
+          model: "gpt-4o-mini",  # Use cheaper model for variations
+          messages: [
+            {
+              role: "user",
+              content: prompt
+            }
+          ],
+          max_tokens: 180,
+          temperature: 0.8  # Slightly higher for more variation
+        }
+      )
+      
+      response.dig("choices", 0, "message", "content")
+    rescue => e
+      Rails.logger.error "OpenAI API error for variation #{target_style}: #{e.message}"
       nil
     end
   end
@@ -130,7 +185,7 @@ class AiCaptionService
       Requirements:
       - Caption should be #{style} in tone
       - Include 3-5 relevant hashtags (use the user's favorites if provided)
-      - Keep it under 150 words
+      - Keep it punchy and under 100 words (shorter is better for engagement)
       - Make it specific to what you see in the image
       - Avoid generic fitness platitudes
       - Include a clear call-to-action related to the user's business
@@ -139,6 +194,32 @@ class AiCaptionService
       Photo context: Title: "#{@photo.title}"#{@photo.description.present? ? ", Description: \"#{@photo.description}\"" : ""}
       
       Return ONLY the caption text, no additional commentary.
+    PROMPT
+  end
+  
+  def build_variation_prompt(target_style, base_caption)
+    base_context = build_user_context
+    style_instructions = get_style_instructions(target_style)
+    
+    <<~PROMPT
+      You are an expert fitness social media content creator. I need you to rewrite this Instagram caption in a different style while keeping the core message and fitness content.
+      
+      #{base_context}
+      
+      #{style_instructions}
+      
+      Original caption:
+      "#{base_caption}"
+      
+      Requirements:
+      - Rewrite in #{target_style} tone
+      - Keep the same fitness content and key message
+      - Include 3-5 relevant hashtags (use the user's favorites if provided)
+      - Keep it punchy and under 100 words (shorter is better for engagement)
+      - Maintain the call-to-action but adapt it to the new style
+      #{@user.words_to_avoid.present? ? "- Avoid these words/phrases: #{@user.words_to_avoid}" : ""}
+      
+      Return ONLY the rewritten caption text, no additional commentary.
     PROMPT
   end
   

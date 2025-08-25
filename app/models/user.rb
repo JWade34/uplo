@@ -156,23 +156,41 @@ class User < ApplicationRecord
   end
   
   def effective_monthly_photo_limit
-    can_access_pro_features? ? Float::INFINITY : monthly_photo_limit
+    if can_access_pro_features?
+      250  # Professional grade limit for Pro users
+    else
+      monthly_photo_limit
+    end
   end
   
   def effective_monthly_caption_limit
-    can_access_pro_features? ? Float::INFINITY : monthly_caption_limit
+    if can_access_pro_features?
+      750  # 3 captions per photo * 250 photos
+    else
+      monthly_caption_limit
+    end
   end
   
   def photos_remaining_this_month
-    reset_monthly_usage_if_needed
-    return Float::INFINITY if can_access_pro_features?
-    [effective_monthly_photo_limit - current_month_photos, 0].max
+    if can_access_pro_features?
+      reset_monthly_usage_if_needed
+      [effective_monthly_photo_limit - current_month_photos, 0].max
+    else
+      # For free tier, use total photos limit (5 total, not monthly)
+      total_photos_used = photos.count
+      [5 - total_photos_used, 0].max
+    end
   end
   
   def captions_remaining_this_month
-    reset_monthly_usage_if_needed
-    return Float::INFINITY if can_access_pro_features?
-    [effective_monthly_caption_limit - current_month_captions, 0].max
+    if can_access_pro_features?
+      reset_monthly_usage_if_needed
+      [effective_monthly_caption_limit - current_month_captions, 0].max
+    else
+      # For free tier, use total captions limit (5 total captions)
+      total_captions_used = photos.sum { |photo| photo.captions.count }
+      [5 - total_captions_used, 0].max
+    end
   end
   
   def can_upload_photo?
@@ -184,25 +202,39 @@ class User < ApplicationRecord
   end
   
   def increment_photo_usage!
-    reset_monthly_usage_if_needed
-    return if can_access_pro_features?
-    increment!(:current_month_photos)
+    if can_access_pro_features?
+      reset_monthly_usage_if_needed
+      increment!(:current_month_photos)
+    end
+    # For free tier, we don't need to increment counters since we count actual photos
   end
   
   def increment_caption_usage!
-    reset_monthly_usage_if_needed
-    return if can_access_pro_features?
-    increment!(:current_month_captions)
+    if can_access_pro_features?
+      reset_monthly_usage_if_needed
+      increment!(:current_month_captions)
+    end
+    # For free tier, we don't need to increment counters since we count actual captions
   end
   
   def usage_percentage(type)
     case type
     when :photos
-      return 0 if can_access_pro_features?
-      (current_month_photos.to_f / effective_monthly_photo_limit * 100).round
+      if can_access_pro_features?
+        (current_month_photos.to_f / effective_monthly_photo_limit * 100).round
+      else
+        # For free tier, show percentage of total 5 photos used
+        total_photos_used = photos.count
+        (total_photos_used.to_f / 5 * 100).round
+      end
     when :captions
-      return 0 if can_access_pro_features?
-      (current_month_captions.to_f / effective_monthly_caption_limit * 100).round
+      if can_access_pro_features?
+        (current_month_captions.to_f / effective_monthly_caption_limit * 100).round
+      else
+        # For free tier, show percentage of total 5 captions used
+        total_captions_used = photos.sum { |photo| photo.captions.count }
+        (total_captions_used.to_f / 5 * 100).round
+      end
     end
   end
   
