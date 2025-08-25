@@ -7,17 +7,10 @@
       </div>
       <div class="flex items-center space-x-2 sm:space-x-4">
         <% if Current.user %>
-          <!-- Dashboard Link (hidden on dashboard page) -->
+          <!-- Dashboard Link (only show on mobile) -->
           <% unless current_page?(dashboard_path) %>
-            <%= link_to dashboard_path, class: "text-gray-700 hover:text-gray-900 flex items-center px-2 py-1.5 sm:px-3 sm:py-2 rounded-lg hover:bg-gray-100 transition-colors text-sm font-medium" do %>
+            <%= link_to dashboard_path, class: "sm:hidden text-gray-700 hover:text-gray-900 flex items-center px-2 py-1.5 rounded-lg hover:bg-gray-100 transition-colors text-sm font-medium" do %>
               Dashboard
-            <% end %>
-          <% end %>
-          
-          <!-- Photos Link (hidden on photos index page) -->
-          <% unless current_page?(photos_path) %>
-            <%= link_to photos_path, class: "text-gray-700 hover:text-gray-900 flex items-center px-2 py-1.5 sm:px-3 sm:py-2 rounded-lg hover:bg-gray-100 transition-colors text-sm font-medium" do %>
-              My Photos
             <% end %>
           <% end %>
           
@@ -51,14 +44,21 @@
           
           <div data-dropdown-target="menu" class="hidden absolute left-auto right-2 sm:right-0 mt-2 w-48 bg-white rounded-xl shadow-xl border border-gray-100 z-50 overflow-hidden origin-top-right">
             <div class="py-2">
-              <!-- Dashboard link in dropdown (always show) -->
+              <!-- Dashboard link in dropdown -->
               <%= link_to dashboard_path, class: "block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors font-medium #{'bg-gray-50' if current_page?(dashboard_path)}" do %>
                 Dashboard
               <% end %>
               
-              <!-- Photos link in dropdown (always show) -->
+              <!-- Photos link in dropdown -->
               <%= link_to photos_path, class: "block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors font-medium #{'bg-gray-50' if current_page?(photos_path)}" do %>
                 My Photos
+              <% end %>
+              
+              <!-- Upload link in dropdown (for easy access) -->
+              <% unless current_page?(new_photo_path) %>
+                <%= link_to new_photo_path, class: "block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors font-medium" do %>
+                  Upload Photo
+                <% end %>
               <% end %>
               
               <!-- Profile link -->

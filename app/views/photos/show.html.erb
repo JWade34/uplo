@@ -113,14 +113,19 @@
             <% elsif @photo.processed? %>
               <!-- No captions generated -->
               <div class="text-center py-6 sm:py-8">
-                <div class="text-gray-400 text-3xl sm:text-4xl mb-3 sm:mb-4">⚠️</div>
-                <h3 class="text-base sm:text-lg font-medium text-gray-900 mb-2">Caption Generation Failed</h3>
+                <div class="text-gray-400 text-3xl sm:text-4xl mb-3 sm:mb-4">🤔</div>
+                <h3 class="text-base sm:text-lg font-medium text-gray-900 mb-2">Hmm, we're having trouble with this one</h3>
                 <p class="text-sm sm:text-base text-gray-600 max-w-sm mx-auto mb-4 px-4">
-                  We encountered an issue generating captions for this photo. This might be due to image quality or content.
+                  Our AI couldn't create captions for this photo. This sometimes happens with very dark images or photos that don't show fitness activities clearly.
                 </p>
-                <button onclick="window.location.reload()" class="bg-accent text-black px-4 py-2 rounded-lg font-semibold hover:bg-accent-hover transition-colors text-sm sm:text-base">
-                  Try Again
-                </button>
+                <div class="space-y-2">
+                  <button onclick="window.location.reload()" class="block mx-auto bg-accent text-black px-4 py-2 rounded-lg font-semibold hover:bg-accent-hover transition-colors text-sm sm:text-base">
+                    Try Again
+                  </button>
+                  <p class="text-xs text-gray-500">
+                    Need help? <a href="mailto:support@getuplo.com" class="text-accent hover:underline">Contact our support team</a>
+                  </p>
+                </div>
               </div>
             <% else %>
               <!-- Enhanced Processing State -->
@@ -135,17 +140,15 @@
                 <div class="animate-spin rounded-full h-6 w-6 sm:h-8 sm:w-8 border-b-2 border-accent mx-auto mb-3 sm:mb-4"></div>
                 
                 <h3 class="text-base sm:text-lg font-medium text-gray-900 mb-2">
-                  <span class="hidden sm:inline">AI Caption Generation in Progress</span>
-                  <span class="sm:hidden">AI Processing</span>
+                  <span class="hidden sm:inline">Creating your personalized captions...</span>
+                  <span class="sm:hidden">Creating captions...</span>
                 </h3>
                 
                 <div class="text-sm sm:text-base text-gray-600 max-w-sm mx-auto px-4 space-y-2">
-                  <% if @photo.processing_started_at %>
-                    <p>
-                      Processing for <%= pluralize(@photo.processing_elapsed_seconds, 'second') %>...
-                      <% if @photo.estimated_completion_time > 0 %>
-                        <br><span class="text-xs text-gray-500">Est. <%= pluralize(@photo.estimated_completion_time, 'second') %> remaining</span>
-                      <% end %>
+                  <p>Our AI is analyzing your photo and crafting captions that match your style.</p>
+                  <% if @photo.processing_started_at && @photo.processing_elapsed_seconds > 15 %>
+                    <p class="text-xs text-gray-500">
+                      This is taking a bit longer than usual, but we're still working on it...
                     </p>
                   <% end %>
                   

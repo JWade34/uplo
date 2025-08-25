@@ -1,4 +1,14 @@
-<div>
-  <h1 class="font-bold text-4xl">Onboarding#index</h1>
-  <p>Find me in app/views/onboarding/index.html.erb</p>
+<!-- This should redirect automatically to welcome - if you're seeing this, there's an issue -->
+<div class="min-h-screen bg-gray-50 flex items-center justify-center">
+  <div class="text-center">
+    <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-accent mx-auto mb-4"></div>
+    <p class="text-gray-600">Redirecting to onboarding...</p>
+  </div>
 </div>
+
+<script>
+  // Fallback redirect in case controller redirect fails
+  setTimeout(() => {
+    window.location.href = '<%= onboarding_welcome_path %>';
+  }, 2000);
+</script>

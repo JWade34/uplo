@@ -25,15 +25,25 @@
               </svg>
             </div>
             <div class="ml-3 flex-1">
-              <h3 class="text-lg font-bold text-red-800">Monthly Upload Limit Reached</h3>
+              <h3 class="text-lg font-bold text-red-800">
+                <% if @user.can_access_pro_features? %>
+                  Monthly Upload Limit Reached
+                <% else %>
+                  Free Trial Photos Used
+                <% end %>
+              </h3>
               <p class="mt-2 text-sm text-red-700">
-                You've used all <%= @user.effective_monthly_photo_limit %> photos for this month. 
+                <% if @user.can_access_pro_features? %>
+                  You've used all <%= @user.effective_monthly_photo_limit %> photos for this month.
+                <% else %>
+                  You've used all <%= @user.effective_monthly_photo_limit %> photos in your free trial.
+                <% end %>
                 Don't lose momentum - upgrade now to keep growing your business!
               </p>
               <div class="mt-4 bg-white rounded-lg p-3 border border-red-200">
                 <p class="text-xs font-semibold text-gray-800 mb-2">What you're missing out on:</p>
                 <ul class="text-xs text-gray-700 space-y-1">
-                  <li class="flex items-start"><span class="text-red-500 mr-1">✗</span> Unlimited photo uploads</li>
+                  <li class="flex items-start"><span class="text-red-500 mr-1">✗</span> Unlimited photos</li>
                   <li class="flex items-start"><span class="text-red-500 mr-1">✗</span> 3 caption variations per photo</li>
                   <li class="flex items-start"><span class="text-red-500 mr-1">✗</span> Advanced analytics & insights</li>
                 </ul>
@@ -68,7 +78,7 @@
                   <span class="text-xs bg-green-100 text-green-800 px-2 py-0.5 rounded-full">Save $78/year</span>
                 </div>
                 <div class="grid grid-cols-2 gap-2 text-xs text-gray-700">
-                  <div>✓ Unlimited uploads</div>
+                  <div>✓ Unlimited photos</div>
                   <div>✓ 3 caption styles</div>
                   <div>✓ Competitor analysis</div>
                   <div>✓ Export reports</div>
@@ -85,7 +95,13 @@
         <!-- Regular Usage Display -->
         <div class="mb-6 bg-white rounded-lg shadow-sm border p-4 sm:p-6">
           <div class="flex items-center justify-between mb-3">
-            <h3 class="text-base sm:text-lg font-semibold text-gray-900">Monthly Usage</h3>
+            <h3 class="text-base sm:text-lg font-semibold text-gray-900">
+              <% if @user.can_access_pro_features? %>
+                Monthly Usage
+              <% else %>
+                Free Trial Usage
+              <% end %>
+            </h3>
             <span class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full">
               Starter Plan
             </span>
@@ -117,7 +133,11 @@
           
           <div class="mt-4 p-3 bg-gradient-to-r from-blue-50 to-accent/10 rounded-lg">
             <p class="text-xs text-gray-700">
-              <strong><%= photos_remaining %></strong> photos, <strong><%= @user.captions_remaining_this_month %></strong> captions remaining
+              <% if @user.can_access_pro_features? %>
+                <strong><%= photos_remaining %></strong> photos, <strong><%= @user.captions_remaining_this_month %></strong> captions remaining this month
+              <% else %>
+                <strong><%= photos_remaining %></strong> photos remaining in your free trial
+              <% end %>
             </p>
             <button onclick="showUpgradeModal('photo-upload-limit')" class="mt-2 text-xs font-medium text-blue-800 hover:text-blue-700">
               Want unlimited? See Pro plans →
@@ -134,7 +154,7 @@
             <span class="text-2xl mr-3">💎</span>
             <div>
               <h3 class="text-sm font-bold text-gray-900">Pro Member</h3>
-              <p class="text-xs text-gray-600">Unlimited uploads • 3 caption styles • Advanced analytics</p>
+              <p class="text-xs text-gray-600">Unlimited photos • 3 caption styles • Advanced analytics</p>
             </div>
           </div>
           <%= link_to "Manage Plan", pricing_path, class: "text-xs text-gray-700 hover:text-gray-900 font-medium" %>
@@ -162,14 +182,14 @@
           <div class="bg-red-50 border border-red-200 rounded-lg p-4">
             <div class="flex">
               <div class="flex-shrink-0">
-                <span class="text-red-400">⚠️</span>
+                <span class="text-red-400">💡</span>
               </div>
               <div class="ml-3">
-                <h3 class="text-sm font-medium text-red-800">Please fix the following errors:</h3>
+                <h3 class="text-sm font-medium text-red-800">Let's fix this:</h3>
                 <div class="mt-2 text-sm text-red-700">
-                  <ul class="list-disc space-y-1 pl-5">
+                  <ul class="space-y-1">
                     <% @photo.errors.full_messages.each do |message| %>
-                      <li><%= message %></li>
+                      <li>• <%= message %></li>
                     <% end %>
                   </ul>
                 </div>
