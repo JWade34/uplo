@@ -116,9 +116,8 @@
                   class: "bg-green-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-green-700 transition-colors",
                   data: { turbo_confirm: "Are you sure you want to reactivate your subscription?" } %>
             <% else %>
-              <%= button_to "Update Payment Method", update_payment_method_billing_index_path, 
-                  method: :post,
-                  class: "bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-700 transition-colors" %>
+              <%= link_to "Update Payment Method", update_payment_method_billing_index_path, 
+                  class: "bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-700 transition-colors inline-block" %>
               
               <% unless @active_subscription.trial_active? %>
                 <%= button_to "Cancel Subscription", cancel_subscription_billing_index_path, 

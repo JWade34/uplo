@@ -37,7 +37,7 @@ Rails.application.routes.draw do
   # Billing management routes
   resources :billing, only: [:index] do
     collection do
-      post :update_payment_method
+      get :update_payment_method
       post :cancel_subscription
       post :reactivate_subscription
       get :download_invoice
