@@ -91,8 +91,14 @@
     
     <!-- Enhanced Usage Display for Pro Users -->
     <% if @user.can_access_pro_features? %>
-      <% usage_monitor = UsageMonitoringService.new(@user) %>
-      <% warning_level = usage_monitor.check_monthly_usage_and_warn %>
+      <% begin %>
+        <% usage_monitor = UsageMonitoringService.new(@user) %>
+        <% warning_level = usage_monitor.check_monthly_usage_and_warn %>
+      <% rescue => e %>
+        <% Rails.logger.error "Dashboard UsageMonitoringService error: #{e.message}" %>
+        <% usage_monitor = nil %>
+        <% warning_level = nil %>
+      <% end %>
       
       <div class="max-w-5xl mx-auto mb-6 sm:mb-8">
         <div class="bg-white rounded-lg shadow-sm border p-4 sm:p-6">
@@ -107,7 +113,7 @@
           </div>
           
           <!-- Usage Warning Banner -->
-          <% if warning_message = usage_monitor.usage_warning_message %>
+          <% if usage_monitor && (warning_message = usage_monitor.usage_warning_message) %>
             <div class="mb-4 p-3 rounded-lg <%= case warning_level
               when :gentle_warning then 'bg-blue-50 border border-blue-200'
               when :approaching_limit then 'bg-yellow-50 border border-yellow-200' 

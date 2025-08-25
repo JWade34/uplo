@@ -14,6 +14,9 @@ class DashboardController < ApplicationController
   end
   
   def load_dashboard_data
+    # Ensure usage tracking fields are initialized for Pro users
+    initialize_usage_tracking if @user.can_access_pro_features?
+    
     # Performance data based on subscription tier
     if @user.can_access_pro_features?
       load_pro_dashboard_data
@@ -156,5 +159,34 @@ class DashboardController < ApplicationController
       photos_percentage: @user.usage_percentage(:photos),
       captions_percentage: @user.usage_percentage(:captions)
     }
+  end
+  
+  def initialize_usage_tracking
+    # Initialize usage tracking fields for Pro users if they're nil
+    updates = {}
+    
+    if @user.current_month_photos.nil?
+      updates[:current_month_photos] = 0
+    end
+    
+    if @user.current_month_captions.nil?
+      updates[:current_month_captions] = 0
+    end
+    
+    if @user.daily_photos_uploaded.nil?
+      updates[:daily_photos_uploaded] = 0
+    end
+    
+    if @user.last_usage_reset.nil?
+      updates[:last_usage_reset] = Time.current
+    end
+    
+    if @user.last_daily_reset.nil?
+      updates[:last_daily_reset] = Date.current
+    end
+    
+    @user.update!(updates) if updates.any?
+  rescue => e
+    Rails.logger.error "Failed to initialize usage tracking for user #{@user.id}: #{e.message}"
   end
 end
