@@ -1,5 +1,5 @@
 class UnsubscribeController < ApplicationController
-  skip_before_action :authenticate
+  allow_unauthenticated_access
   
   def show
     @user = User.find_by(unsubscribe_token: params[:token])
