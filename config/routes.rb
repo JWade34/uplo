@@ -76,6 +76,12 @@ Rails.application.routes.draw do
   # get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
+  # Email unsubscribe
+  get "unsubscribe/:token", to: "unsubscribe#show", as: :unsubscribe
+  
+  # Test emails (temporary - remove in production)
+  get "test_emails", to: "test_emails#send_test" if Rails.env.development? || Rails.env.production?
+  
   # Legal pages
   get "terms", to: "terms#terms_of_service", as: :terms_of_service
   get "privacy", to: "terms#privacy_policy", as: :privacy_policy

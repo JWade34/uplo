@@ -1,0 +1,132 @@
+<%= render 'header' %>
+
+<!-- Main Content -->
+<table border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #ffffff; margin: 0; padding: 0;">
+  <tr>
+    <td align="center" style="padding: 0 16px 48px 16px;">
+      <table border="0" cellpadding="0" cellspacing="0" width="600" style="max-width: 600px; margin: 0 auto;">
+        
+        <!-- Hero Section -->
+        <tr>
+          <td style="padding: 0 24px 40px 24px;">
+            <div style="background: linear-gradient(135deg, #111827 0%, #1f2937 100%); border-radius: 16px; padding: 40px 24px; text-align: center; margin-bottom: 0;">
+              <div style="font-size: 48px; margin-bottom: 20px;">📈</div>
+              <h1 style="font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif; font-size: 32px; font-weight: bold; color: #ffffff; margin: 0 0 20px 0; line-height: 1.2;">
+                Ready to 10x your social media results?
+              </h1>
+              <p style="font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif; font-size: 18px; color: #e5e7eb; margin: 0; line-height: 1.6;">
+                Hey <strong style="color: #d2f803;"><%= @user.email_address.split('@').first.capitalize %></strong>! Here's how top trainers are using Uplo to book <strong style="color: #d2f803;">5+ new clients</strong> every month.
+              </p>
+            </div>
+          </td>
+        </tr>
+        
+        <!-- Success Story -->
+        <tr>
+          <td style="padding: 0 24px 40px 24px;">
+            <div style="background: linear-gradient(135deg, #1f2937 0%, #111827 100%); border: 2px solid #d2f803; border-radius: 16px; padding: 32px; margin-bottom: 32px;">
+              <div style="font-size: 32px; margin-bottom: 16px; text-align: center;">💪</div>
+              <h2 style="font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif; font-size: 22px; font-weight: bold; color: #d2f803; margin: 0 0 16px 0; text-align: center;">
+                Success Story: Sarah gained 15 clients in 60 days
+              </h2>
+              <p style="font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif; font-size: 16px; color: #e5e7eb; margin: 0 0 20px 0; line-height: 1.6; font-style: italic; text-align: center;">
+                "Before Uplo, I struggled to post consistently. Now I upload 4 photos per week and my DMs are flooded with potential clients. 
+                <strong style="color: #d2f803; background: rgba(210, 248, 3, 0.1); padding: 2px 8px; border-radius: 4px;">I've booked $4,500 in new business in just 2 months!</strong>"
+              </p>
+              <div style="background: rgba(210, 248, 3, 0.1); border-radius: 8px; padding: 16px; text-align: center;">
+                <p style="font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif; font-size: 14px; color: #d2f803; margin: 0; font-weight: bold;">
+                  🎆 Results: 15 new clients • $4,500 revenue • 4 posts per week
+                </p>
+              </div>
+              <p style="font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif; font-size: 12px; color: #9ca3af; margin: 16px 0 0 0; font-style: italic; text-align: center;">
+                - Sarah M., Personal Trainer, Dallas
+              </p>
+            </div>
+          </td>
+        </tr>
+        
+        <!-- 3 Quick Wins -->
+        <tr>
+          <td style="padding: 0 24px 32px 24px;">
+            <h2 style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 20px; font-weight: bold; color: #1f2937; margin: 0 0 20px 0; text-align: center;">
+              3 ways to make every post convert:
+            </h2>
+            
+            <div style="margin-bottom: 24px; border-left: 4px solid #d2f803; padding: 20px; background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%); border-radius: 8px;">
+              <h3 style="font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif; font-size: 18px; font-weight: bold; color: #1f2937; margin: 0 0 12px 0;">
+                1. Post at the right times
+              </h3>
+              <p style="font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif; font-size: 16px; color: #4b5563; margin: 0; line-height: 1.6;">
+                Fitness audiences are most active: <strong style="background: #d2f803; color: #000; padding: 2px 6px; border-radius: 4px;">6-8 AM</strong> (morning motivation) and <strong style="background: #d2f803; color: #000; padding: 2px 6px; border-radius: 4px;">6-8 PM</strong> (post-workout inspiration)
+              </p>
+            </div>
+            
+            <div style="margin-bottom: 24px; border-left: 4px solid #d2f803; padding: 20px; background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%); border-radius: 8px;">
+              <h3 style="font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif; font-size: 18px; font-weight: bold; color: #1f2937; margin: 0 0 12px 0;">
+                2. Always include a clear next step
+              </h3>
+              <p style="font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif; font-size: 16px; color: #4b5563; margin: 0; line-height: 1.6;">
+                <strong style="background: #d2f803; color: #000; padding: 2px 6px; border-radius: 4px;">"DM me 'READY'"</strong> or <strong style="background: #d2f803; color: #000; padding: 2px 6px; border-radius: 4px;">"Link in bio"</strong> - make it dead simple for people to take action
+              </p>
+            </div>
+            
+            <div style="margin-bottom: 24px; border-left: 4px solid #d2f803; padding: 20px; background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%); border-radius: 8px;">
+              <h3 style="font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif; font-size: 18px; font-weight: bold; color: #1f2937; margin: 0 0 12px 0;">
+                3. Show transformation, not just exercises
+              </h3>
+              <p style="font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif; font-size: 16px; color: #4b5563; margin: 0; line-height: 1.6;">
+                People buy <strong style="background: #d2f803; color: #000; padding: 2px 6px; border-radius: 4px;">results, not workouts</strong>. Share before/after stories and client wins
+              </p>
+            </div>
+          </td>
+        </tr>
+        
+        <!-- Stat Box -->
+        <tr>
+          <td style="padding: 0 24px 32px 24px;">
+            <div style="background: #fef3c7; border: 2px solid #fbbf24; border-radius: 8px; padding: 20px; text-align: center;">
+              <h3 style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 16px; font-weight: bold; color: #92400e; margin: 0 0 8px 0;">
+                🔥 Hot Tip
+              </h3>
+              <p style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 14px; color: #92400e; margin: 0; line-height: 1.5;">
+                <strong>Personal trainers who post 4x per week get 3x more leads</strong> than those who post once per week. 
+                Uplo makes consistent posting effortless!
+              </p>
+            </div>
+          </td>
+        </tr>
+        
+        <!-- CTA Button -->
+        <tr>
+          <td style="padding: 0 24px 40px 24px; text-align: center;">
+            <p style="font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif; font-size: 20px; color: #1f2937; margin: 0 0 24px 0; font-weight: 600;">
+              Ready to upload 2 more photos this week?
+            </p>
+            <a href="<%= @upload_url %>?utm_source=email&utm_medium=tips&utm_campaign=day_1" 
+               style="display: inline-block; background: #d2f803; color: #000000; text-decoration: none; font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif; font-size: 20px; font-weight: bold; padding: 20px 40px; border-radius: 12px; box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); text-transform: uppercase; letter-spacing: 0.5px;">
+              Upload Another Photo →
+            </a>
+            <p style="font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif; font-size: 14px; color: #6b7280; margin: 20px 0 0 0;">
+              3 caption styles • Instant AI generation • Start posting consistently
+            </p>
+          </td>
+        </tr>
+        
+        <!-- Secondary CTA -->
+        <tr>
+          <td style="padding: 0 24px 32px 24px; text-align: center;">
+            <p style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 14px; color: #6b7280; margin: 0;">
+              Want unlimited photos and 3 caption styles? 
+              <a href="<%= @pricing_url %>?utm_source=email&utm_medium=tips&utm_campaign=day_1" style="color: #f59e0b; text-decoration: underline; font-weight: bold;">
+                Check out Pro →
+              </a>
+            </p>
+          </td>
+        </tr>
+        
+      </table>
+    </td>
+  </tr>
+</table>
+
+<%= render 'footer' %>

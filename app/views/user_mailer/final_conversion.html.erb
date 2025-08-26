@@ -1,0 +1,159 @@
+<%= render 'header' %>
+
+<!-- Main Content -->
+<table border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #ffffff; margin: 0; padding: 0;">
+  <tr>
+    <td align="center" style="padding: 0 16px 48px 16px;">
+      <table border="0" cellpadding="0" cellspacing="0" width="600" style="max-width: 600px; margin: 0 auto;">
+        
+        <!-- Hero Section -->
+        <tr>
+          <td style="padding: 0 24px 40px 24px;">
+            <div style="background: linear-gradient(135deg, #111827 0%, #1f2937 100%); border-radius: 16px; padding: 40px 24px; text-align: center; margin-bottom: 0;">
+              <div style="font-size: 48px; margin-bottom: 20px;">🔥</div>
+              <h1 style="font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif; font-size: 32px; font-weight: bold; color: #ffffff; margin: 0 0 20px 0; line-height: 1.2;">
+                Last chance: Keep the momentum going 💪
+              </h1>
+              <p style="font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif; font-size: 18px; color: #e5e7eb; margin: 0; line-height: 1.6;">
+                Hey <strong style="color: #d2f803;"><%= @user.email_address.split('@').first.capitalize %></strong>! You've been with Uplo for <strong style="color: #d2f803;">2 weeks</strong> now. Let's talk about what happens next...
+              </p>
+            </div>
+          </td>
+        </tr>
+        
+        <!-- Progress Celebration -->
+        <tr>
+          <td style="padding: 0 24px 40px 24px;">
+            <div style="background: linear-gradient(135deg, #1f2937 0%, #111827 100%); border: 2px solid #d2f803; border-radius: 16px; padding: 32px; margin-bottom: 32px;">
+              <div style="font-size: 40px; margin-bottom: 16px; text-align: center;">🎉</div>
+              <h2 style="font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif; font-size: 24px; font-weight: bold; color: #d2f803; margin: 0 0 24px 0; text-align: center;">
+                Look what you've accomplished:
+              </h2>
+              <div style="font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif; font-size: 18px; color: #e5e7eb; line-height: 1.6;">
+                <div style="display: flex; align-items: flex-start; margin-bottom: 16px; padding: 16px; background: rgba(210, 248, 3, 0.1); border-radius: 8px;">
+                  <span style="color: #d2f803; font-weight: bold; margin-right: 12px; font-size: 20px;">✓</span>
+                  <span>You've created <strong style="color: #d2f803;">AI-powered captions</strong> that sound authentically YOU</span>
+                </div>
+                <div style="display: flex; align-items: flex-start; margin-bottom: 16px; padding: 16px; background: rgba(210, 248, 3, 0.1); border-radius: 8px;">
+                  <span style="color: #d2f803; font-weight: bold; margin-right: 12px; font-size: 20px;">✓</span>
+                  <span>You've learned the <strong style="color: #d2f803;">secrets that top trainers</strong> use to convert followers</span>
+                </div>
+                <div style="display: flex; align-items: flex-start; padding: 16px; background: rgba(210, 248, 3, 0.1); border-radius: 8px;">
+                  <span style="color: #d2f803; font-weight: bold; margin-right: 12px; font-size: 20px;">✓</span>
+                  <span>You've got the foundation for <strong style="color: #d2f803;">consistent, engaging content</strong></span>
+                </div>
+              </div>
+            </div>
+          </td>
+        </tr>
+        
+        <!-- The Turning Point -->
+        <tr>
+          <td style="padding: 0 24px 32px 24px;">
+            <div style="background: #fef3c7; border-left: 4px solid #f59e0b; border-radius: 8px; padding: 24px; margin-bottom: 32px;">
+              <h2 style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 18px; font-weight: bold; color: #92400e; margin: 0 0 16px 0;">
+                🚀 Here's the turning point:
+              </h2>
+              <p style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 14px; color: #92400e; margin: 0; line-height: 1.6;">
+                Most trainers quit right here. They try Uplo for a few days, see the potential, but don't commit to 
+                the consistent posting that actually builds a business. <strong>Don't let that be you.</strong>
+              </p>
+            </div>
+          </td>
+        </tr>
+        
+        <!-- Social Proof with Urgency -->
+        <tr>
+          <td style="padding: 0 24px 32px 24px;">
+            <h2 style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 20px; font-weight: bold; color: #1f2937; margin: 0 0 20px 0; text-align: center;">
+              Trainers who upgrade to Pro in their first 2 weeks see:
+            </h2>
+            
+            <div style="background: #ffffff; border: 2px solid #fbbf24; border-radius: 12px; padding: 24px;">
+              <div style="text-align: center; margin-bottom: 20px;">
+                <div style="font-size: 32px; font-weight: bold; color: #f59e0b; margin-bottom: 8px;">3.2x</div>
+                <p style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 14px; color: #6b7280; margin: 0;">more client inquiries per month</p>
+              </div>
+              
+              <div style="border-top: 1px solid #f3f4f6; padding-top: 16px;">
+                <div style="margin-bottom: 12px;">
+                  <span style="color: #16a34a; font-weight: bold;">✓</span>
+                  <span style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 14px; color: #374151; margin-left: 8px;">
+                    <strong>Unlimited photos</strong> - Post every single day without limits
+                  </span>
+                </div>
+                <div style="margin-bottom: 12px;">
+                  <span style="color: #16a34a; font-weight: bold;">✓</span>
+                  <span style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 14px; color: #374151; margin-left: 8px;">
+                    <strong>3 caption styles</strong> - Educational, Motivational, Story-driven for every post
+                  </span>
+                </div>
+                <div>
+                  <span style="color: #16a34a; font-weight: bold;">✓</span>
+                  <span style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 14px; color: #374151; margin-left: 8px;">
+                    <strong>Advanced AI training</strong> - Learns your voice better with every post
+                  </span>
+                </div>
+              </div>
+            </div>
+          </td>
+        </tr>
+        
+        <!-- Final Push -->
+        <tr>
+          <td style="padding: 0 24px 40px 24px;">
+            <div style="background: linear-gradient(135deg, #1f2937 0%, #111827 100%); border: 2px solid #d2f803; border-radius: 16px; padding: 32px; text-align: center;">
+              <h3 style="font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif; font-size: 22px; font-weight: bold; color: #d2f803; margin: 0 0 16px 0;">
+                ⚡ The math is simple:
+              </h3>
+              <p style="font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif; font-size: 24px; color: #d2f803; margin: 0 0 12px 0; font-weight: bold;">
+                Just 1 new client pays for Uplo Pro for 8 months
+              </p>
+              <p style="font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif; font-size: 16px; color: #e5e7eb; margin: 0;">
+                Average trainer session: <strong style="color: #d2f803;">$75</strong> | Uplo Pro: <strong style="color: #d2f803;">$39/month</strong>
+              </p>
+              <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #374151;">
+                <div style="background: rgba(210, 248, 3, 0.1); padding: 16px; border-radius: 8px;">
+                  <p style="font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif; font-size: 18px; color: #d2f803; margin: 0; font-weight: bold;">
+                    = $861 profit per month from just ONE client!
+                  </p>
+                </div>
+              </div>
+            </div>
+          </td>
+        </tr>
+        
+        <!-- CTA Button -->
+        <tr>
+          <td style="padding: 0 24px 40px 24px; text-align: center;">
+            <p style="font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif; font-size: 24px; color: #1f2937; margin: 0 0 28px 0; font-weight: bold;">
+              Ready to join the trainers who are fully booked?
+            </p>
+            <a href="<%= @upgrade_url %>?utm_source=email&utm_medium=final_conversion&utm_campaign=day_14" 
+               style="display: inline-block; background: #d2f803; color: #000000; text-decoration: none; font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif; font-size: 24px; font-weight: bold; padding: 24px 48px; border-radius: 12px; box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); text-transform: uppercase; letter-spacing: 0.5px; border: 3px solid #000000;">
+              Start 7-Day Pro Trial →
+            </a>
+            <p style="font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif; font-size: 16px; color: #6b7280; margin: 20px 0 0 0;">
+              Cancel anytime • No setup fees • Join 500+ successful trainers
+            </p>
+          </td>
+        </tr>
+        
+        <!-- Final Message -->
+        <tr>
+          <td style="padding: 0 24px 32px 24px;">
+            <div style="background: #f9fafb; border-radius: 8px; padding: 20px; text-align: center;">
+              <p style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 14px; color: #6b7280; margin: 0; line-height: 1.6; font-style: italic;">
+                "The best time to plant a tree was 20 years ago. The second best time is now."<br><br>
+                <strong>Your fitness business deserves the momentum that consistent, engaging content creates.</strong>
+              </p>
+            </div>
+          </td>
+        </tr>
+        
+      </table>
+    </td>
+  </tr>
+</table>
+
+<%= render 'footer' %>

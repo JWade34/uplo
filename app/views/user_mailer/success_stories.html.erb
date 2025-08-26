@@ -1,0 +1,192 @@
+<%= render 'header' %>
+
+<!-- Main Content -->
+<table border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #ffffff; margin: 0; padding: 0;">
+  <tr>
+    <td align="center" style="padding: 0 16px 48px 16px;">
+      <table border="0" cellpadding="0" cellspacing="0" width="600" style="max-width: 600px; margin: 0 auto;">
+        
+        <!-- Hero Section -->
+        <tr>
+          <td style="padding: 0 24px 40px 24px;">
+            <div style="background: linear-gradient(135deg, #111827 0%, #1f2937 100%); border-radius: 16px; padding: 40px 24px; text-align: center; margin-bottom: 0;">
+              <div style="font-size: 48px; margin-bottom: 20px;">💰</div>
+              <h1 style="font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif; font-size: 30px; font-weight: bold; color: #ffffff; margin: 0 0 20px 0; line-height: 1.3;">
+                How trainers are booking 5+ clients per month with simple posts
+              </h1>
+              <p style="font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif; font-size: 18px; color: #e5e7eb; margin: 0; line-height: 1.6;">
+                Hey <strong style="color: #d2f803;"><%= @user.email_address.split('@').first.capitalize %></strong>! These <strong style="color: #d2f803;">real results</strong> from Uplo users will blow your mind...
+              </p>
+            </div>
+          </td>
+        </tr>
+        
+        <!-- Success Story 1 -->
+        <tr>
+          <td style="padding: 0 24px 32px 24px;">
+            <div style="background: linear-gradient(135deg, #1f2937 0%, #111827 100%); border: 2px solid #d2f803; border-radius: 16px; padding: 32px; margin-bottom: 24px;">
+              <div style="display: flex; align-items: center; margin-bottom: 20px;">
+                <div style="width: 56px; height: 56px; background: #d2f803; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 16px;">
+                  <span style="color: #000000; font-size: 24px; font-weight: bold;">M</span>
+                </div>
+                <div>
+                  <h3 style="font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif; font-size: 18px; font-weight: bold; color: #d2f803; margin: 0;">
+                    Mike R. - CrossFit Coach
+                  </h3>
+                  <p style="font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif; font-size: 14px; color: #9ca3af; margin: 0;">
+                    Chicago, IL
+                  </p>
+                </div>
+              </div>
+              <p style="font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif; font-size: 18px; color: #e5e7eb; margin: 0 0 20px 0; line-height: 1.6; font-style: italic;">
+                "I was posting randomly with terrible captions. After using Uplo for 3 months, I've booked 
+                <strong style="color: #d2f803; background: rgba(210, 248, 3, 0.1); padding: 2px 8px; border-radius: 4px;">$7,200 in new business</strong>. The AI captions actually convert!"
+              </p>
+              <div style="background: rgba(210, 248, 3, 0.1); border-radius: 8px; padding: 16px;">
+                <p style="font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif; font-size: 14px; color: #d2f803; margin: 0; font-weight: bold; text-align: center;">
+                  📈 Results: 12 new clients • $7,200 revenue • 4.8x ROI in 90 days
+                </p>
+              </div>
+            </div>
+          </td>
+        </tr>
+        
+        <!-- Success Story 2 -->
+        <tr>
+          <td style="padding: 0 24px 32px 24px;">
+            <div style="background: linear-gradient(135deg, #1f2937 0%, #111827 100%); border: 2px solid #d2f803; border-radius: 16px; padding: 32px; margin-bottom: 24px;">
+              <div style="display: flex; align-items: center; margin-bottom: 20px;">
+                <div style="width: 56px; height: 56px; background: #d2f803; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 16px;">
+                  <span style="color: #000000; font-size: 24px; font-weight: bold;">L</span>
+                </div>
+                <div>
+                  <h3 style="font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif; font-size: 18px; font-weight: bold; color: #d2f803; margin: 0;">
+                    Lisa T. - Personal Trainer
+                  </h3>
+                  <p style="font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif; font-size: 14px; color: #9ca3af; margin: 0;">
+                    Austin, TX
+                  </p>
+                </div>
+              </div>
+              <p style="font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif; font-size: 18px; color: #e5e7eb; margin: 0 0 20px 0; line-height: 1.6; font-style: italic;">
+                "I went from 1-2 clients per month to consistently booking 6+ clients. Uplo's captions get people 
+                to actually DM me instead of just liking posts. <strong style="color: #d2f803; background: rgba(210, 248, 3, 0.1); padding: 2px 8px; border-radius: 4px;">$2,400 extra per month!</strong>"
+              </p>
+              <div style="background: rgba(210, 248, 3, 0.1); border-radius: 8px; padding: 16px;">
+                <p style="font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif; font-size: 14px; color: #d2f803; margin: 0; font-weight: bold; text-align: center;">
+                  📈 Results: 18 new clients • $2,400/month increase • Booked out for 6 weeks
+                </p>
+              </div>
+            </div>
+          </td>
+        </tr>
+        
+        <!-- Success Story 3 -->
+        <tr>
+          <td style="padding: 0 24px 40px 24px;">
+            <div style="background: linear-gradient(135deg, #1f2937 0%, #111827 100%); border: 2px solid #d2f803; border-radius: 16px; padding: 32px;">
+              <div style="display: flex; align-items: center; margin-bottom: 20px;">
+                <div style="width: 56px; height: 56px; background: #d2f803; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 16px;">
+                  <span style="color: #000000; font-size: 24px; font-weight: bold;">J</span>
+                </div>
+                <div>
+                  <h3 style="font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif; font-size: 18px; font-weight: bold; color: #d2f803; margin: 0;">
+                    James K. - Strength Coach
+                  </h3>
+                  <p style="font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif; font-size: 14px; color: #9ca3af; margin: 0;">
+                    Denver, CO
+                  </p>
+                </div>
+              </div>
+              <p style="font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif; font-size: 18px; color: #e5e7eb; margin: 0 0 20px 0; line-height: 1.6; font-style: italic;">
+                "The AI learns your voice so well, clients think I personally write every caption. 
+                I've tripled my income and <strong style="color: #d2f803; background: rgba(210, 248, 3, 0.1); padding: 2px 8px; border-radius: 4px;">launched a successful online coaching program</strong>."
+              </p>
+              <div style="background: rgba(210, 248, 3, 0.1); border-radius: 8px; padding: 16px;">
+                <p style="font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif; font-size: 14px; color: #d2f803; margin: 0; font-weight: bold; text-align: center;">
+                  📈 Results: 3x income increase • Online program launch • 500+ followers/month
+                </p>
+              </div>
+            </div>
+          </td>
+        </tr>
+        
+        <!-- Value Prop Section -->
+        <tr>
+          <td style="padding: 0 24px 32px 24px;">
+            <div style="background: #1f2937; border-radius: 12px; padding: 24px; text-align: center;">
+              <h2 style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 20px; font-weight: bold; color: #ffffff; margin: 0 0 16px 0;">
+                What makes Uplo different?
+              </h2>
+              <div style="text-align: left;">
+                <div style="margin-bottom: 12px;">
+                  <span style="color: #fbbf24; font-weight: bold;">✓</span>
+                  <span style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 14px; color: #d1d5db; margin-left: 8px;">
+                    <strong>3 caption styles per photo</strong> - Educational, Motivational, Story-driven
+                  </span>
+                </div>
+                <div style="margin-bottom: 12px;">
+                  <span style="color: #fbbf24; font-weight: bold;">✓</span>
+                  <span style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 14px; color: #d1d5db; margin-left: 8px;">
+                    <strong>AI trained on YOUR voice</strong> - Sounds authentically like you
+                  </span>
+                </div>
+                <div style="margin-bottom: 12px;">
+                  <span style="color: #fbbf24; font-weight: bold;">✓</span>
+                  <span style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 14px; color: #d1d5db; margin-left: 8px;">
+                    <strong>Built for fitness professionals</strong> - Understands your industry
+                  </span>
+                </div>
+                <div>
+                  <span style="color: #fbbf24; font-weight: bold;">✓</span>
+                  <span style="font-family: 'Helvetica Nueva', Arial, sans-serif; font-size: 14px; color: #d1d5db; margin-left: 8px;">
+                    <strong>Unlimited photos</strong> - Post as much as you want
+                  </span>
+                </div>
+              </div>
+            </div>
+          </td>
+        </tr>
+        
+        <!-- Math Section -->
+        <tr>
+          <td style="padding: 0 24px 32px 24px;">
+            <div style="background: #fef2f2; border: 2px solid #ef4444; border-radius: 8px; padding: 20px; text-align: center;">
+              <h3 style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 16px; font-weight: bold; color: #dc2626; margin: 0 0 16px 0;">
+                🔥 The math is simple:
+              </h3>
+              <p style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 18px; color: #7f1d1d; margin: 0 0 8px 0; font-weight: bold;">
+                3 new clients = $900 per month
+              </p>
+              <p style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 14px; color: #7f1d1d; margin: 0 0 16px 0;">
+                Uplo Pro = $39 per month
+              </p>
+              <p style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 16px; color: #dc2626; margin: 0; font-weight: bold;">
+                That's $861 profit from just 3 clients!
+              </p>
+            </div>
+          </td>
+        </tr>
+        
+        <!-- CTA Button -->
+        <tr>
+          <td style="padding: 0 24px 40px 24px; text-align: center;">
+            <p style="font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif; font-size: 22px; color: #1f2937; margin: 0 0 24px 0; font-weight: bold;">
+              Join these successful trainers with Uplo Pro:
+            </p>
+            <a href="<%= @upgrade_url %>" 
+               style="display: inline-block; background: #d2f803; color: #000000; text-decoration: none; font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif; font-size: 22px; font-weight: bold; padding: 22px 44px; border-radius: 12px; box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); text-transform: uppercase; letter-spacing: 0.5px;">
+              Start 7-Day Free Trial →
+            </a>
+            <p style="font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif; font-size: 14px; color: #6b7280; margin: 20px 0 0 0;">
+              Cancel anytime • No setup fees • Join 500+ successful trainers
+            </p>
+          </td>
+        </tr>
+        
+      </table>
+    </td>
+  </tr>
+</table>
+
+<%= render 'footer' %>

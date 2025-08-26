@@ -1,0 +1,151 @@
+<%= render 'header' %>
+
+<!-- Main Content -->
+<table border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #ffffff; margin: 0; padding: 0;">
+  <tr>
+    <td align="center" style="padding: 0 16px 48px 16px;">
+      <table border="0" cellpadding="0" cellspacing="0" width="600" style="max-width: 600px; margin: 0 auto;">
+        
+        <!-- Hero Section -->
+        <tr>
+          <td style="padding: 0 24px 40px 24px;">
+            <div style="background: linear-gradient(135deg, #111827 0%, #1f2937 100%); border-radius: 16px; padding: 40px 24px; text-align: center; margin-bottom: 0;">
+              <div style="font-size: 48px; margin-bottom: 20px;">⚠️</div>
+              <h1 style="font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif; font-size: 30px; font-weight: bold; color: #ffffff; margin: 0 0 20px 0; line-height: 1.3;">
+                The #1 mistake that kills trainer social media growth
+              </h1>
+              <p style="font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif; font-size: 18px; color: #e5e7eb; margin: 0; line-height: 1.6;">
+                Hey <strong style="color: #d2f803;"><%= @user.email_address.split('@').first.capitalize %></strong>! I see this mistake every day, and it's costing trainers <strong style="color: #d2f803;">thousands in lost revenue</strong>.
+              </p>
+            </div>
+          </td>
+        </tr>
+        
+        <!-- The Problem -->
+        <tr>
+          <td style="padding: 0 24px 40px 24px;">
+            <div style="background: linear-gradient(135deg, #1f2937 0%, #111827 100%); border: 3px solid #ef4444; border-radius: 16px; padding: 32px; margin-bottom: 32px;">
+              <h2 style="font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif; font-size: 22px; font-weight: bold; color: #ef4444; margin: 0 0 20px 0; text-align: center;">
+                ❌ The Deadly Mistake: Generic, boring captions
+              </h2>
+              <div style="background: rgba(239, 68, 68, 0.1); border-radius: 12px; padding: 20px; margin-bottom: 20px;">
+                <p style="font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif; font-size: 18px; color: #fca5a5; margin: 0; line-height: 1.6; font-style: italic; text-align: center;">
+                  <strong>"Great workout today! 💪 #fitness #gym"</strong>
+                </p>
+              </div>
+              <p style="font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif; font-size: 16px; color: #e5e7eb; margin: 0; line-height: 1.6; text-align: center;">
+                Sound familiar? This caption could be from <strong style="color: #ef4444;">ANY trainer</strong>. It's generic, forgettable, and worst of all - <strong style="color: #d2f803;">it doesn't convert followers into clients</strong>.
+              </p>
+            </div>
+          </td>
+        </tr>
+        
+        <!-- Before/After Comparison -->
+        <tr>
+          <td style="padding: 0 24px 32px 24px;">
+            <h2 style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 20px; font-weight: bold; color: #1f2937; margin: 0 0 20px 0; text-align: center;">
+              Before vs. After: Same photo, different results
+            </h2>
+            
+            <!-- Before Box -->
+            <div style="background: linear-gradient(135deg, #1f2937 0%, #111827 100%); border: 2px solid #ef4444; border-radius: 12px; padding: 24px; margin-bottom: 24px;">
+              <h3 style="font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif; font-size: 18px; font-weight: bold; color: #ef4444; margin: 0 0 16px 0;">
+                ❌ BEFORE (Generic Caption)
+              </h3>
+              <p style="font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif; font-size: 16px; color: #fca5a5; margin: 0 0 16px 0; font-style: italic; background: rgba(239, 68, 68, 0.1); padding: 12px; border-radius: 8px;">
+                "Crushing legs today! Remember to push yourself! 💪 #legday #fitness #motivation"
+              </p>
+              <div style="background: rgba(239, 68, 68, 0.2); padding: 12px; border-radius: 6px;">
+                <p style="font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif; font-size: 14px; color: #ef4444; margin: 0; font-weight: bold;">
+                  📉 Result: 12 likes, 0 comments, 0 new clients
+                </p>
+              </div>
+            </div>
+            
+            <!-- After Box -->
+            <div style="background: linear-gradient(135deg, #1f2937 0%, #111827 100%); border: 2px solid #d2f803; border-radius: 12px; padding: 24px;">
+              <h3 style="font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif; font-size: 18px; font-weight: bold; color: #d2f803; margin: 0 0 16px 0;">
+                ✅ AFTER (Uplo AI Caption)
+              </h3>
+              <p style="font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif; font-size: 16px; color: #e5e7eb; margin: 0 0 16px 0; font-style: italic; background: rgba(210, 248, 3, 0.1); padding: 12px; border-radius: 8px; line-height: 1.6;">
+                "My client Sarah couldn't walk up stairs without knee pain 6 months ago. Today she crushed 225lb squats! 🔥<br><br>
+                
+                If you're dealing with knee issues but want to get stronger, I've got a bulletproof progression that works.<br><br>
+                
+                DM me 'KNEES' and I'll send you the 3-phase system I used with Sarah (completely free)."
+              </p>
+              <div style="background: rgba(210, 248, 3, 0.2); padding: 12px; border-radius: 6px;">
+                <p style="font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif; font-size: 14px; color: #d2f803; margin: 0; font-weight: bold;">
+                  📈 Result: 87 likes, 23 comments, 8 DMs, 2 new clients = <strong style="background: #1f2937; padding: 2px 8px; border-radius: 4px;">$800 revenue</strong>
+                </p>
+              </div>
+            </div>
+          </td>
+        </tr>
+        
+        <!-- The Solution -->
+        <tr>
+          <td style="padding: 0 24px 40px 24px;">
+            <div style="background: linear-gradient(135deg, #1f2937 0%, #111827 100%); border: 2px solid #d2f803; border-radius: 16px; padding: 32px;">
+              <div style="font-size: 40px; margin-bottom: 16px; text-align: center;">🎯</div>
+              <h2 style="font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif; font-size: 24px; font-weight: bold; color: #d2f803; margin: 0 0 20px 0; text-align: center;">
+                The Solution: AI captions trained on YOUR voice
+              </h2>
+              <p style="font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif; font-size: 18px; color: #e5e7eb; margin: 0; line-height: 1.6; text-align: center;">
+                Uplo's AI learns <strong style="color: #d2f803;">your personality</strong>, your client stories, and your unique approach. 
+                Every caption sounds <strong style="color: #d2f803;">authentically YOU</strong> - but optimized for maximum engagement and conversions.
+              </p>
+              <div style="margin-top: 24px; padding-top: 24px; border-top: 1px solid #374151; text-align: center;">
+                <div style="display: flex; justify-content: center; gap: 32px;">
+                  <div style="text-align: center;">
+                    <div style="font-size: 20px; font-weight: bold; color: #d2f803; margin-bottom: 4px;">10x</div>
+                    <div style="font-size: 12px; color: #9ca3af;">Better Results</div>
+                  </div>
+                  <div style="text-align: center;">
+                    <div style="font-size: 20px; font-weight: bold; color: #d2f803; margin-bottom: 4px;">3</div>
+                    <div style="font-size: 12px; color: #9ca3af;">Caption Styles</div>
+                  </div>
+                  <div style="text-align: center;">
+                    <div style="font-size: 20px; font-weight: bold; color: #d2f803; margin-bottom: 4px;">30s</div>
+                    <div style="font-size: 12px; color: #9ca3af;">To Generate</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </td>
+        </tr>
+        
+        <!-- CTA Button -->
+        <tr>
+          <td style="padding: 40px 24px; text-align: center;">
+            <p style="font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif; font-size: 20px; color: #1f2937; margin: 0 0 24px 0; font-weight: 600;">
+              Complete your profile so our AI knows YOUR unique style:
+            </p>
+            <a href="<%= @profile_url %>?utm_source=email&utm_medium=mistakes&utm_campaign=day_3" 
+               style="display: inline-block; background: #d2f803; color: #000000; text-decoration: none; font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif; font-size: 20px; font-weight: bold; padding: 20px 40px; border-radius: 12px; box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); text-transform: uppercase; letter-spacing: 0.5px;">
+              Complete My Profile →
+            </a>
+            <p style="font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif; font-size: 14px; color: #6b7280; margin: 20px 0 0 0;">
+              Takes 2 minutes • Personalizes your AI • Better captions instantly
+            </p>
+          </td>
+        </tr>
+        
+        <!-- Secondary CTA -->
+        <tr>
+          <td style="padding: 0 24px 32px 24px; text-align: center;">
+            <p style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 14px; color: #6b7280; margin: 0;">
+              Already completed your profile? 
+              <a href="<%= @upload_url %>?utm_source=email&utm_medium=mistakes&utm_campaign=day_3" style="color: #f59e0b; text-decoration: underline; font-weight: bold;">
+                Upload another photo →
+              </a>
+            </p>
+          </td>
+        </tr>
+        
+      </table>
+    </td>
+  </tr>
+</table>
+
+<%= render 'footer' %>

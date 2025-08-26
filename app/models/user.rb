@@ -10,6 +10,11 @@ class User < ApplicationRecord
   
   validate :profile_picture_validation, if: -> { profile_picture.attached? }
   
+  # Email sequence callbacks
+  after_create :schedule_welcome_email
+  after_update :schedule_onboarding_emails, if: -> { saved_change_to_onboarding_completed? && onboarding_completed? }
+  before_save :ensure_unsubscribe_token
+  
   # Profile enums for AI personalization
   enum :fitness_focus, {
     strength_training: 'strength_training',
@@ -240,6 +245,15 @@ class User < ApplicationRecord
     end
   end
   
+  # Email sequence helper methods  
+  def unsubscribe_token
+    read_attribute(:unsubscribe_token) || generate_unsubscribe_token
+  end
+  
+  def can_receive_emails?
+    email_preferences.nil? ? true : email_preferences
+  end
+  
   private
   
   def profile_picture_validation
@@ -251,6 +265,34 @@ class User < ApplicationRecord
       if profile_picture.byte_size > 5.megabytes
         errors.add(:profile_picture, 'should be less than 5MB')
       end
+    end
+  end
+  
+  # Email sequence callback methods
+  def schedule_welcome_email
+    return unless can_receive_emails?
+    
+    UserMailer.welcome_email(self).deliver_later
+  end
+  
+  def schedule_onboarding_emails
+    return unless can_receive_emails?
+    
+    # Schedule the 4-email sequence with strategic timing
+    UserMailer.getting_started_tips(self).deliver_later(wait: 1.day)
+    UserMailer.common_mistakes(self).deliver_later(wait: 3.days) 
+    UserMailer.success_stories(self).deliver_later(wait: 7.days)
+    UserMailer.final_conversion(self).deliver_later(wait: 14.days)
+  end
+  
+  def ensure_unsubscribe_token
+    self.unsubscribe_token ||= generate_unsubscribe_token
+  end
+  
+  def generate_unsubscribe_token
+    loop do
+      token = SecureRandom.urlsafe_base64(32)
+      break token unless User.exists?(unsubscribe_token: token)
     end
   end
 end

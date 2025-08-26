@@ -1,0 +1,59 @@
+<div class="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+  <div class="sm:mx-auto sm:w-full sm:max-w-md">
+    <div class="text-center">
+      <h1 class="text-2xl font-bold text-gray-900 mb-4">
+        <%= link_to root_path, class: "hover:text-gray-700" do %>
+          <span class="bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent font-bold">
+            Uplo
+          </span>
+        <% end %>
+      </h1>
+    </div>
+  </div>
+
+  <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+    <div class="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
+      <% if @success %>
+        <div class="text-center">
+          <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100 mb-4">
+            <svg class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+          </div>
+          
+          <h3 class="text-lg font-medium text-gray-900 mb-2">
+            You've been unsubscribed
+          </h3>
+          
+          <p class="text-sm text-gray-500 mb-6">
+            You won't receive any more emails from Uplo.
+          </p>
+          
+          <p class="text-xs text-gray-400">
+            Changed your mind? Just reply to any of our previous emails.
+          </p>
+        </div>
+      <% else %>
+        <div class="text-center">
+          <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4">
+            <svg class="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </div>
+          
+          <h3 class="text-lg font-medium text-gray-900 mb-2">
+            Invalid unsubscribe link
+          </h3>
+          
+          <p class="text-sm text-gray-500">
+            This unsubscribe link is not valid or has expired.
+          </p>
+        </div>
+      <% end %>
+      
+      <div class="mt-6 text-center">
+        <%= link_to "Back to Uplo", root_path, class: "text-sm text-yellow-600 hover:text-yellow-500" %>
+      </div>
+    </div>
+  </div>
+</div>
