@@ -3,64 +3,59 @@
 <!-- Main Content -->
 <table border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #ffffff; margin: 0; padding: 0;">
   <tr>
-    <td align="center" style="padding: 0 16px 48px 16px;">
+    <td align="center" style="padding: 20px 16px 60px 16px;">
       <table border="0" cellpadding="0" cellspacing="0" width="600" style="max-width: 600px; margin: 0 auto;">
         
-        <!-- Hero Section -->
+        <!-- Welcome -->
         <tr>
-          <td style="padding: 0 24px 40px 24px;">
-            <div style="background: linear-gradient(135deg, #111827 0%, #1f2937 100%); border-radius: 16px; padding: 40px 24px; text-align: center; margin-bottom: 0;">
-              <div style="font-size: 48px; margin-bottom: 20px;">🚀</div>
-              <h1 style="font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif; font-size: 36px; font-weight: bold; color: #ffffff; margin: 0 0 20px 0; line-height: 1.2;">
-                Welcome to Uplo!
-              </h1>
-              <p style="font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif; font-size: 20px; color: #d2f803; margin: 0 0 24px 0; line-height: 1.4; font-weight: 600;">
-                Hey <strong><%= @user.email_address.split('@').first.capitalize %></strong>! 👋
-              </p>
-              <p style="font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif; font-size: 18px; color: #e5e7eb; margin: 0; line-height: 1.6;">
-                You're now part of <strong style="color: #d2f803;">500+ personal trainers</strong> who are transforming their social media game. 
-                Ready to turn your gym photos into client-attracting posts?
-              </p>
-            </div>
+          <td style="padding: 0 24px; text-align: center;">
+            <h1 style="font-family: Arial, Helvetica, sans-serif; font-size: 32px; font-weight: bold; color: #1f2937; margin: 0 0 16px 0; line-height: 1.2;">
+              Welcome to Uplo!
+            </h1>
+            <p style="font-family: Arial, Helvetica, sans-serif; font-size: 18px; color: #374151; margin: 0 0 40px 0; line-height: 1.5;">
+              Hey <strong style="color: #d2f803;"><%= @user.email_address.split('@').first.capitalize %></strong>! 👋
+            </p>
           </td>
         </tr>
         
-        <!-- Value Proposition -->
+        <!-- Main Message -->
         <tr>
-          <td style="padding: 0 24px 40px 24px;">
-            <div style="background: linear-gradient(135deg, #1f2937 0%, #111827 100%); border: 2px solid #d2f803; border-radius: 16px; padding: 32px; margin-bottom: 32px;">
-              <h2 style="font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif; font-size: 24px; font-weight: bold; color: #ffffff; margin: 0 0 20px 0; text-align: center;">
-                Here's what happens next:
-              </h2>
-              <div style="font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif; font-size: 18px; color: #e5e7eb; line-height: 1.6;">
-                <div style="display: flex; align-items: flex-start; margin-bottom: 16px; padding: 16px; background: rgba(210, 248, 3, 0.1); border-radius: 8px;">
-                  <span style="color: #d2f803; font-weight: bold; margin-right: 12px; font-size: 20px;">1.</span>
-                  <span><strong style="color: #d2f803;">Upload your first gym photo</strong> (takes 30 seconds)</span>
-                </div>
-                <div style="display: flex; align-items: flex-start; margin-bottom: 16px; padding: 16px; background: rgba(210, 248, 3, 0.1); border-radius: 8px;">
-                  <span style="color: #d2f803; font-weight: bold; margin-right: 12px; font-size: 20px;">2.</span>
-                  <span>Our AI creates <strong style="color: #d2f803;">personalized captions</strong> that sound like YOU</span>
-                </div>
-                <div style="display: flex; align-items: flex-start; padding: 16px; background: rgba(210, 248, 3, 0.1); border-radius: 8px;">
-                  <span style="color: #d2f803; font-weight: bold; margin-right: 12px; font-size: 20px;">3.</span>
-                  <span>Post, watch engagement soar, <strong style="color: #d2f803;">book more clients</strong> 📈</span>
-                </div>
-              </div>
-            </div>
+          <td style="padding: 0 24px;">
+            <p style="font-family: Arial, Helvetica, sans-serif; font-size: 18px; color: #374151; margin: 0 0 32px 0; line-height: 1.6; text-align: left;">
+              You're now part of <strong>500+ personal trainers</strong> who are transforming their social media game with AI-powered captions.
+            </p>
+            
+            <p style="font-family: Arial, Helvetica, sans-serif; font-size: 18px; color: #374151; margin: 0 0 24px 0; line-height: 1.6; text-align: left;">
+              Here's what happens next:
+            </p>
+            
+            <p style="font-family: Arial, Helvetica, sans-serif; font-size: 18px; color: #374151; margin: 0 0 12px 0; line-height: 1.6; text-align: left;">
+              <strong style="color: #d2f803;">1.</strong> Upload your first gym photo (30 seconds)
+            </p>
+            
+            <p style="font-family: Arial, Helvetica, sans-serif; font-size: 18px; color: #374151; margin: 0 0 12px 0; line-height: 1.6; text-align: left;">
+              <strong style="color: #d2f803;">2.</strong> AI creates 3 personalized captions that sound like YOU
+            </p>
+            
+            <p style="font-family: Arial, Helvetica, sans-serif; font-size: 18px; color: #374151; margin: 0 0 48px 0; line-height: 1.6; text-align: left;">
+              <strong style="color: #d2f803;">3.</strong> Post, watch engagement soar, book more clients 📈
+            </p>
           </td>
         </tr>
         
-        <!-- CTA Button -->
+        <!-- CTA -->
         <tr>
-          <td style="padding: 0 24px 40px 24px; text-align: center;">
-            <p style="font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif; font-size: 20px; color: #1f2937; margin: 0 0 24px 0; font-weight: 600;">
+          <td style="padding: 0 24px; text-align: center;">
+            <p style="font-family: Arial, Helvetica, sans-serif; font-size: 18px; color: #1f2937; margin: 0 0 32px 0;">
               Ready to create your first AI-powered post?
             </p>
+            
             <a href="<%= @cta_url %>?utm_source=email&utm_medium=welcome&utm_campaign=onboarding" 
-               style="display: inline-block; background: #d2f803; color: #000000; text-decoration: none; font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif; font-size: 20px; font-weight: bold; padding: 20px 40px; border-radius: 12px; box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); text-transform: uppercase; letter-spacing: 0.5px;">
+               style="display: inline-block; background-color: #d2f803; color: #000000; text-decoration: none; font-family: Arial, Helvetica, sans-serif; font-size: 18px; font-weight: bold; padding: 16px 32px; border-radius: 8px; margin-bottom: 20px;">
               Upload Your First Photo →
             </a>
-            <p style="font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif; font-size: 14px; color: #6b7280; margin: 20px 0 0 0;">
+            
+            <p style="font-family: Arial, Helvetica, sans-serif; font-size: 16px; color: #6b7280; margin: 0; line-height: 1.5;">
               Takes 30 seconds • Get 3 caption styles • Start attracting clients today
             </p>
           </td>
