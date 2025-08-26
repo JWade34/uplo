@@ -247,11 +247,20 @@ class User < ApplicationRecord
   
   # Email sequence helper methods  
   def unsubscribe_token
-    read_attribute(:unsubscribe_token) || generate_unsubscribe_token
+    if self.class.column_names.include?('unsubscribe_token')
+      read_attribute(:unsubscribe_token) || generate_unsubscribe_token
+    else
+      generate_unsubscribe_token
+    end
   end
   
   def can_receive_emails?
-    email_preferences.nil? ? true : email_preferences
+    # Check if column exists first (for production deployment)
+    if self.class.column_names.include?('email_preferences')
+      email_preferences.nil? ? true : email_preferences
+    else
+      true
+    end
   end
   
   private
@@ -286,13 +295,21 @@ class User < ApplicationRecord
   end
   
   def ensure_unsubscribe_token
-    self.unsubscribe_token ||= generate_unsubscribe_token
+    # Only set if the column exists (for production deployment)
+    if self.class.column_names.include?('unsubscribe_token')
+      self.unsubscribe_token ||= generate_unsubscribe_token
+    end
   end
   
   def generate_unsubscribe_token
     loop do
       token = SecureRandom.urlsafe_base64(32)
-      break token unless User.exists?(unsubscribe_token: token)
+      # Check if column exists before querying
+      if self.class.column_names.include?('unsubscribe_token')
+        break token unless User.exists?(unsubscribe_token: token)
+      else
+        break token
+      end
     end
   end
 end

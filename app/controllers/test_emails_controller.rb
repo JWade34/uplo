@@ -1,5 +1,5 @@
 class TestEmailsController < ApplicationController
-  before_action :authenticate
+  # Authentication is already handled by ApplicationController
   
   def send_test
     if Current.user.email_address.include?('@superdupr.com') || Current.user.email_address == 'justinmckelvey@gmail.com'
