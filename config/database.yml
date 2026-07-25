@@ -94,7 +94,12 @@ test:
 production:
   <<: *default
   <% if ENV["DATABASE_URL"] %>
-  <% # Fix Hatchbox malformed DATABASE_URL %>
-  <% fixed_url = ENV["DATABASE_URL"].sub(/^postgresql:/, 'postgresql://').sub('@:', '@178.156.161.52:') %>
-  url: <%= fixed_url %>
+  <% # Hatchbox provides a malformed DATABASE_URL (missing // and host).
+     # Only repair it when malformed — a well-formed URL (e.g. Railway's)
+     # must pass through untouched or the subs would corrupt it. %>
+  <% url = ENV["DATABASE_URL"]
+     unless url.match?(%r{\Apostgres(ql)?://})
+       url = url.sub(/\Apostgresql:/, "postgresql://").sub("@:", "@178.156.161.52:")
+     end %>
+  url: <%= url %>
   <% end %>

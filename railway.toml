@@ -1,0 +1,25 @@
+# Railway deploy config — Dockerfile builder, healthcheck on /up,
+# persistent volume for Active Storage at /rails/storage,
+# PostgreSQL via the Railway Postgres service (DATABASE_URL reference).
+
+[build]
+builder = "DOCKERFILE"
+dockerfilePath = "Dockerfile"
+
+[deploy]
+healthcheckPath = "/up"
+healthcheckTimeout = 300
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 5
+
+# Required env vars — set in Railway dashboard or via `railway variables`:
+#
+#   RAILS_MASTER_KEY          — from local config/master.key
+#   DATABASE_URL              — ${{Postgres.DATABASE_URL}} service reference
+#   RESEND_API_KEY            — Resend SMTP password
+#   FROM_EMAIL                — verified sender address
+#   OPENAI_API_KEY            — caption generation
+#   STRIPE_SECRET_KEY, STRIPE_PUBLISHABLE_KEY, STRIPE_WEBHOOK_SECRET
+#   STRIPE_PRO_MONTHLY_PRICE_ID, STRIPE_PRO_YEARLY_PRICE_ID
+#
+# The persistent volume is mounted at /rails/storage (Active Storage blobs).

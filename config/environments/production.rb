@@ -87,7 +87,9 @@ Rails.application.configure do
     "www.getuplo.com", # Allow requests from www.getuplo.com
     /.*\.getuplo\.com/, # Allow requests from subdomains
     "6eqkm.hatchboxapp.com", # Allow requests from Hatchbox staging
-    /.*\.hatchboxapp\.com/ # Allow requests from any Hatchbox subdomain
+    /.*\.hatchboxapp\.com/, # Allow requests from any Hatchbox subdomain
+    /.*\.up\.railway\.app/, # Railway-provided service domain
+    /.*\.railway\.app/ # Railway edge domains
   ]
   
   # Skip DNS rebinding protection for the default health check endpoint.

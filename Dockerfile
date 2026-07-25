@@ -58,11 +58,10 @@ FROM base
 COPY --from=build "${BUNDLE_PATH}" "${BUNDLE_PATH}"
 COPY --from=build /rails /rails
 
-# Run and own only the runtime files as a non-root user for security
-RUN groupadd --system --gid 1000 rails && \
-    useradd rails --uid 1000 --gid 1000 --create-home --shell /bin/bash && \
-    chown -R rails:rails db log storage tmp
-USER 1000:1000
+# Runs as root so the entrypoint can chown the Railway-mounted volume
+# at /rails/storage on first boot (Railway mounts volumes owned by
+# root by default). Single-tenant app, accepting the security tradeoff.
+RUN chown -R root:root /rails
 
 # Entrypoint prepares the database.
 ENTRYPOINT ["/rails/bin/docker-entrypoint"]
