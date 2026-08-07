@@ -44,7 +44,7 @@ gem "thruster", require: false
 gem "image_processing", "~> 1.2"
 
 # Image processing and metadata extraction
-gem "mini_magick", "~> 4.12"
+gem "mini_magick", "~> 5.3"
 gem "exifr", "~> 1.4"
 
 # OpenAI integration for AI caption generation
